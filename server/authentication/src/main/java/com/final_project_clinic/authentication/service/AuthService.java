@@ -4,9 +4,6 @@ import com.final_project_clinic.authentication.data.model.User;
 import com.final_project_clinic.authentication.exception.AuthException;
 
 public interface AuthService {
-    
-    // Find user by its username
-    User findByUsername(String username);
 
     // Find user by its email
     User findByEmail(String email);

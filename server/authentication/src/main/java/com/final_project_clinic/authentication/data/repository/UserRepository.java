@@ -10,9 +10,6 @@ import com.final_project_clinic.authentication.data.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    // Find User based on his/her username
-    User findByUsername(String username);
-
     // Find User based on his/her email
     User findByEmail(String email);
 }
