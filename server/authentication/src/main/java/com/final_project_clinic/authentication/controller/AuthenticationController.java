@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.final_project_clinic.authentication.utils.JwtUtils;
 import com.final_project_clinic.authentication.utils.PasswordUtils;
 import com.final_project_clinic.authentication.data.model.User;
+import com.final_project_clinic.authentication.data.model.Role;
 import com.final_project_clinic.authentication.dto.LoginRequestDTO;
 import com.final_project_clinic.authentication.dto.LoginResponseDTO;
 import com.final_project_clinic.authentication.dto.RegisterRequestDTO;
@@ -37,8 +38,7 @@ public class AuthenticationController {
 
     @PostMapping
     public ResponseEntity<LoginResponseDTO> createAuthenticationToken(@RequestBody LoginRequestDTO authRequest) {
-        User user = authService.findByEmail(authRequest.getEmail()); // Custom method to find user by username
-        System.out.println("Data " + user);
+        User user = authService.findByEmail(authRequest.getEmail());
         if (user == null) {
             throw new AuthException("User not found, Please input a valid email");
         }
@@ -50,7 +50,7 @@ public class AuthenticationController {
         authService.login(authRequest.getEmail(), authRequest.getPassword());
 
         // Generate JWT token
-        final String jwt = jwtUtil.generateToken(authRequest.getEmail(), user.getId(),user.getRole());
+        final String jwt = jwtUtil.generateToken(authRequest.getEmail(), user.getId(), user.getRole());
 
         // Return the token as a response
         return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(jwt));
@@ -64,7 +64,8 @@ public class AuthenticationController {
             newUser.setFull_name(request.getFull_name());
             newUser.setEmail(request.getEmail());
             newUser.setPassword(request.getPassword());
-            String role = (request.getRole() != null && !request.getRole().isEmpty()) ? request.getRole() : "Patient";
+            String role = (request.getRole() != null && !request.getRole().isEmpty()) ? request.getRole()
+                    : Role.PATIENT.toString();
             newUser.setRole(role);
             // Register the new user
             authService.register(newUser);

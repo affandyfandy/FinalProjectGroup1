@@ -1,6 +1,8 @@
 package com.final_project_clinic.authentication.service.impl;
 
+import com.final_project_clinic.authentication.data.model.Patient;
 import com.final_project_clinic.authentication.data.model.User;
+import com.final_project_clinic.authentication.data.repository.PatientRepository;
 import com.final_project_clinic.authentication.data.repository.UserRepository;
 import com.final_project_clinic.authentication.service.AuthService;
 import com.final_project_clinic.authentication.utils.PasswordUtils;
@@ -15,10 +17,12 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final PatientRepository patientRepository;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository) {
+    public AuthServiceImpl(UserRepository userRepository, PatientRepository patientRepository) {
         this.userRepository = userRepository;
+        this.patientRepository = patientRepository;
     }
 
     @Override
@@ -46,6 +50,17 @@ public class AuthServiceImpl implements AuthService {
         user.setCreatedTime(new Date());
         user.setUpdatedTime(new Date());
         user.setCreatedBy(user.getEmail());
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // Create a corresponding patient record
+        if ("ADMIN".equals(savedUser.getRole())) {
+            return; // Exit the method early if the user is an admin
+        }        
+        Patient patient = new Patient();
+        patient.setNik(3174123411234L);
+        patient.setUser_id(savedUser.getId());
+        patient.setCreatedBy(savedUser.getEmail());
+        patient.setCreatedTime(new Date());
+        patientRepository.save(patient);
     }
 }
