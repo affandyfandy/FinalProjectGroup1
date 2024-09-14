@@ -1,18 +1,18 @@
 package com.final_project_clinic.user.data.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import lombok.Data;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -27,8 +27,11 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private Integer nik;
+    @Column(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
+    private UUID user_id;
+
+    @Column(name = "nik", nullable = false, unique = true)
+    private Long nik;
 
     @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;

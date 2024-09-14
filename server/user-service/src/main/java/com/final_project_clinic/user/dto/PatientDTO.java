@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatientDTO {
     private UUID id;
+    private UUID user_id;
     private Integer nik;
     private String phoneNumber;
     private String address;

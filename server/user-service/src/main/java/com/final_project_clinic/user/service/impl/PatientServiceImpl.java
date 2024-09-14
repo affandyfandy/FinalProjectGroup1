@@ -64,7 +64,7 @@ public class PatientServiceImpl implements PatientService {
         existingPatient.setPhoneNumber(patientSaveDTO.getPhoneNumber());
         existingPatient.setDateOfBirth(patientSaveDTO.getDateOfBirth());
         existingPatient.setGender(patientSaveDTO.getGender());
-        existingPatient.setNik(patientSaveDTO.getNik());
+        existingPatient.setNik((long) patientSaveDTO.getNik());
         existingPatient.setUpdatedTime(new Date());
         existingPatient.setUpdatedBy("adm in"); // Replace with actual user from context
 
