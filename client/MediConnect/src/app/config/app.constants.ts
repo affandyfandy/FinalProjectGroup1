@@ -12,10 +12,17 @@ export interface RouteLink {
 
 export const RouterConfig = {
   HOME: { path: '', link: '/', title: 'Home' },
-  LOGIN: {
-    path: 'login',
-    link: '/login',
-    title: 'Login',
+  Dashboard: { path: 'dashboard', link: '/dashboard', title: 'Dashboard' },
+  SIGNIN: {
+    path: 'signin',
+    link: '/signin',
+    title: 'Signin',
+    data: { header: true },
+  },
+  SIGNUP: {
+    path: 'signup',
+    link: '/signup',
+    title: 'Signup',
     data: { header: true },
   },
 };
