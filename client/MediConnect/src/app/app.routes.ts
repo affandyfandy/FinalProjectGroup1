@@ -7,8 +7,7 @@ export const routes: Routes = [
     path: RouterConfig.HOME.path,
     loadChildren: () =>
       import('./pages/home/home.routes').then((m) => m.homeRoutes),
-    title: RouterConfig.SIGNIN.title,
-    data: RouterConfig.SIGNIN.data,
+    title: RouterConfig.HOME.title,
   },
   {
     path: RouterConfig.SIGNUP.path,

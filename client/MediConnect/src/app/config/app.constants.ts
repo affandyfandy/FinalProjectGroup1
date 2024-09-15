@@ -11,7 +11,11 @@ export interface RouteLink {
 }
 
 export const RouterConfig = {
-  HOME: { path: '', link: '/', title: 'Home' },
+  HOME: {
+    path: '',
+    link: '/',
+    title: 'MediConnect',
+  },
   Dashboard: { path: 'dashboard', link: '/dashboard', title: 'Dashboard' },
   SIGNIN: {
     path: 'signin',
