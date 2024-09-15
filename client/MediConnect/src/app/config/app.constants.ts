@@ -1,7 +1,7 @@
 export const AppConstants = {
   APPLICATION_NAME: 'MediConnect',
   APPLICATION_ICON: 'icon',
-  BASE_API_URL: '/my-api',
+  BASE_API_URL: 'http://localhost:8085/api/v1',
   LOG_OFF_ICON: 'sign-out',
 };
 

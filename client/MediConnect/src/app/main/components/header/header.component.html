@@ -6,47 +6,96 @@
       routerLink="/"
       aria-label="Company"
       title="Company"
-      class="inline-flex items-center"
+      class="inline-flex items-center z-50"
     >
       <span
         class="ml-2 text-xl font-bold text-fpt-colors tracking-wide uppercase"
-        >MediConnect</span
       >
+        MediConnect
+      </span>
     </a>
 
     <ul class="flex items-center hidden space-x-8 lg:flex">
       <li>
         <a
-          routerLink="/"
+          routerLink="/services"
           aria-label="Services"
           title="Services"
-          class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
           >Services</a
         >
       </li>
       <li>
         <a
-          routerLink="/"
+          routerLink="/about"
           aria-label="About us"
           title="About us"
-          class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
           >About us</a
         >
       </li>
-      <li>
+
+      <!-- Avatar and Logout Button (Show if Logged In) -->
+      <li *ngIf="isLoggedIn">
+        <div
+          class="flex items-center space-x-5 hover:bg-orange-1/80 rounded-3xl"
+        >
+          <div
+            class="relative"
+            (mouseenter)="showLogout = true"
+            (mouseleave)="showLogout = false"
+          >
+            <button
+              hlmBtn
+              varian="outline"
+              class="flex flex-row-reverse space-x-3 gap-x-4 py-6 text-center rounded-full font-semibold tracking-wide text-gray-900 border-2 border-fpt-colors"
+            >
+              <hlm-avatar>
+                <img src="#" alt="{{ username }}" hlmAvatarImage />
+                <span class="bg-destructive" hlmAvatarFallback>{{
+                  username
+                }}</span>
+              </hlm-avatar>
+              <div class="flex flex-col text-start md:block hidden">
+                <div class="text-base font-semibold">
+                  {{ username }}
+                </div>
+                <div class="text-slate-700 text-xs">{{ users?.email }}</div>
+              </div>
+            </button>
+            <!-- Dropdown Logout Button -->
+            <div
+              *ngIf="showLogout"
+              class="absolute bg-white rounded-lg text-gray-900 right-0 w-52"
+            >
+              <button
+                (click)="handleLogout()"
+                class="block text-gray-700 w-full bg-white shadow mt-2 text-left px-4 py-4 rounded-lg font-medium text-sm hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Login Button (Show if Not Logged In) -->
+      <li *ngIf="!isLoggedIn">
         <a
           routerLink="/signin"
           class="text-center px-8 py-2 font-semibold tracking-wide text-white transition duration-200 rounded-full drop-shadow-button-dropShadow-fpt shadow-md bg-fpt-colors"
-          aria-label="Sign up"
-          title="Sign up"
+          aria-label="Login"
+          title="Login"
         >
           Login
         </a>
       </li>
     </ul>
-    <!-- Mobile menu -->
+
+    <!-- Mobile Menu -->
     <div class="lg:hidden">
       <button
+        (click)="toggleMenu()"
         aria-label="Open Menu"
         title="Open Menu"
         class="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
@@ -66,53 +115,46 @@
           ></path>
         </svg>
       </button>
-      <!-- Mobile menu dropdown
-      <div class="absolute top-0 left-0 w-full">
-        <div class="p-5 bg-white border rounded shadow-sm">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <a  routerLink="/" aria-label="Company" title="Company" class="inline-flex items-center">
-                <svg class="w-8 text-deep-purple-accent-400" viewBox="0 0 24 24" stroke-linejoin="round" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" stroke="currentColor" fill="none">
-                  <rect x="3" y="1" width="7" height="12"></rect>
-                  <rect x="3" y="17" width="7" height="6"></rect>
-                  <rect x="14" y="1" width="7" height="6"></rect>
-                  <rect x="14" y="11" width="7" height="12"></rect>
-                </svg>
-                <span class="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">Company</span>
-              </a>
-            </div>
-            <div>
-              <button aria-label="Close Menu" title="Close Menu" class="p-2 -mt-2 -mr-2 transition duration-200 rounded hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
-                <svg class="w-5 text-gray-600" viewBox="0 0 24 24">
-                  <path
-                    fill="currentColor"
-                    d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <nav>
-            <ul class="space-y-4">
-              <li><a  routerLink="/" aria-label="Our product" title="Our product" class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400">Product</a></li>
-              <li><a  routerLink="/" aria-label="Our product" title="Our product" class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400">Features</a></li>
-              <li><a  routerLink="/" aria-label="Product pricing" title="Product pricing" class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400">Pricing</a></li>
-              <li><a  routerLink="/" aria-label="About us" title="About us" class="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400">About us</a></li>
-              <li>
-                <a
-                   routerLink="/"
-                  class="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                  aria-label="Sign up"
-                  title="Sign up"
-                >
-                  Sign up
-                </a>
-              </li>
-            </ul>
-          </nav>
+
+      <!-- Mobile Menu Dropdown -->
+      <div
+        *ngIf="isOpen"
+        class="hamburger-menu fixed inset-0 bg-opacity-95 z-40 text-gray-900 bg-fpt-colors/50"
+      >
+        <div class="w-full flex flex-col space-y-4 p-6 pt-20 bg-white">
+          <a
+            routerLink="/services"
+            aria-label="Services"
+            title="Services"
+            class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+            >Services</a
+          >
+          <a
+            routerLink="/about"
+            aria-label="About us"
+            title="About us"
+            class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+            >About us</a
+          >
+          <!-- Logout button (show only if logged in) -->
+          <button
+            *ngIf="isLoggedIn"
+            (click)="handleLogout()"
+            class="text-lg border border-black hover:font-semibold p-2 rounded-xl text-center"
+          >
+            Logout
+          </button>
+
+          <!-- Login button (show only if not logged in) -->
+          <a
+            *ngIf="!isLoggedIn"
+            routerLink="/signin"
+            class="text-lg border border-black hover:font-semibold p-2 rounded-xl text-center"
+          >
+            Login
+          </a>
         </div>
       </div>
-      -->
     </div>
   </div>
 </div>

@@ -1,12 +1,13 @@
-<form class="w-full text-left">
+<form (submit)="login()" class="w-full text-left">
   <div class="mb-6">
     <label hlmLabl
       >Email
       <input
         hlmInput
         type="text"
-        name=""
-        id=""
+        name="email"
+        id="email"
+        [(ngModel)]="user.email"
         placeholder="Email Address"
         class="w-full mt-1"
       />
@@ -22,8 +23,10 @@
         <input
           hlmInput
           type="text"
-          name=""
-          id=""
+          [(ngModel)]="user.password"
+          type="password"
+          id="password"
+          name="password"
           class="w-full mt-1"
           placeholder="Password"
         />
