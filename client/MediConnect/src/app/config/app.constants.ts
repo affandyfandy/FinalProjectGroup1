@@ -25,4 +25,10 @@ export const RouterConfig = {
     title: 'Signup',
     data: { header: true },
   },
+  USERDASHBOARD: {
+    path: 'dashboard',
+    link: '/dashboard',
+    title: 'dashboard',
+    data: { header: true },
+  },
 };
