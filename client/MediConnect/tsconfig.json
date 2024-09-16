@@ -39,7 +39,7 @@
       ],
       "@spartan-ng/ui-avatar-helm": [
         ".\\src/app/components/ui-avatar-helm/src/index.ts"
-      ]
+      ],
     }
   },
   "angularCompilerOptions": {

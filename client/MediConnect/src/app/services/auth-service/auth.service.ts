@@ -29,6 +29,11 @@ export class AuthService {
     return this.http.post<any>(this.apiUrl, user, { headers });
   }
 
+  register(user: any): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(`${this.apiUrl}/register`, user, { headers });
+  }
+
   profile(): Observable<any> {
     const headers = this.getHeadersRestricted();
     return this.http.get<any>(`${this.apiUrl}/profile`, { headers });

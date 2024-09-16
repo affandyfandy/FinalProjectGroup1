@@ -1,37 +1,61 @@
-<form (submit)="login()" class="w-full text-left">
+<form [formGroup]="signinForm" (ngSubmit)="login()" class="w-full text-left">
+  <div aria-live="polite" toastContainer></div>
   <div class="mb-6">
-    <label hlmLabl
-      >Email
+    <label hlmLabel>
+      Email
       <input
         hlmInput
-        type="text"
-        name="email"
-        id="email"
-        [(ngModel)]="user.email"
+        type="email"
+        formControlName="email"
         placeholder="Email Address"
         class="w-full mt-1"
       />
     </label>
+    <div
+      *ngIf="email?.errors?.['required'] && email?.touched"
+      class="text-red-500 text-sm"
+    >
+      Email is required.
+    </div>
+    <div
+      *ngIf="email?.errors?.['email'] && email?.touched"
+      class="text-red-500 text-sm"
+    >
+      Enter a valid email address.
+    </div>
   </div>
+
   <div class="mb-4">
-    <label hlmLabel
-      >Password
+    <label hlmLabel>
+      Password
       <div class="relative">
-        <span class="absolute inset-y-0 right-4 flex items-center pl-8">
-          <ng-icon name="bootstrapEyeSlash" class="text-lg"></ng-icon>
-        </span>
         <input
           hlmInput
-          type="text"
-          [(ngModel)]="user.password"
-          type="password"
-          id="password"
-          name="password"
-          class="w-full mt-1"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
           placeholder="Password"
+          class="w-full mt-1 pr-10"
         />
+        <button
+          type="button"
+          class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+          (click)="togglePasswordVisibility()"
+        >
+          <ng-container *ngIf="showPassword; else passwordHidden">
+            <ng-icon name="bootstrapEye" class="text-lg"></ng-icon>
+          </ng-container>
+          <ng-template #passwordHidden>
+            <ng-icon name="bootstrapEyeSlash" class="text-lg"></ng-icon>
+          </ng-template>
+        </button>
       </div>
     </label>
+    <div
+      *ngIf="password?.errors?.['required'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      Password is required.
+    </div>
   </div>
   <div class="w-full text-left text-white">
     <p class="text-sm text-black">
@@ -42,9 +66,10 @@
       hlmBtn
       type="submit"
       variant="fpt"
-      class="text-center px-8 mt-8 py-2"
+      class="text-center px-8 mt-4 py-2"
+      [disabled]="signinForm.invalid"
     >
-      Login
+      Register
     </button>
   </div>
 </form>
