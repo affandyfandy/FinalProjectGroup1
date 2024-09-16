@@ -1,0 +1,158 @@
+<form [formGroup]="signupForm" (ngSubmit)="register()" class="w-full text-left">
+  <div class="mb-4">
+    <label hlmLabel>
+      NIK
+      <input
+        hlmInput
+        type="text"
+        formControlName="nik"
+        placeholder="NIK Number"
+        class="w-full mt-1"
+      />
+    </label>
+    <div
+      *ngIf="nik?.errors?.['required'] && nik?.touched"
+      class="text-red-500 text-sm"
+    >
+      NIK is required.
+    </div>
+    <div
+      *ngIf="nik?.errors?.['minlength'] && nik?.touched"
+      class="text-red-500 text-sm"
+    >
+      NIK must be at least 8 characters.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label hlmLabel>
+      Fullname
+      <input
+        hlmInput
+        type="text"
+        formControlName="full_name"
+        placeholder="Fullname"
+        class="w-full mt-1"
+      />
+    </label>
+    <div
+      *ngIf="full_name?.errors?.['required'] && full_name?.touched"
+      class="text-red-500 text-sm"
+    >
+      Fullname is required.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label hlmLabel>
+      Email
+      <input
+        hlmInput
+        type="email"
+        formControlName="email"
+        placeholder="Email Address"
+        class="w-full mt-1"
+      />
+    </label>
+    <div
+      *ngIf="email?.errors?.['required'] && email?.touched"
+      class="text-red-500 text-sm"
+    >
+      Email is required.
+    </div>
+    <div
+      *ngIf="email?.errors?.['email'] && email?.touched"
+      class="text-red-500 text-sm"
+    >
+      Enter a valid email address.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label hlmLabel>
+      Password
+      <div class="relative">
+        <input
+          hlmInput
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Password"
+          class="w-full mt-1 pr-10"
+        />
+        <button
+          type="button"
+          class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+          (click)="togglePasswordVisibility()"
+        >
+          <ng-container *ngIf="showPassword; else passwordHidden">
+            <ng-icon name="bootstrapEye" class="text-lg"></ng-icon>
+          </ng-container>
+          <ng-template #passwordHidden>
+            <ng-icon name="bootstrapEyeSlash" class="text-lg"></ng-icon>
+          </ng-template>
+        </button>
+      </div>
+    </label>
+    <div
+      *ngIf="password?.errors?.['required'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      Password is required.
+    </div>
+    <div
+      *ngIf="password?.errors?.['minlength'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      Password must be at least 6 characters.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label hlmLabel>
+      Confirm Password
+      <div class="relative">
+        <input
+          hlmInput
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+          class="w-full mt-1 pr-10"
+        />
+        <button
+          type="button"
+          class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+          (click)="toggleConfirmPasswordVisibility()"
+        >
+          <ng-container *ngIf="showConfirmPassword; else confirmPasswordHidden">
+            <ng-icon name="bootstrapEye" class="text-lg"></ng-icon>
+          </ng-container>
+          <ng-template #confirmPasswordHidden>
+            <ng-icon name="bootstrapEyeSlash" class="text-lg"></ng-icon>
+          </ng-template>
+        </button>
+      </div>
+    </label>
+    <div
+      *ngIf="signupForm.errors?.['passwordsMismatch'] && confirmPassword?.touched"
+      class="text-red-500 text-sm"
+    >
+      Passwords must match.
+    </div>
+  </div>
+
+  <div class="w-full text-left text-white">
+    <p class="text-sm text-black">
+      Already have an account?
+      <a class="text-fpt-colors" routerLink="/signin">Login here</a>
+    </p>
+    <button
+      hlmBtn
+      type="submit"
+      variant="fpt"
+      class="text-center px-8 mt-4 py-2"
+      [disabled]="signupForm.invalid"
+    >
+      Register
+    </button>
+  </div>
+</form>

@@ -1,0 +1,37 @@
+<div
+  class="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-20 lg:px-8 border-2 border-black min-h-screen flex justify-center items-center"
+>
+  <div class="w-full h-full">
+    <a
+      routerLink="/signup"
+      aria-label="MediConnect"
+      title="MediConnect"
+      class="inline-flex items-center z-20"
+    >
+      <span
+        class="ml-12 text-xl font-bold text-fpt-colors tracking-wide uppercase"
+        >MediConnect</span
+      >
+    </a>
+
+    <div
+      class="w-full h-[85vh] flex flex-col items-center justify-between lg:flex-row-reverse"
+    >
+      <div class="w-full lg:max-w-lg lg:pr-5 lg:mb-0 text-center">
+        <h1 class="font-semibold tracking-wide text-3xl mb-1 text-fpt-colors">
+          Register
+        </h1>
+        <div>
+          <app-signup-form></app-signup-form>
+        </div>
+      </div>
+      <div class="relative lg:w-1/2">
+        <img
+          class="object-cover w-full h-56 sm:h-96"
+          src="/assets/images/signinImage.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
