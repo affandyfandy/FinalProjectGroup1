@@ -5,7 +5,7 @@
     <app-sidebar *ngIf="showSidebar"></app-sidebar>
     <div
       class="w-full"
-      [ngClass]="showSidebar ? 'bg-[#F3FBFF]' : 'bg-white'"
+      [ngClass]="showSidebar ? 'bg-[#F3FBFF] pl-64' : 'bg-white'"
     >
       <app-header-admin *ngIf="showSidebar"></app-header-admin>
       <router-outlet></router-outlet>

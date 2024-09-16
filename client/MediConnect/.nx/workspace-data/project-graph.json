@@ -28,7 +28,10 @@
                 }
               ],
               "styles": [
-                "src/styles.css"
+                "src/styles.css",
+                "./node_modules/ag-grid-community/styles/ag-grid.css",
+                "./node_modules/ag-grid-community/styles/ag-theme-quartz.css",
+                "./node_modules/ngx-toastr/toastr.css"
               ],
               "scripts": []
             },
@@ -4415,6 +4418,15 @@
         "version": "3.1.1",
         "packageName": "yallist",
         "hash": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="
+      }
+    },
+    "npm:@spartan-ng/ui-avatar-brain": {
+      "type": "npm",
+      "name": "npm:@spartan-ng/ui-avatar-brain",
+      "data": {
+        "version": "0.0.1-alpha.355",
+        "packageName": "@spartan-ng/ui-avatar-brain",
+        "hash": "sha512-mFuTHF1AE45pKGwI+wC5sD2pGUlgri5vO5aOuByqhUHuOuhrTz1EwCtP94WySeUeOsBmE8HHgzGiVPGuKmL/Vg=="
       }
     },
     "npm:@spartan-ng/ui-core": {
@@ -9277,6 +9289,15 @@
         "hash": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw=="
       }
     },
+    "npm:ngx-toastr": {
+      "type": "npm",
+      "name": "npm:ngx-toastr",
+      "data": {
+        "version": "19.0.0",
+        "packageName": "ngx-toastr",
+        "hash": "sha512-6pTnktwwWD+kx342wuMOWB4+bkyX9221pAgGz3SHOJH0/MI9erLucS8PeeJDFwbUYyh75nQ6AzVtolgHxi52dQ=="
+      }
+    },
     "npm:nice-napi": {
       "type": "npm",
       "name": "npm:nice-napi",
@@ -11866,6 +11887,11 @@
       },
       {
         "source": "MediConnect",
+        "target": "npm:@spartan-ng/ui-avatar-brain",
+        "type": "static"
+      },
+      {
+        "source": "MediConnect",
         "target": "npm:@spartan-ng/ui-core",
         "type": "static"
       },
@@ -11897,6 +11923,11 @@
       {
         "source": "MediConnect",
         "target": "npm:clsx",
+        "type": "static"
+      },
+      {
+        "source": "MediConnect",
+        "target": "npm:ngx-toastr",
         "type": "static"
       },
       {
@@ -17911,6 +17942,28 @@
         "type": "static"
       }
     ],
+    "npm:@spartan-ng/ui-avatar-brain": [
+      {
+        "source": "npm:@spartan-ng/ui-avatar-brain",
+        "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "npm:@spartan-ng/ui-avatar-brain",
+        "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@spartan-ng/ui-avatar-brain",
+        "target": "npm:clsx",
+        "type": "static"
+      },
+      {
+        "source": "npm:@spartan-ng/ui-avatar-brain",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
     "npm:@spartan-ng/ui-core": [
       {
         "source": "npm:@spartan-ng/ui-core",
@@ -23176,6 +23229,28 @@
       {
         "source": "npm:needle",
         "target": "npm:sax",
+        "type": "static"
+      }
+    ],
+    "npm:ngx-toastr": [
+      {
+        "source": "npm:ngx-toastr",
+        "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "npm:ngx-toastr",
+        "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:ngx-toastr",
+        "target": "npm:@angular/platform-browser",
+        "type": "static"
+      },
+      {
+        "source": "npm:ngx-toastr",
+        "target": "npm:tslib",
         "type": "static"
       }
     ],

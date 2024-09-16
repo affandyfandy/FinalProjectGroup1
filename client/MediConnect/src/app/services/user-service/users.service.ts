@@ -26,7 +26,7 @@ export class UserService {
 
   // Get products by criteria with pagination
   getUsers(page: number = 0, size: number = 20): Observable<any> {
-    const headers = this.getHeaders();
+    const headers = this.getHeadersRestricted();
 
     let params = new HttpParams();
 
