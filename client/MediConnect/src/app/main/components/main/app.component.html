@@ -1,7 +1,8 @@
 <div class="font-poppins">
   <app-header *ngIf="showNavAndFooter"></app-header>
 
-  <div class="min-h-[100vh]">
+  <div class="min-h-[100vh] flex gap-x-2">
+    <app-sidebar *ngIf="showSidebar"></app-sidebar>
     <router-outlet></router-outlet>
   </div>
 
