@@ -1,0 +1,3 @@
+@echo off
+echo Building the project with Maven...
+mvn clean install && java -jar target/gateway_service-0.0.1-SNAPSHOT.jar
