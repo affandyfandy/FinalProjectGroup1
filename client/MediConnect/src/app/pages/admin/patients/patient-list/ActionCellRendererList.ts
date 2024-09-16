@@ -20,7 +20,8 @@ import {
   HlmDialogTitleDirective,
 } from '@spartan-ng/ui-dialog-helm';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm'
+import { PatientModalComponent } from '../patient-modal/patient-modal.component';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-action-cell-renderer',
   standalone: true,
@@ -35,6 +36,8 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm'
     HlmDialogFooterComponent,
     HlmDialogTitleDirective,
     HlmDialogDescriptionDirective,
+    PatientModalComponent,
+    RouterModule,
   ],
   viewProviders: [
     provideIcons({ bootstrapTrash, bootstrapPencilSquare, bootstrapEyeFill }),
@@ -50,26 +53,29 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm'
         <ng-icon name="bootstrapEyeFill"></ng-icon> View
       </button>
       <hlm-dialog-content
-        class="max-w-[300px] lg:max-w-[700px] text-left h-[90vh]"
+        class="max-w-[300px] bg-white lg:max-w-[700px] text-left h-[70vh]"
         *brnDialogContent="let ctx"
       >
         <hlm-dialog-header class="w-full text-left">
-          <h3 hlmDialogTitle>Invoice Details</h3>
-          <p hlmDialogDescription>Invoice Details</p>
+          <h3 hlmDialogTitle>Patient Information</h3>
+          <p hlmDialogDescription>
+            Detailed information regarding the patient's data
+          </p>
         </hlm-dialog-header>
-        <!-- <app-invoice-modal [invoice]="params.data"></app-invoice-modal> -->
+        <app-patient-modal [patient]="params.data"></app-patient-modal>
         <hlm-dialog-footer>
           <button hlmButton hlmDialogClose>Close</button>
         </hlm-dialog-footer>
       </hlm-dialog-content>
     </hlm-dialog>
-    <button
-      class="bg-gray-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-gray-600 mr-1.5 disabled:bg-gray-300 disabled:cursor-not-allowed"
-      brnDialogTrigger
-      hlmBtn
-    >
-      <ng-icon name="bootstrapPencilSquare"></ng-icon> Update
-    </button>
+    <a [routerLink]="['/admin/dashboard/patients', params.data.id]">
+      <button
+        class="bg-gray-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-gray-600 mr-1.5 disabled:bg-gray-300 disabled:cursor-not-allowed"
+      >
+        <ng-icon name="bootstrapPencilSquare"></ng-icon> Update
+      </button>
+    </a>
+
     <button
       class="bg-red-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
       brnDialogTrigger

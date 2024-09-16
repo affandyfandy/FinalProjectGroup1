@@ -1,7 +1,7 @@
 <div class="font-poppins">
   <app-header *ngIf="showNavAndFooter"></app-header>
 
-  <div class="min-h-[100vh] flex gap-x-2">
+  <div class="min-h-[100vh]">
     <app-sidebar *ngIf="showSidebar"></app-sidebar>
     <div
       class="w-full"
@@ -14,3 +14,9 @@
 
   <app-footer *ngIf="showNavAndFooter"></app-footer>
 </div>
+<!--
+<div>
+  <app-header *ngIf="showNavAndFooter"></app-header>
+  <router-outlet></router-outlet>
+  <app-footer *ngIf="showNavAndFooter"></app-footer>
+</div> -->

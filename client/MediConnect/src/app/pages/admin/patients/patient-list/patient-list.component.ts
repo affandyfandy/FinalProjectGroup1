@@ -74,6 +74,9 @@ export class PatientListComponent implements OnInit {
       cellRenderer: ActionCellRendererList,
       headerClass: 'text-center',
       minWidth: 300,
+      sortable: false,
+      filter: false,
+      floatingFilter:false,
       cellClass: 'text-center',
     },
   ];
