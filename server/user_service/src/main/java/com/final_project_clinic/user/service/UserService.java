@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import com.final_project_clinic.user.data.model.User;
 import com.final_project_clinic.user.dto.UserDTO;
 import com.final_project_clinic.user.dto.UserSaveDTO;
 import com.final_project_clinic.user.dto.UserShowDTO;
@@ -15,6 +17,8 @@ public interface UserService {
 
     // Find User by its id
     UserShowDTO findUserById(UUID id);
+
+    User findUserByEmail(String email);
 
     // Creating a new User.
     UserDTO createUser(UserSaveDTO userSaveDTO);

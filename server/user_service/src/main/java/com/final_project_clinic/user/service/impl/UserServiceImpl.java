@@ -1,6 +1,5 @@
 package com.final_project_clinic.user.service.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +8,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.final_project_clinic.user.data.model.Role;
 import com.final_project_clinic.user.data.model.User;
 import com.final_project_clinic.user.data.repository.UserRepository;
 import com.final_project_clinic.user.mapper.UserMapper;
 import com.final_project_clinic.user.service.UserService;
+import com.final_project_clinic.user.utils.PasswordUtils;
 import com.final_project_clinic.user.dto.UserDTO;
 import com.final_project_clinic.user.dto.UserShowDTO;
+import com.final_project_clinic.user.exception.ResourceNotFoundException;
 import com.final_project_clinic.user.dto.UserSaveDTO;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,17 +39,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public UserShowDTO findUserById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found."));
         return userMapper.toUserShowDTO(user);
     }
 
     @Override
     public UserDTO createUser(UserSaveDTO userSaveDTO) {
         User user = userMapper.toUser(userSaveDTO);
-        user.setCreatedTime(new Date());
-        user.setCreatedBy("admin"); // Replace with actual user from context
+        String role = (userSaveDTO.getRole() != null && !userSaveDTO.getRole().isEmpty())
+                ? userSaveDTO.getRole()
+                : Role.PATIENT.toString();
+        user.setRole(role);
+        user.setPassword(PasswordUtils.hashPassword(userSaveDTO.getPassword()));
         user = userRepository.save(user);
         return userMapper.toUserDTO(user);
     }
@@ -57,14 +65,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UUID id, UserSaveDTO userSaveDTO) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found."));
 
         // Update fields from UserSaveDTO
         existingUser.setFull_name(userSaveDTO.getFull_name());
         existingUser.setEmail(userSaveDTO.getEmail());
-        existingUser.setUpdatedTime(new Date());
-        existingUser.setUpdatedBy("admin"); // Replace with actual user from context
-
         existingUser = userRepository.save(existingUser);
         return userMapper.toUserDTO(existingUser);
     }
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("User with id " + id + " not found.");
+            throw new ResourceNotFoundException("User with id " + id + " not found.");
         }
         userRepository.deleteById(id);
     }
