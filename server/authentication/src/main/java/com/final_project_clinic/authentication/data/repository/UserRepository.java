@@ -11,5 +11,5 @@ import com.final_project_clinic.authentication.data.model.User;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
     // Find User based on his/her email
-    User findByEmail(String email);
+    User findUserByEmail(String email);
 }
