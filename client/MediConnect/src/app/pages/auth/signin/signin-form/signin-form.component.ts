@@ -13,10 +13,7 @@ import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { bootstrapEye, bootstrapEyeSlash } from '@ng-icons/bootstrap-icons';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import {
-  UserRequestLogin,
-  UserRequestRegister,
-} from '../../../../models/user.model';
+import { UserRequestLogin } from '../../../../models/user.model';
 import { AuthService } from '../../../../services/auth-service/auth.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 
@@ -97,7 +94,7 @@ export class SigninFormComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.log("ERROR : ", error);
+          console.log('ERROR : ', error);
           if (error.status === 401) {
             this.toastrService.error(
               'Try Again!!',

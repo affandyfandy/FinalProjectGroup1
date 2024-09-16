@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { RouterConfig } from '../../../config/app.constants';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { HeaderAdminComponent } from '../header-admin/header-admin.component';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
+    HeaderAdminComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: [],

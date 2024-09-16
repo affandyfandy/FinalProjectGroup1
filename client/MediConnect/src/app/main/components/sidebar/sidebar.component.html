@@ -1,35 +1,32 @@
-<!-- component -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
-/>
-
 <div class="min-h-screen flex flex-row bg-gray-100">
-  <div class="flex flex-col w-64 bg-white rounded-r-3xl overflow-hidden">
-    <div class="flex items-center justify-center h-20 shadow-md">
-      <h1 class="text-3xl uppercase text-indigo-500">Logo</h1>
+  <div class="flex flex-col justify-between w-64 bg-white overflow-hidden">
+    <div class="flex flex-col items-center justify-center h-20 shadow-md">
+      <h1 class="text-2xl font-bold text-fpt-colors tracking-wide uppercase">
+        MediConnect
+      </h1>
+      <p class="text-sm font-medium">Admin Panel</p>
     </div>
-    <ul class="flex flex-col py-4">
+    <ul class="flex flex-col gap-y-2 py-4">
       <li>
         <a
-          href="#"
+          routerLink="/admin/dashboard"
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-home"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapHouse"></ng-icon
           ></span>
           <span class="text-sm font-medium">Dashboard</span>
         </a>
       </li>
       <li>
         <a
-          href="#"
+          routerLink="/admin/dashboard/patients"
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-music"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapPeopleFill"></ng-icon
           ></span>
           <span class="text-sm font-medium">Patient Data</span>
         </a>
@@ -40,9 +37,9 @@
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-drink"></i
-          ></span>
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapPersonHearts"></ng-icon>
+          </span>
           <span class="text-sm font-medium">Doctor Data</span>
         </a>
       </li>
@@ -52,8 +49,8 @@
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-shopping-bag"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapCalendar2Fill"></ng-icon
           ></span>
           <span class="text-sm font-medium">Doctor Schedule</span>
         </a>
@@ -64,8 +61,8 @@
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-chat"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapCalendar2WeekFill"></ng-icon
           ></span>
           <span class="text-sm font-medium">Appointment Queue </span>
         </a>
@@ -76,40 +73,34 @@
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-user"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapWallet2"></ng-icon
           ></span>
           <span class="text-sm font-medium">Payments</span>
         </a>
       </li>
       <li>
         <a
-          href="#"
+          routerLink="/admin/dashboard/users"
           class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
         >
           <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-bell"></i
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapPersonFillCheck"></ng-icon
           ></span>
           <span class="text-sm font-medium">Admin Data</span>
-          <span
-            class="ml-auto mr-6 text-sm bg-red-100 rounded-full px-3 py-px text-red-500"
-            >5</span
-          >
-        </a>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
-        >
-          <span
-            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"
-            ><i class="bx bx-log-out"></i
-          ></span>
-          <span class="text-sm font-medium">Logout</span>
         </a>
       </li>
     </ul>
+
+    <div
+      class="flex flex-row items-center h-20 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+    >
+      <span
+        class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+        ><ng-icon name="bootstrapDoorOpen"></ng-icon
+      ></span>
+      <span class="text-sm font-medium">Logout</span>
+    </div>
   </div>
 </div>

@@ -3,7 +3,13 @@
 
   <div class="min-h-[100vh] flex gap-x-2">
     <app-sidebar *ngIf="showSidebar"></app-sidebar>
-    <router-outlet></router-outlet>
+    <div
+      class="w-full"
+      [ngClass]="showSidebar ? 'bg-[#F3FBFF]' : 'bg-white'"
+    >
+      <app-header-admin *ngIf="showSidebar"></app-header-admin>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 
   <app-footer *ngIf="showNavAndFooter"></app-footer>
