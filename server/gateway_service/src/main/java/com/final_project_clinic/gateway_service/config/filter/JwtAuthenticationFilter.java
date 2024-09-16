@@ -17,11 +17,12 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     private JwtUtils jwtUtils;
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, org.springframework.cloud.gateway.filter.GatewayFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange,
+            org.springframework.cloud.gateway.filter.GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
 
-        // Skip filter for authentication routes (auth-service)
+        // Skip filter for authentication routes
         if (path.startsWith("/api/v1/authentication")) {
             return chain.filter(exchange);
         }
@@ -48,10 +49,15 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             return exchange.getResponse().setComplete();
         }
 
-        // Optionally, pass user information to downstream services
-        String username = jwtUtils.extractUsername(token);
+        // Extract claims and pass them to downstream services
+        String email = jwtUtils.extractEmail(token);
+        String userId = jwtUtils.extractUserId(token);
+        String role = jwtUtils.extractUserRole(token);
+
         ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-                .header("X-Authenticated-User", username)
+                .header("X-Authenticated-User", email)
+                .header("X-User-Id", userId)
+                .header("X-User-Role", role)
                 .build();
 
         return chain.filter(exchange.mutate().request(modifiedRequest).build());
@@ -59,7 +65,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1;  // Ensure the filter runs early
+        return -1; // Ensure the filter runs early
     }
 }
-

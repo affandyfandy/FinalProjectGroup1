@@ -22,7 +22,8 @@ public class JwtUtils {
         this.publicKey = publicKey;
     }
 
-    public Claims extractClaims(String token) {
+    // Extract all claims from the token
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(publicKey) // Use the public key to verify JWT
                 .build()
@@ -30,16 +31,28 @@ public class JwtUtils {
                 .getBody();
     }
 
+    // Validate the token by checking its expiration date
     public boolean validateToken(String token) {
         try {
-            Claims claims = extractClaims(token);
+            Claims claims = extractAllClaims(token);
             return claims.getExpiration().after(new Date());
         } catch (Exception e) {
             return false;
         }
     }
 
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+    // Extract the username (email) from the token
+    public String extractEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    // Optionally, extract other claims such as the user ID or role
+    public String extractUserId(String token) {
+        return (String) extractAllClaims(token).get("id");
+    }
+
+    public String extractUserRole(String token) {
+        return (String) extractAllClaims(token).get("role");
     }
 }
+
