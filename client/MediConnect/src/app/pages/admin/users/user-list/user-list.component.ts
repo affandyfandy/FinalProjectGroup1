@@ -13,6 +13,7 @@ import {
 } from 'ag-grid-community';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
+import { ActionCellRendererList } from './ActionCellRendererList';
 
 @Component({
   selector: 'app-user-list',
@@ -40,6 +41,16 @@ export class UserListComponent implements OnInit {
       field: 'updatedTime',
       headerName: 'Updated Time',
       valueFormatter: (params) => new Date(params.value).toLocaleString(),
+    },
+    {
+      headerName: 'Actions',
+      cellRenderer: ActionCellRendererList,
+      headerClass: 'text-center',
+      minWidth: 300,
+      sortable: false,
+      filter: false,
+      floatingFilter: false,
+      cellClass: 'text-center',
     },
   ];
 

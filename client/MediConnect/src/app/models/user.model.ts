@@ -22,3 +22,10 @@ export interface UserRequestRegister {
   password: string;
   role: string;
 }
+
+export interface UserRequestAdmin {
+  full_name: string;
+  email: string;
+  password: string;
+  role: string;
+}
