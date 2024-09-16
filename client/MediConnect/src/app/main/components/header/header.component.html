@@ -16,31 +16,41 @@
     </a>
 
     <ul class="flex items-center hidden space-x-8 lg:flex">
-      <li
-        *ngIf="isAdmin; else userDashboard"
-        class="bg-gradient-fpt-2 py-2 px-4 rounded-lg"
-      >
-        <a
-          routerLink="/admin/dashboard"
-          aria-label="Admin Dashboard"
-          title="Admin Dashboard"
-          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
-          >Dashboard</a
+      <div *ngIf="isLoggedIn">
+        <li
+          *ngIf="isAdmin; else userDashboard"
+          class="bg-gradient-fpt-2 py-2 px-4 rounded-lg"
         >
-      </li>
-
-      <ng-template #userDashboard>
-        <li class="bg-gradient-fpt-2 py-2 px-4 rounded-lg">
           <a
-            routerLink="/dashboard"
-            aria-label="User Dashboard"
-            title="User Dashboard"
+            routerLink="/admin/dashboard"
+            aria-label="Admin Dashboard"
+            title="Admin Dashboard"
             class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
             >Dashboard</a
           >
         </li>
-      </ng-template>
 
+        <ng-template #userDashboard>
+          <li class="bg-gradient-fpt-2 py-2 px-4 rounded-lg">
+            <a
+              routerLink="/dashboard"
+              aria-label="User Dashboard"
+              title="User Dashboard"
+              class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+              >Dashboard</a
+            >
+          </li>
+        </ng-template>
+      </div>
+      <li>
+        <a
+          routerLink="/"
+          aria-label="Home"
+          title="Home"
+          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+          >Home</a
+        >
+      </li>
       <li>
         <a
           routerLink="/services"
@@ -48,15 +58,6 @@
           title="Services"
           class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
           >Services</a
-        >
-      </li>
-      <li>
-        <a
-          routerLink="/about"
-          aria-label="About us"
-          title="About us"
-          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
-          >About us</a
         >
       </li>
 
@@ -148,18 +149,18 @@
       >
         <div class="w-full flex flex-col space-y-4 p-6 pt-20 bg-white">
           <a
-            routerLink="/services"
-            aria-label="Services"
-            title="Services"
+            routerLink="/"
+            aria-label="Home"
+            title="Home"
             class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
-            >Services</a
+            >Home</a
           >
           <a
-            routerLink="/about"
-            aria-label="About us"
-            title="About us"
+            routerLink="/services"
+            aria-label="Services us"
+            title="Services us"
             class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
-            >About us</a
+            >Services</a
           >
           <!-- Logout button (show only if logged in) -->
           <button
