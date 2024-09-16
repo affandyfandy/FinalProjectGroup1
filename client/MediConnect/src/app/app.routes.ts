@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 import { RouterConfig } from './config/app.constants';
+import { authGuard } from './main/guards/auth.guard';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { UnauthorizeComponent } from './pages/unauthorize/unauthorize.component';
 // import { authGuard } from './main/guards/auth-guard.service';
 
 export const routes: Routes = [
@@ -24,10 +27,34 @@ export const routes: Routes = [
     data: RouterConfig.SIGNIN.data,
   },
   {
-    path: RouterConfig.USERDASHBOARD.path,
-    loadChildren: () =>
-      import('./pages/user/user.routes').then((m) => m.userRoutes),
-    title: RouterConfig.USERDASHBOARD.title,
-    data: RouterConfig.USERDASHBOARD.data,
+    path: '',
+    canActivate: [authGuard],
+    data: { roles: ['PATIENT'] },
+    children: [
+      {
+        path: RouterConfig.USERDASHBOARD.path,
+        loadChildren: () =>
+          import('./pages/user/user.routes').then((m) => m.userRoutes),
+        title: RouterConfig.USERDASHBOARD.title,
+        data: RouterConfig.USERDASHBOARD.data,
+      },
+    ],
   },
+  {
+    path: '',
+    canActivate: [authGuard],
+    data: { roles: ['ADMIN', 'SUPERADMIN'] },
+    children: [
+      {
+        path: RouterConfig.ADMINDASHBOARD.path,
+        loadChildren: () =>
+          import('./pages/admin/admin.routes').then((m) => m.adminRoutes),
+        title: RouterConfig.ADMINDASHBOARD.title,
+        data: RouterConfig.ADMINDASHBOARD.data,
+      },
+    ],
+  },
+  { path: 'unauthorized', component: UnauthorizeComponent },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', component: NotFoundComponent },
 ];

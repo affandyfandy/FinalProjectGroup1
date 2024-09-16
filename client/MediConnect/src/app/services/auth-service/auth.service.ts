@@ -47,8 +47,17 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  setRole(role: string): void {
+    localStorage.setItem('userRole', role);
+  }
+
+  getRole(): string | null {
+    return localStorage.getItem('userRole');
+  }
+
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
   }
 
   isLoggedIn(): boolean {

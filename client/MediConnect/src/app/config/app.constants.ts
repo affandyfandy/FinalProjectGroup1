@@ -32,7 +32,13 @@ export const RouterConfig = {
   USERDASHBOARD: {
     path: 'dashboard',
     link: '/dashboard',
-    title: 'dashboard',
+    title: 'Dashboard',
     data: { header: true },
   },
+  ADMINDASHBOARD: {
+    path: 'admin/dashboard',
+    link: '/admin/dashboard',
+    title: 'Admin Dashboard',
+    data: { header: true },
+  }
 };

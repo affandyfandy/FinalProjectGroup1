@@ -19,6 +19,7 @@ import {
 } from '../../../../models/user.model';
 import { AuthService } from '../../../../services/auth-service/auth.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-signin-form',
   standalone: true,
@@ -72,13 +73,31 @@ export class SigninFormComponent implements OnInit {
       this.authService.login(loginUser).subscribe({
         next: (response) => {
           if (response) {
-            this.toastrService.success('Welcome Back!!', 'Login successful!');
             this.authService.setToken(response.token);
-            this.router.navigate(['/']);
+            this.authService.profile().subscribe({
+              next: (profileResponse) => {
+                const userRole = profileResponse.role;
+                this.authService.setRole(userRole);
+                this.toastrService.success(
+                  'Welcome Back!!',
+                  'Login successful!'
+                );
+                if (userRole === 'PATIENT') {
+                  this.router.navigate(['/dashboard']);
+                } else if (userRole === 'ADMIN' || userRole === 'SUPERADMIN') {
+                  this.router.navigate(['/admin/dashboard']);
+                } else {
+                  this.toastrService.error('Invalid user role');
+                }
+              },
+              error: (profileError) => {
+                this.toastrService.error('Failed to fetch user profile');
+              },
+            });
           }
         },
         error: (error) => {
-          // Improved error handling
+          console.log("ERROR : ", error);
           if (error.status === 401) {
             this.toastrService.error(
               'Try Again!!',

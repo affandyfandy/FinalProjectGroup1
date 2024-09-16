@@ -16,6 +16,31 @@
     </a>
 
     <ul class="flex items-center hidden space-x-8 lg:flex">
+      <li
+        *ngIf="isAdmin; else userDashboard"
+        class="bg-gradient-fpt-2 py-2 px-4 rounded-lg"
+      >
+        <a
+          routerLink="/admin/dashboard"
+          aria-label="Admin Dashboard"
+          title="Admin Dashboard"
+          class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+          >Dashboard</a
+        >
+      </li>
+
+      <ng-template #userDashboard>
+        <li class="bg-gradient-fpt-2 py-2 px-4 rounded-lg">
+          <a
+            routerLink="/dashboard"
+            aria-label="User Dashboard"
+            title="User Dashboard"
+            class="font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-gray-900"
+            >Dashboard</a
+          >
+        </li>
+      </ng-template>
+
       <li>
         <a
           routerLink="/services"

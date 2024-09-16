@@ -32,11 +32,19 @@ export class HeaderComponent implements OnInit {
   showLogout = false;
   isOpen = false;
   isLoggedIn = false;
+  isAdmin = true;
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadProfile(); // Load user profile on init
+    this.checkAdminRole();
+  }
+
+  checkAdminRole(): void {
+    if (this.authService.getRole() === 'PATIENT') {
+      this.isAdmin = false;
+    }
   }
 
   loadProfile() {
@@ -61,6 +69,6 @@ export class HeaderComponent implements OnInit {
   handleLogout() {
     this.isLoggedIn = false; // Set loggedIn to false
     this.authService.logout();
-    this.router.navigate(['/login']); // Redirect to login page after logout
+    this.router.navigate(['/signin']); // Redirect to login page after logout
   }
 }
