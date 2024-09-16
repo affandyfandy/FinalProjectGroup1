@@ -1,34 +1,28 @@
 package com.final_project_clinic.user.data.model;
 
-import java.util.Date;
 import java.util.UUID;
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import lombok.Data;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "Patient")
-public class Patient {
+@EntityListeners(AuditingEntityListener.class)
+public class Patient extends Audit {
 
     @Id
     @Column(name = "ID", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @Column(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID user_id;
 
     @Column(name = "nik", nullable = false, unique = true)
     private Long nik;
@@ -45,16 +39,8 @@ public class Patient {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "created_time", nullable = false)
-    private Date createdTime;
-
-    @Column(name = "updated_time")
-    private Date updatedTime;
-
-    @Column(name = "created_by", nullable = false, length = 255)
-    private String createdBy;
-
-    @Column(name = "updated_by", length = 255)
-    private String updatedBy;
+    @ManyToOne // or @OneToOne depending on the relationship
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

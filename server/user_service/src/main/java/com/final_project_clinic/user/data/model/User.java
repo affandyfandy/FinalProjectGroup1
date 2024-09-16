@@ -1,25 +1,22 @@
 package com.final_project_clinic.user.data.model;
 
-import java.util.Date;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "User")
-public class User {
+@EntityListeners(AuditingEntityListener.class)
+public class User extends Audit {
 
     @Id
     @Column(name = "ID", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
@@ -37,17 +34,4 @@ public class User {
 
     @Column(name = "role", nullable = false, length = 20)
     private String role;
-
-    @Column(name = "created_time", nullable = false)
-    private Date createdTime;
-
-    @Column(name = "updated_time")
-    private Date updatedTime;
-
-    @Column(name = "created_by", nullable = false, length = 255)
-    private String createdBy;
-
-    @Column(name = "updated_by", length = 255)
-    private String updatedBy;
-
 }
