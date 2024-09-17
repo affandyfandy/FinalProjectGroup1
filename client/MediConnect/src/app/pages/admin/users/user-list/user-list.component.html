@@ -13,6 +13,7 @@
           Add Data
         </button>
       </a>
+      <spartan-alert-dialog-preview></spartan-alert-dialog-preview>
       <div class="flex items-center justify-center">
         <ag-grid-angular
           class="ag-theme-quartz w-full h-[100vh] mt-4 my-6"
@@ -20,9 +21,6 @@
           [rowData]="users"
           [columnDefs]="colDefs"
           [defaultColDef]="defaultColDef"
-          [pagination]="true"
-          [paginationPageSize]="10"
-          [context]="{ componentParent: this }"
           (gridReady)="onGridReady($event)"
           (gridSizeChanged)="onGridSizeChanged($event)"
           (firstDataRendered)="onFirstDataRendered($event)"

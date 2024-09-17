@@ -6,7 +6,10 @@
       <h2 class="text-2xl font-medium mt-8">Update User Data</h2>
       <div class="w-full flex items-center justify-center">
         <div class="w-4/5">
-          <app-user-form></app-user-form>
+          <app-user-form
+            [isEditMode]="userId !== null"
+            [userId]="userId"
+          ></app-user-form>
         </div>
       </div>
     </div>

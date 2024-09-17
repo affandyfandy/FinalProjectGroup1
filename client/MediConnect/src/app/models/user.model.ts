@@ -29,3 +29,19 @@ export interface UserRequestAdmin {
   password: string;
   role: string;
 }
+
+export interface UserSaveDTO {
+  full_name: string;
+  email: string;
+  password: string;
+  role: string;
+  createdBy: string;
+}
+
+export interface UserShowDTO {
+  id: string;
+  full_name: string;
+  email: string;
+  role: string;
+  createdTime: Date;
+}

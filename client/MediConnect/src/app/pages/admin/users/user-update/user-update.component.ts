@@ -10,14 +10,13 @@ import { UserFormComponent } from '../user-form/user-form.component';
   styleUrl: './user-update.component.css',
 })
 export class UserUpdateComponent implements OnInit {
-  patientId: string = '';
+  userId: string | null = null; // Store the user ID from the route
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.patientId = params['id']; // Access the 'id' parameter from the URL
-      console.log('Test ID:', this.patientId);
+      this.userId = params['id']; // Get the ID from the route
     });
   }
 }

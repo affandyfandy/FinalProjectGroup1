@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { AppConstants } from '../../config/app.constants';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +14,7 @@ import { AppConstants } from '../../config/app.constants';
 export class AuthService {
   private apiUrl = `${AppConstants.BASE_API_URL}/authentication`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
@@ -62,5 +67,17 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.getToken() !== null;
+  }
+
+  handleError(error: HttpErrorResponse) {
+    if (error.status === 401 || error.status === 500) {
+      console.error('JWT expired. Logging out.');
+      this.logout();
+      this.router.navigate(['/signin']);
+    }
+
+    return throwError(
+      () => new Error('An error occurred. Please try again later.')
+    );
   }
 }

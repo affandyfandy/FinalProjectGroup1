@@ -58,6 +58,7 @@ export class HeaderAdminComponent implements OnInit {
       },
       (error) => {
         console.error('Error loading profile', error);
+        this.authService.handleError(error);
       }
     );
   }

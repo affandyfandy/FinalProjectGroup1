@@ -2,6 +2,22 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import {
+  BrnAlertDialogContentDirective,
+  BrnAlertDialogTriggerDirective,
+} from '@spartan-ng/ui-alertdialog-brain';
+import {
+  HlmAlertDialogActionButtonDirective,
+  HlmAlertDialogCancelButtonDirective,
+  HlmAlertDialogComponent,
+  HlmAlertDialogContentComponent,
+  HlmAlertDialogDescriptionDirective,
+  HlmAlertDialogFooterComponent,
+  HlmAlertDialogHeaderComponent,
+  HlmAlertDialogOverlayDirective,
+  HlmAlertDialogTitleDirective,
+} from '@spartan-ng/ui-alertdialog-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import {
   bootstrapTrash,
   bootstrapPencilSquare,
   bootstrapEyeFill,
@@ -22,11 +38,25 @@ import {
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { RouterModule } from '@angular/router';
 import { UserModalComponent } from '../user-modal/user-modal.component';
+import { UserListComponent } from '../user-list/user-list.component';
 @Component({
   selector: 'app-action-cell-renderer',
   standalone: true,
   imports: [
+    BrnAlertDialogContentDirective,
+    BrnAlertDialogTriggerDirective,
+    HlmAlertDialogActionButtonDirective,
+    HlmAlertDialogCancelButtonDirective,
+    HlmAlertDialogComponent,
+    HlmAlertDialogContentComponent,
+    HlmAlertDialogDescriptionDirective,
+    HlmAlertDialogFooterComponent,
+    HlmAlertDialogHeaderComponent,
+    HlmAlertDialogOverlayDirective,
+    HlmAlertDialogTitleDirective,
+
     NgIconComponent,
+
     BrnDialogModule,
     BrnDialogContentDirective,
     BrnDialogTriggerDirective,
@@ -53,7 +83,7 @@ import { UserModalComponent } from '../user-modal/user-modal.component';
         <ng-icon name="bootstrapEyeFill"></ng-icon> View
       </button>
       <hlm-dialog-content
-        class="max-w-[300px] bg-white lg:max-w-[700px] text-left h-[70vh]"
+        class="max-w-[400px] bg-white lg:max-w-[700px] text-left h-[75vh]"
         *brnDialogContent="let ctx"
       >
         <hlm-dialog-header class="w-full text-left">
@@ -76,14 +106,30 @@ import { UserModalComponent } from '../user-modal/user-modal.component';
       </button>
     </a>
 
-    <button
-      class="bg-red-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
-      brnDialogTrigger
-      hlmBtn
-      [disabled]="!params.data"
-    >
-      <ng-icon name="bootstrapTrash"></ng-icon> Trash
-    </button>
+    <hlm-alert-dialog>
+      <button
+        class="bg-red-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
+        brnAlertDialogTrigger
+      >
+        <ng-icon name="bootstrapTrash"></ng-icon> Trash
+      </button>
+      <hlm-alert-dialog-content
+        *brnAlertDialogContent="let ctx"
+        class="bg-white"
+      >
+        <hlm-alert-dialog-header>
+          <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+          <p hlmAlertDialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </p>
+        </hlm-alert-dialog-header>
+        <hlm-alert-dialog-footer>
+          <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+          <button hlmAlertDialogAction class="bg-gray-800 text-white" (click)="onDelete()">Delete user</button>
+        </hlm-alert-dialog-footer>
+      </hlm-alert-dialog-content>
+    </hlm-alert-dialog>
   `,
 })
 export class ActionCellRendererList implements ICellRendererAngularComp {
@@ -96,5 +142,14 @@ export class ActionCellRendererList implements ICellRendererAngularComp {
   refresh(params: ICellRendererParams): boolean {
     this.params = params;
     return true;
+  }
+
+  onDelete(): void {
+    const parentComponent = this.params.context as UserListComponent;
+    if (parentComponent && parentComponent.deleteOneUser) {
+      parentComponent.deleteOneUser(this.params.data.id); // Call deleteUser on parent component
+    } else {
+      console.error('Parent component or deleteUser method not found.');
+    }
   }
 }

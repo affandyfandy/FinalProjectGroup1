@@ -14,11 +14,18 @@ import {
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
+import { AlertDialogPreviewComponent } from './ButtonSample';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [AgGridAngular, CommonModule, RouterModule, HlmButtonDirective],
+  imports: [
+    AgGridAngular,
+    CommonModule,
+    RouterModule,
+    HlmButtonDirective,
+    AlertDialogPreviewComponent,
+  ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
 })
@@ -29,22 +36,28 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   public colDefs: ColDef[] = [
-    { field: 'full_name', headerName: 'Full Name' },
-    { field: 'email', headerName: 'Email' },
-    { field: 'role', headerName: 'Role' },
+    { field: 'full_name', headerName: 'Full Name', minWidth: 150 },
+    { field: 'email', headerName: 'Email', minWidth: 150 },
+    { field: 'role', headerName: 'Role', minWidth: 150 },
     {
       field: 'createdTime',
       headerName: 'Created Time',
+      minWidth: 150,
       valueFormatter: (params) => new Date(params.value).toLocaleString(),
     },
     {
       field: 'updatedTime',
       headerName: 'Updated Time',
+      minWidth: 150,
       valueFormatter: (params) => new Date(params.value).toLocaleString(),
     },
     {
       headerName: 'Actions',
+      field: 'action',
       cellRenderer: ActionCellRendererList,
+      cellRendererParams: {
+        context: this, // Pass 'this' to provide access to UserListComponent
+      },
       headerClass: 'text-center',
       minWidth: 300,
       sortable: false,
@@ -93,6 +106,15 @@ export class UserListComponent implements OnInit {
   loadUsers() {
     this.userService.getUsers().subscribe((response) => {
       this.users = response.content;
+    });
+  }
+
+  deleteOneUser(id: string): void {
+    this.userService.deleteUser(id).subscribe({
+      next: () => {
+        this.loadUsers(); // Reload products after deletion
+      },
+      error: (e) => console.error(e),
     });
   }
 }
