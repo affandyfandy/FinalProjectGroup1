@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +25,21 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping
     public ResponseEntity<Page<DoctorDTO>> getAllDoctors(Pageable pageable) {
         Page<DoctorDTO> doctors = doctorService.getAllDoctors(pageable);
         return ResponseEntity.ok(doctors);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<DoctorDTO>> getAllDoctorsList() {
         List<DoctorDTO> doctors = doctorService.getAllDoctorsList();
         return ResponseEntity.ok(doctors);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable UUID id) {
         Optional<DoctorDTO> doctor = doctorService.getDoctorById(id);
@@ -43,12 +47,14 @@ public class DoctorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PostMapping
     public ResponseEntity<DoctorDTO> createDoctor(@RequestBody DoctorDTO doctorDTO) {
         DoctorDTO createdDoctor = doctorService.createDoctor(doctorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDoctor);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DoctorDTO> editDoctor(@PathVariable UUID id,
                                                 @RequestBody DoctorDTO doctorDTO) {
@@ -57,6 +63,7 @@ public class DoctorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteDoctor(@PathVariable UUID id) {
         Optional<DoctorDTO> doctor = doctorService.getDoctorById(id);

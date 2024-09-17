@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(ScheduleTimeId.class)
-public class ScheduleTime {
+public class ScheduleTime extends Audit {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)

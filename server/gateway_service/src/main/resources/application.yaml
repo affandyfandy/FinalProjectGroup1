@@ -16,6 +16,10 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/api/v1/all/**
+        - id: doctor-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/v1/doctors/**, /api/v1/schedules/**
 
 
 management:

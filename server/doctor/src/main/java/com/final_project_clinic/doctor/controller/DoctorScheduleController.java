@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -46,6 +47,7 @@ public class DoctorScheduleController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PostMapping
     public ResponseEntity<List<DoctorScheduleDTO>> createSchedule(@RequestBody List<DoctorScheduleDTO> doctorScheduleDTOs) {
         List<DoctorScheduleDTO> createdSchedules = new ArrayList<>();
@@ -57,6 +59,7 @@ public class DoctorScheduleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSchedules);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PutMapping("/{scheduleId}/{startWorkingHour}")
     public ResponseEntity<DoctorScheduleDTO> updateScheduleTime(
             @PathVariable UUID scheduleId,
@@ -67,6 +70,7 @@ public class DoctorScheduleController {
         return ResponseEntity.ok(updatedSchedule);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteSchedule(@PathVariable UUID id) {
         Optional<DoctorScheduleDTO> schedule = doctorScheduleService.getScheduleById(id);
@@ -79,6 +83,7 @@ public class DoctorScheduleController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @DeleteMapping("/{scheduleId}/{startWorkingHour}")
     public ResponseEntity<Void> deleteScheduleTime(
             @PathVariable UUID scheduleId,

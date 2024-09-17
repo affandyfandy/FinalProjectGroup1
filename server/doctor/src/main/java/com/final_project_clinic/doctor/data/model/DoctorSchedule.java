@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "DoctorSchedule")
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorSchedule {
+public class DoctorSchedule extends Audit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
