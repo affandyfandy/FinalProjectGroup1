@@ -2,6 +2,7 @@ package com.final_project_clinic.user.data.model;
 
 import java.util.UUID;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
