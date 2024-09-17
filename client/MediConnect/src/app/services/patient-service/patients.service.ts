@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../../config/app.constants';
+import {
+  PatientDTO,
+  PatientSaveDTO,
+  PatientShowDTO,
+} from '../../models/patient.model'; // Assuming you have model interfaces
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +30,7 @@ export class PatientsService {
   }
 
   // Get products by criteria with pagination
-  getPatients(page: number = 0, size: number = 20): Observable<any> {
+  getPatientsPublic(page: number = 0, size: number = 20): Observable<any> {
     const headers = this.getHeadersRestricted();
 
     let params = new HttpParams();
@@ -38,7 +43,7 @@ export class PatientsService {
     return this.http.get<any>(`${this.apiUrl}/public`, { headers, params });
   }
 
-  getPatientsRestricted(page: number = 0, size: number = 20): Observable<any> {
+  getPatients(page: number = 0, size: number = 20): Observable<any> {
     const headers = this.getHeadersRestricted();
 
     let params = new HttpParams();
@@ -49,5 +54,36 @@ export class PatientsService {
     }
 
     return this.http.get<any>(this.apiUrl, { headers, params });
+  }
+
+  // Get patient by ID (authentication required)
+  getPatientById(id: string): Observable<PatientShowDTO> {
+    return this.http.get<PatientShowDTO>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Create a new patient (authentication required)
+  createPatient(patientSaveDTO: PatientSaveDTO): Observable<PatientDTO> {
+    return this.http.post<PatientDTO>(this.apiUrl, patientSaveDTO, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Update existing patient by ID (authentication required)
+  updatePatient(
+    id: string,
+    patientSaveDTO: PatientSaveDTO
+  ): Observable<PatientDTO> {
+    return this.http.put<PatientDTO>(`${this.apiUrl}/${id}`, patientSaveDTO, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Delete patient by ID (authentication required)
+  deletePatient(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeadersRestricted(),
+    });
   }
 }

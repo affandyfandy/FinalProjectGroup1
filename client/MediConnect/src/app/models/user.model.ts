@@ -35,7 +35,6 @@ export interface UserSaveDTO {
   email: string;
   password: string;
   role: string;
-  createdBy: string;
 }
 
 export interface UserShowDTO {

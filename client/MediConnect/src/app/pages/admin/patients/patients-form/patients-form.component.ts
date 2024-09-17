@@ -1,87 +1,96 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+  User,
+  UserRequestRegister,
+  UserSaveDTO,
+} from '../../../../models/user.model';
+import { PatientSaveDTO } from '../../../../models/patient.model';
+import { PatientsService } from '../../../../services/patient-service/patients.service';
+import { UserService } from '../../../../services/user-service/users.service';
 @Component({
   selector: 'app-patients-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    HlmInputDirective,
-    HlmButtonDirective,
-    HlmLabelDirective,
-    HlmIconComponent,
-    NgIconComponent,
-    RouterModule,
-  ],
   templateUrl: './patients-form.component.html',
   styleUrl: './patients-form.component.css',
 })
 export class PatientsFormComponent implements OnInit {
   patientForm!: FormGroup;
+  createdUserId: string = ''; // To store the created user ID
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private patientService: PatientsService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.patientForm = this.fb.group({
       full_name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['password123'],
-      role: ['PATIENT'], // Since role is fixed, we hard-code it
-      nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]], // Pattern for NIK (16-digit number)
+      role: ['PATIENT'], // Fixed role
+      nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       phoneNumber: [
         '',
         [Validators.required, Validators.pattern('^[0-9]{10,12}$')],
-      ], // Allow only valid phone numbers
+      ],
       address: ['', [Validators.required]],
-      gender: ['', [Validators.required]], // Assuming you will have a dropdown or radio buttons for this
+      gender: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
     });
   }
 
-  // Method to handle form submission
   onSubmit(): void {
     if (this.patientForm.valid) {
-      const formData = this.patientForm.value;
-      console.log('Patient data submitted:', formData);
-      // Perform your logic here, e.g., send formData to an API.
+      // Create the user first
+      const userSaveDTO: UserSaveDTO = {
+        full_name: this.patientForm.get('full_name')?.value,
+        email: this.patientForm.get('email')?.value,
+        password: this.patientForm.get('password')?.value,
+        role: this.patientForm.get('role')?.value,
+      };
+
+      this.userService.createUser(userSaveDTO).subscribe({
+        next: (user: User) => {
+          this.createdUserId = user.id;
+          console.log('User created successfully:');
+
+          // Now create the patient using the user ID
+          this.createPatient();
+        },
+        error: (error: any) => {
+          alert('Failed to update user');
+          console.error('Error:', error);
+        },
+      });
     } else {
       console.log('Form is invalid');
-      this.patientForm.markAllAsTouched(); // Mark all controls as touched to show validation messages
+      this.patientForm.markAllAsTouched();
     }
   }
 
-  get full_name() {
-    return this.patientForm.get('full_name');
-  }
+  // Separate method to create the patient once the user is created
+  createPatient(): void {
+    const patientSaveDTO: PatientSaveDTO = {
+      user_id: this.createdUserId, // Use the user ID from the created user
+      nik: this.patientForm.get('nik')?.value,
+      phoneNumber: this.patientForm.get('phoneNumber')?.value,
+      address: this.patientForm.get('address')?.value,
+      gender: this.patientForm.get('gender')?.value,
+      dateOfBirth: this.patientForm.get('dateOfBirth')?.value,
+    };
 
-  get email() {
-    return this.patientForm.get('email');
-  }
-  get nik() {
-    return this.patientForm.get('nik');
-  }
-  get phoneNumber() {
-    return this.patientForm.get('phoneNumber');
-  }
-  get address() {
-    return this.patientForm.get('address');
-  }
-  get gender() {
-    return this.patientForm.get('gender');
-  }
-  get dateOfBirth() {
-    return this.patientForm.get('dateOfBirth');
+    this.patientService.createPatient(patientSaveDTO).subscribe({
+      next: () => {
+        alert('User updated successfully!');
+        this.router.navigate(['/admin/dashboard/users']);
+      },
+      error: (error: any) => {
+        alert('Failed to update user');
+        console.error('Error:', error);
+      },
+    });
   }
 }
