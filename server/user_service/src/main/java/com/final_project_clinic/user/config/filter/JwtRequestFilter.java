@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User userDetails = userService.findUserByEmail(email);
                 System.out.println("data  users " + userDetails);
-                System.out.println("User Role "+ userDetails.getRole());
+                System.out.println("User Role " + userDetails.getRole());
                 // logger.info("User Role: {}", userDetails.getRole());
                 // Directly validate the JWT without authorities
                 if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt, userDetails))) {

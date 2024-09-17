@@ -89,6 +89,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDTO updatePatient(UUID id, PatientSaveDTO patientSaveDTO) {
+
+        // Find and validate the existing patient
+        Patient existingPatient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient with id " + id + " not found."));
+
         // Find and validate the existing user
         User existingUser = userRepository.findById(patientSaveDTO.getUser_id())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -96,14 +101,12 @@ public class PatientServiceImpl implements PatientService {
 
         // Check if the user already has a patient
         Patient existingPatientForUser = patientRepository.findByUser(existingUser);
-        if (existingPatientForUser != null) {
+
+        // Allow update if the user is already associated with the patient being updated
+        if (existingPatientForUser != null && !existingPatientForUser.getId().equals(id)) {
             throw new IllegalArgumentException(
                     "User with id " + patientSaveDTO.getUser_id() + " already has a patient.");
         }
-
-        // Find and validate the existing patient
-        Patient existingPatient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient with id " + id + " not found."));
 
         // Check if another patient with the same NIK exists
         Patient existingPatientWithNik = patientRepository.findPatientByNik(patientSaveDTO.getNik());
@@ -111,9 +114,10 @@ public class PatientServiceImpl implements PatientService {
             throw new DuplicateNikException("NIK already exists: " + patientSaveDTO.getNik());
         }
 
+        // Check if another patient with the same phone number exists
         Patient existingPatientPhoneNumber = patientRepository
                 .findPatientByPhoneNumber(patientSaveDTO.getPhoneNumber());
-        if (existingPatientPhoneNumber != null) {
+        if (existingPatientPhoneNumber != null && !existingPatientPhoneNumber.getId().equals(id)) {
             throw new DuplicateNikException("Phone number already exists: " + patientSaveDTO.getPhoneNumber());
         }
 
