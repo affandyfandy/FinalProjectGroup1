@@ -55,4 +55,3 @@ public class JwtUtils {
         return (String) extractAllClaims(token).get("role");
     }
 }
-
