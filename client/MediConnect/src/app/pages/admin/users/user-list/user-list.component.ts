@@ -14,6 +14,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-list',
@@ -26,7 +27,10 @@ export class UserListComponent implements OnInit {
   private gridApi!: GridApi;
   users: User[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private toastr: ToastrService
+  ) {}
 
   public colDefs: ColDef[] = [
     { field: 'full_name', headerName: 'Full Name', minWidth: 150 },
@@ -105,6 +109,7 @@ export class UserListComponent implements OnInit {
   deleteOneUser(id: string): void {
     this.userService.deleteUser(id).subscribe({
       next: () => {
+        this.toastr.success('Success delete user data');
         this.loadUsers(); // Reload products after deletion
       },
       error: (e) => console.error(e),

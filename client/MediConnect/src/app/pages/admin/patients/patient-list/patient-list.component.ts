@@ -14,7 +14,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Patient } from '../../../../models/patient.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-patient-list',
   standalone: true,
@@ -26,7 +26,10 @@ export class PatientListComponent implements OnInit {
   private gridApi!: GridApi;
   patients: Patient[] = [];
 
-  constructor(private patientService: PatientsService) {}
+  constructor(
+    private patientService: PatientsService,
+    private toastr: ToastrService
+  ) {}
 
   public colDefs: ColDef[] = [
     {
@@ -72,11 +75,14 @@ export class PatientListComponent implements OnInit {
     {
       headerName: 'Actions',
       cellRenderer: ActionCellRendererList,
+      cellRendererParams: {
+        context: this, // Pass 'this' to provide access to UserListComponent
+      },
       headerClass: 'text-center',
       minWidth: 300,
       sortable: false,
       filter: false,
-      floatingFilter:false,
+      floatingFilter: false,
       cellClass: 'text-center',
     },
   ];
@@ -120,6 +126,16 @@ export class PatientListComponent implements OnInit {
       error: (error) => {
         console.error('Error loading patients:', error);
       },
+    });
+  }
+
+  deleteOnePatient(id: string): void {
+    this.patientService.deletePatient(id).subscribe({
+      next: () => {
+        this.toastr.success('Success delete patient data');
+        this.loadPatients(); // Reload products after deletion
+      },
+      error: (e) => console.error(e),
     });
   }
 }

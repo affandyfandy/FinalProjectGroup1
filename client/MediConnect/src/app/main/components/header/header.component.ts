@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit {
         }
       },
       (error) => {
+        this.authService.handleError(error);
         console.error('Error loading profile', error);
       }
     );

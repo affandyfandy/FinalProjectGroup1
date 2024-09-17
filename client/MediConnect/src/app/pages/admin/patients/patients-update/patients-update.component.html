@@ -6,7 +6,10 @@
       <h2 class="text-2xl font-medium mt-8">Update Patient Data</h2>
       <div class="w-full flex items-center justify-center">
         <div class="w-4/5">
-          <app-patients-form></app-patients-form>
+          <app-patients-form
+            [isEditMode]="patientId !== null"
+            [patientId]="patientId"
+          ></app-patients-form>
         </div>
       </div>
     </div>

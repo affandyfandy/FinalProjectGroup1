@@ -11,7 +11,7 @@ import { PatientsFormComponent } from '../patients-form/patients-form.component'
   styleUrl: './patients-update.component.css',
 })
 export class PatientsUpdateComponent implements OnInit {
-  patientId: string = '';
+  patientId: string | null = null; // Store the user ID from the route
 
   constructor(private route: ActivatedRoute) {}
 
