@@ -14,18 +14,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
-import { AlertDialogPreviewComponent } from './ButtonSample';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [
-    AgGridAngular,
-    CommonModule,
-    RouterModule,
-    HlmButtonDirective,
-    AlertDialogPreviewComponent,
-  ],
+  imports: [AgGridAngular, CommonModule, RouterModule, HlmButtonDirective],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
 })
