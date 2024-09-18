@@ -33,7 +33,7 @@ export interface UserRequestAdmin {
 export interface UserSaveDTO {
   full_name: string;
   email: string;
-  password: string;
+  password?: string;
   role: string;
 }
 

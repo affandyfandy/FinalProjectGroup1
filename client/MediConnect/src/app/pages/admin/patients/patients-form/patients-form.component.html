@@ -3,142 +3,175 @@
   (ngSubmit)="onSubmit()"
   class="w-full text-left"
 >
-  <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 mt-8">
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Fullname
-        <input
-          hlmInput
-          type="text"
-          formControlName="full_name"
-          class="w-full mt-1"
-        />
+  <div class="mt-8 mb-4 border shadow rounded p-4">
+    <div class="flex items-center justify-between mb-4">
+      <p class="text-base font-medium">User Account Information</p>
+      <label class="flex items-center" *ngIf="isEditMode">
+        <input type="checkbox" formControlName="editUserAccount" class="mr-2" />
+        Edit User Account
       </label>
-      <div
-        *ngIf="full_name?.errors?.['required'] && full_name?.touched"
-        class="text-red-500 text-sm"
-      >
-        Fullname is required.
+    </div>
+    <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4">
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Fullname
+          <input
+            hlmInput
+            type="text"
+            formControlName="full_name"
+            class="w-full mt-1"
+            [attr.disabled]="!editUserAccount?.value ? '' : null"
+          />
+        </label>
+        <div
+          *ngIf="full_name?.errors?.['required'] && full_name?.touched"
+          class="text-red-500 text-sm"
+        >
+          Fullname is required.
+        </div>
+      </div>
+
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Email
+          <input
+            hlmInput
+            type="email"
+            formControlName="email"
+            class="w-full mt-1"
+            [attr.disabled]="!editUserAccount?.value ? '' : null"
+          />
+        </label>
+        <div
+          *ngIf="email?.errors?.['required'] && email?.touched"
+          class="text-red-500 text-sm"
+        >
+          Email is required.
+        </div>
+        <div
+          *ngIf="email?.errors?.['email'] && email?.touched"
+          class="text-red-500 text-sm"
+        >
+          Enter a valid email address.
+        </div>
       </div>
     </div>
-
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Email
-        <input
-          hlmInput
-          type="email"
-          formControlName="email"
-          class="w-full mt-1"
-        />
-      </label>
-      <div
-        *ngIf="email?.errors?.['required'] && email?.touched"
-        class="text-red-500 text-sm"
+    <div class="w-full flex justify-end">
+      <button
+        *ngIf="editUserAccount?.value"
+        hlmBtn
+        type="button"
+        variant="fpt"
+        class="text-center text-white px-8 py-2"
+        (click)="updateUser()"
       >
-        Email is required.
-      </div>
-      <div
-        *ngIf="email?.errors?.['email'] && email?.touched"
-        class="text-red-500 text-sm"
-      >
-        Enter a valid email address.
-      </div>
+        Update User
+      </button>
     </div>
+  </div>
+  <div class="border shadow rounded p-4">
+    <p class="text-base mb-4 font-medium">Patient data Information</p>
 
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Phone Number
-        <input
-          hlmInput
-          type="text"
-          formControlName="phoneNumber"
-          class="w-full mt-1"
-        />
-      </label>
-      <div
-        *ngIf="phoneNumber?.errors?.['required'] && phoneNumber?.touched"
-        class="text-red-500 text-sm"
-      >
-        Phone Number is required.
+    <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4">
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Phone Number
+          <input
+            hlmInput
+            type="text"
+            formControlName="phoneNumber"
+            class="w-full mt-1"
+          />
+        </label>
+        <div
+          *ngIf="phoneNumber?.errors?.['required'] && phoneNumber?.touched"
+          class="text-red-500 text-sm"
+        >
+          Phone Number is required.
+        </div>
+        <div
+          *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
+          class="text-red-500 text-sm"
+        >
+          Enter a valid Phone Number address.
+        </div>
       </div>
-      <div
-        *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
-        class="text-red-500 text-sm"
-      >
-        Enter a valid Phone Number address.
-      </div>
-    </div>
 
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Gender
-        <select hlmInput formControlName="gender" class="w-full mt-1">
-          <option value="" disabled>Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-      </label>
-      <div
-        *ngIf="gender?.errors?.['required'] && gender?.touched"
-        class="text-red-500 text-sm"
-      >
-        Gender Number is required.
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Gender
+          <select hlmInput formControlName="gender" class="w-full mt-1">
+            <option value="" disabled>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </label>
+        <div
+          *ngIf="gender?.errors?.['required'] && gender?.touched"
+          class="text-red-500 text-sm"
+        >
+          Gender Number is required.
+        </div>
       </div>
-    </div>
 
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        NIK
-        <input hlmInput type="text" formControlName="nik" class="w-full mt-1" />
-      </label>
-      <div
-        *ngIf="nik?.errors?.['required'] && nik?.touched"
-        class="text-red-500 text-sm"
-      >
-        Phone Number is required.
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          NIK
+          <input
+            hlmInput
+            type="text"
+            formControlName="nik"
+            class="w-full mt-1"
+          />
+        </label>
+        <div
+          *ngIf="nik?.errors?.['required'] && nik?.touched"
+          class="text-red-500 text-sm"
+        >
+          Phone Number is required.
+        </div>
+        <div
+          *ngIf="nik?.errors?.['nik'] && nik?.touched"
+          class="text-red-500 text-sm"
+        >
+          NIK must be a 16-digit number.
+        </div>
       </div>
-      <div
-        *ngIf="nik?.errors?.['nik'] && nik?.touched"
-        class="text-red-500 text-sm"
-      >
-        NIK must be a 16-digit number.
-      </div>
-    </div>
 
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Address
-        <input
-          hlmInput
-          type="text"
-          formControlName="address"
-          class="w-full mt-1"
-        />
-      </label>
-      <div
-        *ngIf="address?.errors?.['required'] && address?.touched"
-        class="text-red-500 text-sm"
-      >
-        Phone Number is required.
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Address
+          <input
+            hlmInput
+            type="text"
+            formControlName="address"
+            class="w-full mt-1"
+          />
+        </label>
+        <div
+          *ngIf="address?.errors?.['required'] && address?.touched"
+          class="text-red-500 text-sm"
+        >
+          Phone Number is required.
+        </div>
       </div>
-    </div>
 
-    <div class="w-full mb-4">
-      <label hlmLabel>
-        Date of Birth
-        <input
-          hlmInput
-          type="date"
-          formControlName="dateOfBirth"
-          class="w-full mt-1"
-        />
-      </label>
-      <div
-        *ngIf="dateOfBirth?.errors?.['required'] && dateOfBirth?.touched"
-        class="text-red-500 text-sm"
-      >
-        Date of birth is required.
+      <div class="w-full mb-4">
+        <label hlmLabel>
+          Date of Birth
+          <input
+            hlmInput
+            type="date"
+            formControlName="dateOfBirth"
+            class="w-full mt-1"
+          />
+        </label>
+        <div
+          *ngIf="dateOfBirth?.errors?.['required'] && dateOfBirth?.touched"
+          class="text-red-500 text-sm"
+        >
+          Date of birth is required.
+        </div>
       </div>
     </div>
   </div>

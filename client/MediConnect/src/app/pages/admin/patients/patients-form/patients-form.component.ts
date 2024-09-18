@@ -39,11 +39,11 @@ import { UserService } from '../../../../services/user-service/users.service';
   styleUrl: './patients-form.component.css',
 })
 export class PatientsFormComponent implements OnInit {
-  @Input() isEditMode: boolean = false; // Input to check if it's edit mode
-  @Input() patientId: string | null = null; // Input to store patient ID for update
+  @Input() isEditMode: boolean = false;
+  @Input() patientId: string | null = null;
 
   patientForm!: FormGroup;
-  createdUserId: string = ''; // To store the created or fetched user ID
+  createdUserId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -51,15 +51,16 @@ export class PatientsFormComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute // For retrieving route parameters
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.patientForm = this.fb.group({
+      editUserAccount: [false],
       full_name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['password123'],
-      role: ['PATIENT'], // Fixed role
+      role: ['PATIENT'],
       nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       phoneNumber: [
         '',
@@ -70,15 +71,24 @@ export class PatientsFormComponent implements OnInit {
       dateOfBirth: ['', [Validators.required]],
     });
 
-    // If it's edit mode and patientId is provided, load the patient data
     if (this.isEditMode && this.patientId) {
       this.loadPatientData(this.patientId);
     }
+
+    this.patientForm.get('editUserAccount')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.patientForm.get('full_name')?.enable();
+        this.patientForm.get('email')?.enable();
+      } else {
+        this.patientForm.get('full_name')?.disable();
+        this.patientForm.get('email')?.disable();
+      }
+    });
   }
 
   loadPatientData(id: string): void {
     this.patientService.getPatientById(id).subscribe((patient) => {
-      this.createdUserId = patient.user.id; // Get the associated user ID
+      this.createdUserId = patient.user.id;
       this.patientForm.patchValue({
         full_name: patient.user.full_name,
         email: patient.user.email,
@@ -88,12 +98,13 @@ export class PatientsFormComponent implements OnInit {
         gender: patient.gender,
         dateOfBirth: patient.dateOfBirth,
       });
+      this.patientForm.get('full_name')?.disable();
+      this.patientForm.get('email')?.disable();
     });
   }
 
   onSubmit(): void {
     if (this.patientForm.valid) {
-      // If it's edit mode, update the patient, otherwise create a new one
       if (this.isEditMode && this.patientId) {
         this.updatePatient();
       } else {
@@ -105,7 +116,6 @@ export class PatientsFormComponent implements OnInit {
     }
   }
 
-  // Separate method to handle user and patient creation
   createUserAndPatient(): void {
     const userSaveDTO: UserSaveDTO = {
       full_name: this.patientForm.get('full_name')?.value,
@@ -121,13 +131,12 @@ export class PatientsFormComponent implements OnInit {
         this.createPatient();
       },
       error: (error: any) => {
-        alert('Failed to create user');
+        this.toastr.error('Failed to create user');
         console.error('Error:', error);
       },
     });
   }
 
-  // Method to create a new patient after user creation
   createPatient(): void {
     const patientSaveDTO: PatientSaveDTO = {
       user_id: this.createdUserId,
@@ -150,7 +159,6 @@ export class PatientsFormComponent implements OnInit {
     });
   }
 
-  // Method to update an existing patient
   updatePatient(): void {
     const patientSaveDTO: PatientSaveDTO = {
       user_id: this.createdUserId,
@@ -176,7 +184,30 @@ export class PatientsFormComponent implements OnInit {
       });
   }
 
+  updateUser(): void {
+    const userUpdateDTO: UserSaveDTO = {
+      full_name: this.patientForm.get('full_name')?.value,
+      email: this.patientForm.get('email')?.value,
+      role: this.patientForm.get('role')?.value,
+    };
+
+    this.userService.updateUser(this.createdUserId, userUpdateDTO).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.toastr.success('User updated successfully!');
+      },
+      error: (error: any) => {
+        this.toastr.error('Failed to update user');
+        console.error('Error:', error);
+      },
+    });
+  }
+
   // Getters for form controls
+  get editUserAccount() {
+    return this.patientForm.get('editUserAccount');
+  }
+
   get full_name() {
     return this.patientForm.get('full_name');
   }

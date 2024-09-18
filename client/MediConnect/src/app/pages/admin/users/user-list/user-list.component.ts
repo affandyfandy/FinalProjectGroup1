@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
 import { ToastrService } from 'ngx-toastr';
+import { DateFormatPipe } from '../../../../core/pipes/date.pipe';
 
 @Component({
   selector: 'app-user-list',
@@ -40,13 +41,15 @@ export class UserListComponent implements OnInit {
       field: 'createdTime',
       headerName: 'Created Time',
       minWidth: 150,
-      valueFormatter: (params) => new Date(params.value).toLocaleString(),
+      valueFormatter: (params: any) =>
+        new DateFormatPipe().transform(params.value),
     },
     {
       field: 'updatedTime',
       headerName: 'Updated Time',
       minWidth: 150,
-      valueFormatter: (params) => new Date(params.value).toLocaleString(),
+      valueFormatter: (params: any) =>
+        new DateFormatPipe().transform(params.value),
     },
     {
       headerName: 'Actions',
@@ -98,12 +101,37 @@ export class UserListComponent implements OnInit {
   onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+    this.loadUsers(); // Load users when the grid is ready
   }
 
   loadUsers() {
-    this.userService.getUsers().subscribe((response) => {
-      this.users = response.content;
-    });
+    this.users = []; // Clear the users array before fetching
+    this.fetchAllUsers(0, 20); // Start fetching from page 0 with size 20
+  }
+
+  fetchAllUsers(page: number, size: number) {
+    const tempUsers: User[] = []; // Temporary array to hold all users
+
+    const fetchPage = (pageNum: number) => {
+      this.userService.getUsers(pageNum, size).subscribe({
+        next: (response) => {
+          tempUsers.push(...response.content); // Add new users to tempUsers
+
+          if (response.totalPages > pageNum + 1) {
+            // If there are more pages, fetch the next page
+            fetchPage(pageNum + 1);
+          } else {
+            // When all pages are fetched, set the final user list and update the grid
+            this.users = tempUsers;
+            this.gridApi.applyTransaction({ add: this.users });
+          }
+        },
+        error: (error) => console.error('Failed to load users', error),
+      });
+    };
+
+    // Start fetching from the initial page
+    fetchPage(page);
   }
 
   deleteOneUser(id: string): void {
