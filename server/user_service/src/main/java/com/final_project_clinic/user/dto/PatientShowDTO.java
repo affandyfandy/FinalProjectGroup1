@@ -22,7 +22,9 @@ public class PatientShowDTO {
     private String phoneNumber;
     private String address;
     private String gender;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdTime;
 

@@ -7,7 +7,11 @@ export interface Patient {
   phoneNumber: string;
   address: string;
   gender: string;
-  dateOfBirth: [number, number, number]; // [year, month, day]
+  dateOfBirth: string;
+  createdTime: string;
+  updatedTime: string;
+  createdBy: string;
+  updatedBy: string;
 }
 
 export interface PatientRequest {

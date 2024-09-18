@@ -48,6 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwt = authorizationHeader.substring(7);
             String email = jwtUtil.extractEmail(jwt);
+            String role = jwtUtil.extractUserRole(jwt);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User userDetails = userService.findUserByEmail(email);
@@ -55,12 +56,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("User Role " + userDetails.getRole());
                 // logger.info("User Role: {}", userDetails.getRole());
                 // Directly validate the JWT without authorities
-                if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt, userDetails))) {
+                if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt))) {
                     // Only set authentication with null authorities
-                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userDetails.getRole()));
+                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, authorities);
+                            email, null, authorities);
 
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
