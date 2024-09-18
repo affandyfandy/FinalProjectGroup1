@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import lombok.Data;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,7 @@ public class Patient {
     @Column(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
     private UUID user_id;
 
+    @NotNull(message = "NIK cannot be null")
     @Column(name = "nik", nullable = false, unique = true)
     private Long nik;
 

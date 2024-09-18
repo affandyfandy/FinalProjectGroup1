@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Data
@@ -25,9 +26,11 @@ public class Patient extends Audit {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull(message = "NIK cannot be null")    
     @Column(name = "nik", nullable = false, unique = true)
     private Long nik;
 
+    @Pattern(regexp = "^[0-9]{10,20}$", message = "Phone number must be between 10 and 20 digits")
     @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;
 

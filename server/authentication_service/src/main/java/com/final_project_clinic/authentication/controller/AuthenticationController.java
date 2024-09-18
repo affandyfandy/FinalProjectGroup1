@@ -18,8 +18,12 @@ import com.final_project_clinic.authentication.dto.RegisterRequestDTO;
 import com.final_project_clinic.authentication.dto.RegisterResponseDTO;
 import com.final_project_clinic.authentication.service.AuthService;
 
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/authentication")
+@Validated
 public class AuthenticationController {
 
     private final JwtUtils jwtUtil;
@@ -32,7 +36,7 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody LoginRequestDTO authRequest) {
+    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody @Valid LoginRequestDTO authRequest) {
         // Call the single service method to handle login and token generation
         LoginResponseDTO response = authService.login(authRequest);
 
@@ -41,7 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> registerUser(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<RegisterResponseDTO> registerUser(@RequestBody @Valid RegisterRequestDTO request) {
         // Call the register method in the service
         RegisterResponseDTO response = authService.register(request);
 
