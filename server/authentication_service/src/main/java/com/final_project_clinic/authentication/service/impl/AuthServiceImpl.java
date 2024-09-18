@@ -17,7 +17,7 @@ import com.final_project_clinic.authentication.exception.AuthException;
 import com.final_project_clinic.authentication.exception.DuplicateEmailException;
 import com.final_project_clinic.authentication.exception.DuplicateNikException;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,8 +87,8 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(registerRequestDTO.getEmail());
         user.setFull_name(registerRequestDTO.getFull_name());
         user.setPassword(PasswordUtils.hashPassword(registerRequestDTO.getPassword())); // Hash the password
-        user.setCreatedTime(new Date());
-        user.setUpdatedTime(new Date());
+        user.setCreatedTime(LocalDateTime.now());
+        user.setUpdatedTime(LocalDateTime.now());
         user.setCreatedBy(registerRequestDTO.getEmail());
 
         // Set the role (default to 'PATIENT' if no role is provided)
@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         patient.setNik(registerRequestDTO.getNik()); // Set the NIK from the request DTO
         patient.setUser_id(savedUser.getId());
         patient.setCreatedBy(savedUser.getEmail());
-        patient.setCreatedTime(new Date());
+        patient.setCreatedTime(LocalDateTime.now());
 
         // Save the patient
         patientRepository.save(patient);

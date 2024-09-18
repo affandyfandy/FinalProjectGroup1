@@ -3,6 +3,7 @@ package com.final_project_clinic.authentication.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class ProfileResponseDTO {
     private String password;
     private String role;
     private String createdBy;
-    private Date createdTime;
+    private LocalDateTime createdTime;
     private String updatedBy;
-    private Date updatedTime;
+    private LocalDateTime updatedTime;
 }

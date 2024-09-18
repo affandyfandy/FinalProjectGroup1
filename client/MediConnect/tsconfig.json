@@ -40,6 +40,12 @@
       "@spartan-ng/ui-avatar-helm": [
         ".\\src/app/components/ui-avatar-helm/src/index.ts"
       ],
+      "@spartan-ng/ui-dialog-helm": [
+        ".\\src/app/components/ui-dialog-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-alertdialog-helm": [
+        ".\\src/app/components/ui-alertdialog-helm/src/index.ts"
+      ]
     }
   },
   "angularCompilerOptions": {

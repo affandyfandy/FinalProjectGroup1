@@ -1,6 +1,6 @@
 package com.final_project_clinic.user.data.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,7 +25,7 @@ public class Audit {
 
     @CreatedDate
     @Column(name = "created_time", nullable = false)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
     @LastModifiedBy
     @Column(name = "updated_by", length = 255)
@@ -33,5 +33,5 @@ public class Audit {
 
     @LastModifiedDate
     @Column(name = "updated_time")
-    private Date updatedTime;
+    private LocalDateTime updatedTime;
 }

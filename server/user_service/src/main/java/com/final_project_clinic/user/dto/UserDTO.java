@@ -1,6 +1,6 @@
 package com.final_project_clinic.user.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +16,8 @@ public class UserDTO {
     private String full_name;
     private String email;
     private String role;
-    private Date createdTime;
-    private Date updatedTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
     private String createdBy;
     private String updatedBy;
 }

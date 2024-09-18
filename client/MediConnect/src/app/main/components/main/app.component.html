@@ -2,8 +2,21 @@
   <app-header *ngIf="showNavAndFooter"></app-header>
 
   <div class="min-h-[100vh]">
-    <router-outlet></router-outlet>
+    <app-sidebar *ngIf="showSidebar"></app-sidebar>
+    <div
+      class="w-full"
+      [ngClass]="showSidebar ? 'bg-[#F3FBFF] pl-64' : 'bg-white'"
+    >
+      <app-header-admin *ngIf="showSidebar"></app-header-admin>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 
   <app-footer *ngIf="showNavAndFooter"></app-footer>
 </div>
+<!--
+<div>
+  <app-header *ngIf="showNavAndFooter"></app-header>
+  <router-outlet></router-outlet>
+  <app-footer *ngIf="showNavAndFooter"></app-footer>
+</div> -->

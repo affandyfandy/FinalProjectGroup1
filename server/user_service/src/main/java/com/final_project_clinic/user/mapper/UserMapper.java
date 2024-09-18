@@ -18,7 +18,7 @@ public interface UserMapper {
 
     // Map UserSaveDTO to User entity
     @Mapping(target = "id", ignore = true) // Ignore id when saving
-    @Mapping(target = "createdTime", expression = "java(new java.util.Date())")
+    @Mapping(target = "createdTime", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "updatedTime", ignore = true) // updatedTime will be set in the service layer
     @Mapping(target = "updatedBy", ignore = true) // updatedBy will be set in the service layer
     User toUser(UserSaveDTO userSaveDTO);

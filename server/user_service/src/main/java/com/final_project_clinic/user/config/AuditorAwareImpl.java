@@ -18,11 +18,13 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.of("System");
         }
-        if (authentication.getPrincipal() instanceof User user) {
-            return Optional.ofNullable(user.getEmail());
-        } else {
-            // Replace with appropriate extraction of email from the principal if necessary
-            return Optional.of("Unknown");
-        }
+        return Optional.of(authentication.getName());
+        // if (authentication.getPrincipal() instanceof User user) {
+        // return Optional.ofNullable(user.getEmail());
+        // } else {
+        // // Replace with appropriate extraction of email from the principal if
+        // necessary
+        // return Optional.of("Unknown");
+        // }
     }
 }

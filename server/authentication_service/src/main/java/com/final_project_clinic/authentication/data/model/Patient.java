@@ -3,6 +3,7 @@ package com.final_project_clinic.authentication.data.model;
 import java.util.Date;
 import java.util.UUID;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,10 +47,10 @@ public class Patient {
     private LocalDate dateOfBirth;
 
     @Column(name = "created_time", nullable = false)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
     @Column(name = "updated_time")
-    private Date updatedTime;
+    private LocalDateTime updatedTime;
 
     @Column(name = "created_by", nullable = false, length = 255)
     private String createdBy;

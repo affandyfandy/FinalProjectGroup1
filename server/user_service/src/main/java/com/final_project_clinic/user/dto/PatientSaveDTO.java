@@ -1,6 +1,7 @@
 package com.final_project_clinic.user.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -19,5 +20,4 @@ public class PatientSaveDTO {
     private String address;
     private String gender;
     private LocalDate dateOfBirth;
-    private String createdBy;
 }

@@ -1,0 +1,52 @@
+<div class="flow-root w-96">
+  <dl class="-my-3 divide-y divide-gray-100 text-sm">
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Fullname</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.full_name }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Email</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.email }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Role</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.role }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Created By</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.createdBy ? user.createdBy : "N/A" }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Created Time</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.createdTime ? (user.createdTime | date : "full") : "N/A" }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Updated By</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.updatedBy ? user.updatedBy : "N/A" }}
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Updated Time</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        {{ user.updatedTime ? (user.updatedTime | date : "full") : "N/A" }}
+      </dd>
+    </div>
+  </dl>
+</div>
