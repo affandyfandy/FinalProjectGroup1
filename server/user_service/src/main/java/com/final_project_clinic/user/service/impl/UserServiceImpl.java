@@ -25,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    private static final String USER_NOT_FOUND = "User Not Found";
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserShowDTO findUserById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return userMapper.toUserShowDTO(user);
     }
 
@@ -65,10 +67,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UUID id, UserSaveDTO userSaveDTO) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         // Update fields from UserSaveDTO
-        existingUser.setFull_name(userSaveDTO.getFull_name());
+        existingUser.setFullName(userSaveDTO.getFullName());
         existingUser.setEmail(userSaveDTO.getEmail());
         existingUser = userRepository.save(existingUser);
         return userMapper.toUserDTO(existingUser);
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User with id " + id + " not found.");
+            throw new ResourceNotFoundException(USER_NOT_FOUND);
         }
         userRepository.deleteById(id);
     }

@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDTO {
     private UUID id;
-    private String full_name;
+    private String fullName;
     private String email;
     private String role;
     private LocalDateTime createdTime;

@@ -1,6 +1,5 @@
 package com.final_project_clinic.authentication.data.model;
 
-import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -39,18 +38,18 @@ public class User implements UserDetails {
 
     @NotBlank(message = "Fullname is mandatory")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
-    @Column(nullable = false)
-    private String full_name;
+    @Column(name="full_name", nullable = false)
+    private String fullName;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
-    @Column(unique = true, nullable = false)
+    @Column(name="email", unique = true, nullable = false)
     private String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 12, message = "Password must be at least 12 characters long")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$", message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character")
-    @Column(nullable = false)
+    @Column(name="password", nullable = false)
     private String password;
 
     @Column(name = "role", nullable = false, length = 20)

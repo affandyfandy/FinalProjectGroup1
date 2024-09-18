@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
-import com.final_project_clinic.authentication.data.model.User;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Date;
@@ -29,11 +28,6 @@ public class JwtUtils {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Extract expiration date from JWT token
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -46,10 +40,6 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
     }
 
     // Generate JWT token with RSA private key, including email, id, and role as claims
@@ -71,11 +61,5 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
-    }
-
-    // Validate the token using RSA public key
-    public Boolean validateToken(String token, User userData) {
-        final String email = extractEmail(token);
-        return (email.equals(userData.getEmail()) && !isTokenExpired(token));
     }
 }

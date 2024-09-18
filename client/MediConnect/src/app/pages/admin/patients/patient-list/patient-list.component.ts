@@ -41,10 +41,10 @@ export class PatientListComponent implements OnInit {
       valueGetter: (params) => params.data.nik ?? 'N/A',
     },
     {
-      field: 'user.full_name',
+      field: 'user.fullName',
       headerName: 'Full Name',
       minWidth: 150,
-      valueGetter: (params) => params.data.user?.full_name ?? 'N/A',
+      valueGetter: (params) => params.data.user?.fullName ?? 'N/A',
     },
     {
       field: 'user.email',

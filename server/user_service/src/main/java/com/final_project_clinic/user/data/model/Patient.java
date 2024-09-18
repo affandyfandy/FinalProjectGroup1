@@ -2,7 +2,6 @@ package com.final_project_clinic.user.data.model;
 
 import java.util.UUID;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -30,7 +29,7 @@ public class Patient extends Audit {
     @Column(name = "nik", nullable = false, unique = true)
     private Long nik;
 
-    @Pattern(regexp = "^[0-9]{10,20}$", message = "Phone number must be between 10 and 20 digits")
+    @Pattern(regexp = "^\\d{10,20}$", message = "Phone number must be between 10 and 20 digits")
     @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;
 

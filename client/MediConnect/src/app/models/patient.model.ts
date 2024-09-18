@@ -15,7 +15,7 @@ export interface Patient {
 }
 
 export interface PatientRequest {
-  full_name: string;
+  fullName: string;
   email: string;
   password: string;
   role: 'PATIENT';
@@ -41,7 +41,7 @@ export interface PatientDTO {
 }
 
 export interface PatientSaveDTO {
-  user_id: string;
+  userId: string;
   nik: number;
   phoneNumber: string;
   address: string;

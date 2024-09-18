@@ -18,16 +18,22 @@
           <input
             hlmInput
             type="text"
-            formControlName="full_name"
+            formControlName="fullName"
             class="w-full mt-1"
             [attr.disabled]="!editUserAccount?.value ? '' : null"
           />
         </label>
         <div
-          *ngIf="full_name?.errors?.['required'] && full_name?.touched"
+          *ngIf="fullName?.errors?.['required'] && fullName?.touched"
           class="text-red-500 text-sm"
         >
           Fullname is required.
+        </div>
+        <div
+          *ngIf="fullName?.errors?.['pattern']"
+          class="text-red-500 text-sm"
+        >
+          Fullname can only contain letters and spaces.
         </div>
       </div>
 
@@ -90,10 +96,10 @@
           Phone Number is required.
         </div>
         <div
-          *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
+          *ngIf="phoneNumber?.errors?.['pattern']"
           class="text-red-500 text-sm"
         >
-          Enter a valid Phone Number address.
+          Phone Number must be between 10 and 20 digits.
         </div>
       </div>
 
@@ -130,11 +136,8 @@
         >
           Phone Number is required.
         </div>
-        <div
-          *ngIf="nik?.errors?.['nik'] && nik?.touched"
-          class="text-red-500 text-sm"
-        >
-          NIK must be a 16-digit number.
+        <div *ngIf="nik?.errors?.['pattern']" class="text-red-500 text-sm">
+          NIK must be exactly 16 digits.
         </div>
       </div>
 

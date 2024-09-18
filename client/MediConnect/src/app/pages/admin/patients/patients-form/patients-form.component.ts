@@ -57,14 +57,17 @@ export class PatientsFormComponent implements OnInit {
   ngOnInit(): void {
     this.patientForm = this.fb.group({
       editUserAccount: [false],
-      full_name: ['', [Validators.required]],
+      fullName: [
+        '',
+        [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      password: ['password123'],
+      password: ['Password123!'],
       role: ['PATIENT'],
       nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       phoneNumber: [
         '',
-        [Validators.required, Validators.pattern('^[0-9]{10,12}$')],
+        [Validators.required, Validators.pattern('^0[0-9]{9,19}$')],
       ],
       address: ['', [Validators.required]],
       gender: ['', [Validators.required]],
@@ -77,10 +80,10 @@ export class PatientsFormComponent implements OnInit {
 
     this.patientForm.get('editUserAccount')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.patientForm.get('full_name')?.enable();
+        this.patientForm.get('fullName')?.enable();
         this.patientForm.get('email')?.enable();
       } else {
-        this.patientForm.get('full_name')?.disable();
+        this.patientForm.get('fullName')?.disable();
         this.patientForm.get('email')?.disable();
       }
     });
@@ -90,7 +93,7 @@ export class PatientsFormComponent implements OnInit {
     this.patientService.getPatientById(id).subscribe((patient) => {
       this.createdUserId = patient.user.id;
       this.patientForm.patchValue({
-        full_name: patient.user.full_name,
+        fullName: patient.user.fullName,
         email: patient.user.email,
         nik: patient.nik,
         phoneNumber: patient.phoneNumber,
@@ -98,7 +101,7 @@ export class PatientsFormComponent implements OnInit {
         gender: patient.gender,
         dateOfBirth: patient.dateOfBirth,
       });
-      this.patientForm.get('full_name')?.disable();
+      this.patientForm.get('fullName')?.disable();
       this.patientForm.get('email')?.disable();
     });
   }
@@ -118,7 +121,7 @@ export class PatientsFormComponent implements OnInit {
 
   createUserAndPatient(): void {
     const userSaveDTO: UserSaveDTO = {
-      full_name: this.patientForm.get('full_name')?.value,
+      fullName: this.patientForm.get('fullName')?.value,
       email: this.patientForm.get('email')?.value,
       password: this.patientForm.get('password')?.value,
       role: this.patientForm.get('role')?.value,
@@ -139,7 +142,7 @@ export class PatientsFormComponent implements OnInit {
 
   createPatient(): void {
     const patientSaveDTO: PatientSaveDTO = {
-      user_id: this.createdUserId,
+      userId: this.createdUserId,
       nik: this.patientForm.get('nik')?.value,
       phoneNumber: this.patientForm.get('phoneNumber')?.value,
       address: this.patientForm.get('address')?.value,
@@ -161,7 +164,7 @@ export class PatientsFormComponent implements OnInit {
 
   updatePatient(): void {
     const patientSaveDTO: PatientSaveDTO = {
-      user_id: this.createdUserId,
+      userId: this.createdUserId,
       nik: this.patientForm.get('nik')?.value,
       phoneNumber: this.patientForm.get('phoneNumber')?.value,
       address: this.patientForm.get('address')?.value,
@@ -186,7 +189,7 @@ export class PatientsFormComponent implements OnInit {
 
   updateUser(): void {
     const userUpdateDTO: UserSaveDTO = {
-      full_name: this.patientForm.get('full_name')?.value,
+      fullName: this.patientForm.get('fullName')?.value,
       email: this.patientForm.get('email')?.value,
       role: this.patientForm.get('role')?.value,
     };
@@ -208,8 +211,8 @@ export class PatientsFormComponent implements OnInit {
     return this.patientForm.get('editUserAccount');
   }
 
-  get full_name() {
-    return this.patientForm.get('full_name');
+  get fullName() {
+    return this.patientForm.get('fullName');
   }
 
   get email() {

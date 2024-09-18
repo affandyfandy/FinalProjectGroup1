@@ -5,8 +5,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.final_project_clinic.user.data.model.User;
-
 import java.util.Optional;
 
 @Component

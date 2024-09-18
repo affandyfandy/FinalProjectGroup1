@@ -4,23 +4,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.final_project_clinic.user.data.model.User;
 import com.final_project_clinic.user.dto.TokenDTO;
-
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
 
-    private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
     @Autowired
-    public JwtUtils(PrivateKey privateKey, PublicKey publicKey) {
-        this.privateKey = privateKey;
+    public JwtUtils(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
@@ -37,13 +31,6 @@ public class JwtUtils {
     public boolean validateToken(String token) {
         Claims claims = extractAllClaims(token);
         return !claims.getExpiration().before(new Date());
-        // try {
-            // Claims claims = extractAllClaims(token);
-        //     String userIdFromToken = claims.get("id", String.class);
-        //     return (userIdFromToken.equals(user.getId().toString()) && claims.getExpiration().after(new Date()));
-        // } catch (Exception e) {
-        //     return false;
-        // }
     }
 
     // Extract the username (email) from the token

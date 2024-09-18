@@ -1,6 +1,5 @@
 package com.final_project_clinic.authentication.data.model;
 
-import java.util.Date;
 import java.util.UUID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class Patient {
     private UUID id;
 
     @Column(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID user_id;
+    private UUID userId;
 
     @NotNull(message = "NIK cannot be null")
     @Column(name = "nik", nullable = false, unique = true)

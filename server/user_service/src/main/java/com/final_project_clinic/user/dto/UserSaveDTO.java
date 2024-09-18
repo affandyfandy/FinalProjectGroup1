@@ -17,7 +17,7 @@ public class UserSaveDTO {
     
     @NotBlank(message = "Fullname is mandatory")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
-    private String full_name;
+    private String fullName;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")

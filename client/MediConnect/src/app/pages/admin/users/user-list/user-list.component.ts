@@ -34,7 +34,7 @@ export class UserListComponent implements OnInit {
   ) {}
 
   public colDefs: ColDef[] = [
-    { field: 'full_name', headerName: 'Full Name', minWidth: 150 },
+    { field: 'fullName', headerName: 'Full Name', minWidth: 150 },
     { field: 'email', headerName: 'Email', minWidth: 150 },
     { field: 'role', headerName: 'Role', minWidth: 150 },
     {

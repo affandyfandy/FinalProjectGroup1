@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @AllArgsConstructor
 public class UserShowDTO {
     private UUID id;
-    private String full_name;
+    private String fullName;
     private String email;
     private String role;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

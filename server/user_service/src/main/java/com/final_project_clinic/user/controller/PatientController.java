@@ -31,19 +31,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/public")
-    public ResponseEntity<Page<PatientShowDTO>> getAllPatientsPublic(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<PatientShowDTO> patients = patientService.findAllPatients(pageable);
-
-        if (patients.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(patients);
-    }
-
     // Get all patients with pagination
     @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping

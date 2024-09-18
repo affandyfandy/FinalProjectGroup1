@@ -49,9 +49,12 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     // Initialize the form
     this.userForm = this.fb.group({
-      full_name: ['', [Validators.required]],
+      fullName: [
+        '',
+        [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      password: ['password123'],
+      password: ['Password123!!'],
       role: ['ADMIN'],
     });
 
@@ -66,7 +69,7 @@ export class UserFormComponent implements OnInit {
     this.userService.getUserById(userId).subscribe({
       next: (user: UserShowDTO) => {
         this.userForm.patchValue({
-          full_name: user.full_name,
+          fullName: user.fullName,
           email: user.email,
           role: user.role,
         });
@@ -115,8 +118,8 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  get full_name() {
-    return this.userForm.get('full_name');
+  get fullName() {
+    return this.userForm.get('fullName');
   }
 
   get email() {

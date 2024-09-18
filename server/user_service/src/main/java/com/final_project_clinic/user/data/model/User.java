@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.*;
@@ -29,7 +28,7 @@ public class User extends Audit {
 
     @NotBlank(message = "Fullname is mandatory")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
-    private String full_name;
+    private String fullName;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")

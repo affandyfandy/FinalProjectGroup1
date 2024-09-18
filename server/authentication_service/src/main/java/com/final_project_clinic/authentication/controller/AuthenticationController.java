@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.final_project_clinic.authentication.utils.JwtUtils;
 import com.final_project_clinic.authentication.dto.LoginRequestDTO;
 import com.final_project_clinic.authentication.dto.LoginResponseDTO;
 import com.final_project_clinic.authentication.dto.ProfileResponseDTO;
@@ -26,13 +25,11 @@ import jakarta.validation.Valid;
 @Validated
 public class AuthenticationController {
 
-    private final JwtUtils jwtUtil;
     private final AuthService authService;
 
     @Autowired
-    public AuthenticationController(AuthService authService, JwtUtils jwtUtil) {
+    public AuthenticationController(AuthService authService) {
         this.authService = authService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
