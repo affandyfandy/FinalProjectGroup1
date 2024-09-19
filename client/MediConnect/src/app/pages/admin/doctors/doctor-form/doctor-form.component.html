@@ -12,6 +12,7 @@
           type="text"
           formControlName="name"
           class="w-full mt-1"
+          placeholder="Doctor Name"
         />
       </label>
       <div
@@ -58,7 +59,7 @@
       </div>
 
       <div
-        *ngIf="identificationNumber?.errors?.['identificationNumber'] && identificationNumber?.touched"
+        *ngIf="identificationNumber?.errors?.['pattern'] && identificationNumber?.touched"
         class="text-red-500 text-sm"
       >
         SIP must be a 6-digit number.
@@ -89,10 +90,10 @@
         Phone Number is required.
       </div>
       <div
-        *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
+        *ngIf="phoneNumber?.errors?.['pattern'] && phoneNumber?.touched"
         class="text-red-500 text-sm"
       >
-        Enter a valid Phone Number address.
+        Enter a valid Phone Number address. sample (+62xxxx)
       </div>
     </div>
 

@@ -16,23 +16,20 @@
     >
       NIK is required.
     </div>
-    <div
-      *ngIf="nik?.errors?.['minlength'] && nik?.touched"
-      class="text-red-500 text-sm"
-    >
-      NIK must be at least 8 characters.
+    <div *ngIf="nik?.errors?.['pattern']" class="text-red-500 text-sm">
+      NIK can only contain number and must be exactly 16 digits.
     </div>
   </div>
 
-  <div class="mb-4">
+  <div class="w-full mb-4">
     <label hlmLabel>
       Fullname
       <input
         hlmInput
         type="text"
         formControlName="fullName"
-        placeholder="Fullname"
         class="w-full mt-1"
+        placeholder="Fullname"
       />
     </label>
     <div

@@ -57,8 +57,7 @@ export class SignupFormComponent implements OnInit {
         nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
         fullName: [
           '',
-          Validators.required,
-          Validators.pattern('^[a-zA-Z\\s]+$'),
+          [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')],
         ],
         email: ['', [Validators.required, Validators.email]],
         password: [
