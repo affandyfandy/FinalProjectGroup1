@@ -8,11 +8,14 @@ import org.springframework.stereotype.Component;
 import com.final_project_clinic.user.dto.TokenDTO;
 import java.security.PublicKey;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class JwtUtils {
 
     private final PublicKey publicKey;
+    private static final Logger utilsLogger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Autowired
     public JwtUtils(PublicKey publicKey) {
@@ -28,10 +31,11 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            System.out.println("Token has expired");
+            utilsLogger.warn("Token has expired");
+
             throw e; // Re-throw to handle it in validateToken
         } catch (Exception e) {
-            System.out.println("Token is invalid");
+            utilsLogger.error("Token has expired");
             throw e; // Re-throw to handle it in validateToken
         }
     }

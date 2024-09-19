@@ -192,6 +192,7 @@ export class PatientsFormComponent implements OnInit {
       fullName: this.patientForm.get('fullName')?.value,
       email: this.patientForm.get('email')?.value,
       role: this.patientForm.get('role')?.value,
+      password: this.patientForm.get('password')?.value,
     };
 
     this.userService.updateUser(this.createdUserId, userUpdateDTO).subscribe({
