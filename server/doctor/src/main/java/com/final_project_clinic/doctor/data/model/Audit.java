@@ -1,5 +1,7 @@
 package com.final_project_clinic.doctor.data.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,19 +14,21 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Audit {
+public class Audit {
 
     @CreatedBy
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by", nullable = false, length = 255)
     private String createdBy;
 
     @CreatedDate
-    @Column(name = "created_time", nullable = false, updatable = false)
+    @Column(name = "created_time", nullable = false)
     private LocalDateTime createdTime;
 
     @LastModifiedBy
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 255)
     private String updatedBy;
 
     @LastModifiedDate

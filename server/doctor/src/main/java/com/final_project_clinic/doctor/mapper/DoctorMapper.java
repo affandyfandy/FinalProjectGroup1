@@ -8,6 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
 
+    @Mapping(target = "createdBy", source = "createdBy")
+    @Mapping(target = "createdTime", source = "createdTime")
+    @Mapping(target = "updatedBy", source = "updatedBy")
+    @Mapping(target = "updatedTime", source = "updatedTime")
     @Mapping(target = "dateOfBirth", source = "dateOfBirth")
     DoctorDTO toDTO(Doctor doctor);
 

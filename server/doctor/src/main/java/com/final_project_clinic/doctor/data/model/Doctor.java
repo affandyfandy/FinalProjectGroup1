@@ -2,17 +2,19 @@ package com.final_project_clinic.doctor.data.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Data
 @Getter
 @Setter
-@Builder
-@Entity
-@Table(name = "Doctor")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "Doctor")
+@EntityListeners(AuditingEntityListener.class)
 public class Doctor extends Audit {
 
     @Id

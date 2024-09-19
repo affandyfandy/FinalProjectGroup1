@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
 
     Doctor findByIdentificationNumber(String identificationNumber);
+    boolean existsByIdentificationNumber(String identificationNumber);
 }

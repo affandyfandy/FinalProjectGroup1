@@ -17,4 +17,6 @@ public interface DoctorScheduleMapper {
     @Mapping(source = "doctorId", target = "doctor.id")
     @Mapping(source = "scheduleTimes", target = "scheduleTimes")
     DoctorSchedule toDoctorSchedule(DoctorScheduleDTO doctorScheduleDTO, @Context Doctor doctor);
+
+
 }

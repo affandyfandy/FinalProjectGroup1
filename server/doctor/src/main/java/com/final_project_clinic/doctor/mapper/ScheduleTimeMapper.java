@@ -10,6 +10,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = { DoctorScheduleMapper.class })
 public interface ScheduleTimeMapper {
 
+    @Mapping(target = "createdBy", source = "createdBy")
+    @Mapping(target = "createdTime", source = "createdTime")
+    @Mapping(target = "updatedBy", source = "updatedBy")
+    @Mapping(target = "updatedTime", source = "updatedTime")
     ScheduleTimeDTO toScheduleTimeDTO(ScheduleTime scheduleTime);
 
     @Mapping(target = "doctorSchedule", ignore = true)
