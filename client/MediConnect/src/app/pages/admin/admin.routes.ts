@@ -6,6 +6,10 @@ import { PatientsUpdateComponent } from './patients/patients-update/patients-upd
 import { PatientsCreateComponent } from './patients/patients-create/patients-create.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserUpdateComponent } from './users/user-update/user-update.component';
+import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
+import { DoctorUpdateComponent } from './doctors/doctor-update/doctor-update.component';
+import { DoctorCreateComponent } from './doctors/doctor-create/doctor-create.component';
+import { DoctorScheduleListComponent } from './doctor-schedules/doctor-schedule-list/doctor-schedule-list.component';
 
 export const adminRoutes: Routes = [
   { path: '', component: DashboardComponent },
@@ -15,4 +19,8 @@ export const adminRoutes: Routes = [
   { path: 'patients', component: PatientListComponent },
   { path: 'patients/create', component: PatientsCreateComponent },
   { path: 'patients/:id', component: PatientsUpdateComponent },
+  { path: 'doctors', component: DoctorListComponent },
+  { path: 'doctors/create', component: DoctorCreateComponent },
+  { path: 'doctors/:id', component: DoctorUpdateComponent },
+  { path: 'schedules', component: DoctorScheduleListComponent },
 ];
