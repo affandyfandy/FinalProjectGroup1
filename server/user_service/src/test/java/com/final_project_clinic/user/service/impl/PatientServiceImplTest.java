@@ -51,7 +51,7 @@ class PatientServiceImplTest {
     private PatientShowDTO patientShowDTO;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
         UUID patientId = UUID.randomUUID();
@@ -77,7 +77,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testFindAllPatients() {
+    void testFindAllPatients() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Patient> patients = new PageImpl<>(List.of(patient), pageable, 1);
 
@@ -93,7 +93,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testFindPatientById() {
+    void testFindPatientById() {
         when(patientRepository.findById(any(UUID.class))).thenReturn(Optional.of(patient));
         when(patientMapper.toPatientShowDTO(any(Patient.class))).thenReturn(patientShowDTO);
 
@@ -105,7 +105,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testCreatePatient() {
+    void testCreatePatient() {
         when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(user));
         when(patientRepository.findPatientByNik(anyLong())).thenReturn(null);
         when(patientRepository.findPatientByPhoneNumber(anyString())).thenReturn(null);
@@ -122,7 +122,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testCreatePatientWithDuplicateNik() {
+    void testCreatePatientWithDuplicateNik() {
         when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(user));
         when(patientRepository.findPatientByNik(anyLong())).thenReturn(patient);
 
@@ -136,7 +136,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testCreatePatientWithDuplicatePhoneNumber() {
+    void testCreatePatientWithDuplicatePhoneNumber() {
         when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(user));
         when(patientRepository.findPatientByPhoneNumber(anyString())).thenReturn(patient);
 
@@ -150,7 +150,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testUpdatePatient() {
+    void testUpdatePatient() {
         when(patientRepository.findById(any(UUID.class))).thenReturn(Optional.of(patient));
         when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(user));
         when(patientRepository.findPatientByNik(anyLong())).thenReturn(null);
@@ -166,7 +166,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testUpdatePatientWithDuplicateNik() {
+    void testUpdatePatientWithDuplicateNik() {
         Patient existingPatientWithDifferentId = new Patient();
         existingPatientWithDifferentId.setId(UUID.randomUUID());
         when(patientRepository.findById(any(UUID.class))).thenReturn(Optional.of(patient));
@@ -175,15 +175,14 @@ class PatientServiceImplTest {
 
         DuplicateNikException thrown = assertThrows(
                 DuplicateNikException.class,
-                () -> patientService.updatePatient(patient.getId(), patientSaveDTO)
-        );
+                () -> updatePatient(patient));
 
         assertEquals("NIK already exists", thrown.getMessage());
         verify(patientRepository).findById(patient.getId());
     }
 
     @Test
-    public void testUpdatePatientWithDuplicatePhoneNumber() {
+    void testUpdatePatientWithDuplicatePhoneNumber() {
         Patient existingPatientWithDifferentId = new Patient();
         existingPatientWithDifferentId.setId(UUID.randomUUID());
         when(patientRepository.findById(any(UUID.class))).thenReturn(Optional.of(patient));
@@ -192,15 +191,14 @@ class PatientServiceImplTest {
 
         DuplicatePhoneNumberException thrown = assertThrows(
                 DuplicatePhoneNumberException.class,
-                () -> patientService.updatePatient(patient.getId(), patientSaveDTO)
-        );
+                () -> updatePatient(patient));
 
         assertEquals("Phone number already exists", thrown.getMessage());
         verify(patientRepository).findById(patient.getId());
     }
 
     @Test
-    public void testDeletePatient() {
+    void testDeletePatient() {
         when(patientRepository.existsById(any(UUID.class))).thenReturn(true);
 
         assertDoesNotThrow(() -> patientService.deletePatient(patient.getId()));
@@ -208,14 +206,24 @@ class PatientServiceImplTest {
     }
 
     @Test
-    public void testDeletePatientNotFound() {
+    void testDeletePatientNotFound() {
         when(patientRepository.existsById(any(UUID.class))).thenReturn(false);
 
         ResourceNotFoundException thrown = assertThrows(
-                ResourceNotFoundException.class,
-                () -> patientService.deletePatient(patient.getId())
+            ResourceNotFoundException.class,
+            () -> deletePatient(patient)
         );
 
         assertEquals("Patient Not Found", thrown.getMessage());
+    }
+
+    // Helper method to perform the patient deletion operation
+    private void deletePatient(Patient patient) {
+        patientService.deletePatient(patient.getId());
+    }
+
+    // Helper method to perform the patient update operation
+    private void updatePatient(Patient patient) {
+        patientService.updatePatient(patient.getId(), patientSaveDTO);
     }
 }

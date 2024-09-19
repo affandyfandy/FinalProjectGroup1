@@ -1,6 +1,5 @@
 package com.final_project_clinic.user.config.filter;
 
-import com.final_project_clinic.user.exception.KeyLoadingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

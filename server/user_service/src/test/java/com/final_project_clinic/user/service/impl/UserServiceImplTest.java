@@ -81,10 +81,10 @@ class UserServiceImplTest {
     @Test
     void testFindUserByEmail() {
         String email = "test@example.com";
-        User user = new User();
-        user.setEmail(email);
+        User users = new User();
+        users.setEmail(email);
 
-        when(userRepository.findByEmail(email)).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(users);
 
         User result = userService.findUserByEmail(email);
 

@@ -30,6 +30,9 @@ public class AuthServiceImpl implements AuthService {
     private final PatientRepository patientRepository;
     final JwtUtils jwtUtils;
 
+    private static final String USER_NOT_FOUND = "User not found, Invalid email or password";
+
+
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, PatientRepository patientRepository, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
@@ -42,12 +45,12 @@ public class AuthServiceImpl implements AuthService {
         // Find the user by email
         User user = userRepository.findUserByEmail(loginRequestDTO.getEmail());
         if (user == null) {
-            throw new AuthException("User not found, Invalid email or password");
+            throw new AuthException(USER_NOT_FOUND);
         }
 
         // Verify the password
         if (!PasswordUtils.verifyPassword(loginRequestDTO.getPassword(), user.getPassword())) {
-            throw new AuthException("User not found, Invalid email or password");
+            throw new AuthException(USER_NOT_FOUND);
         }
 
         // Generate JWT token if authentication succeeds
@@ -124,8 +127,11 @@ public class AuthServiceImpl implements AuthService {
         // Extract user ID from the token
         String email = jwtUtils.extractEmail(jwtToken);
 
-        // Fetch user from database by ID
+        // Fetch user from database by email
         User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            throw new AuthException(USER_NOT_FOUND);
+        }
 
         // Return profile data as ProfileResponseDTO
         return new ProfileResponseDTO(

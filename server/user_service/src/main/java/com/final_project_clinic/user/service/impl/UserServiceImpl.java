@@ -3,7 +3,6 @@ package com.final_project_clinic.user.service.impl;
 import java.util.UUID;
 
 import com.final_project_clinic.user.exception.DuplicateEmailException;
-import com.final_project_clinic.user.exception.DuplicateNikException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
