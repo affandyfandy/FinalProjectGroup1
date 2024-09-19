@@ -1,6 +1,7 @@
 package com.final_project_clinic.gateway_service.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -24,21 +25,25 @@ public class JwtUtils {
 
     // Extract all claims from the token
     public Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(publicKey) // Use the public key to verify JWT
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(publicKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token has expired");
+            throw e; // Re-throw to handle it in validateToken
+        } catch (Exception e) {
+            System.out.println("Token is invalid");
+            throw e; // Re-throw to handle it in validateToken
+        }
     }
 
     // Validate the token by checking its expiration date
     public boolean validateToken(String token) {
-        try {
-            Claims claims = extractAllClaims(token);
-            return claims.getExpiration().after(new Date());
-        } catch (Exception e) {
-            return false;
-        }
+        Claims claims = extractAllClaims(token);
+        return !claims.getExpiration().before(new Date());
     }
 
     // Extract the username (email) from the token

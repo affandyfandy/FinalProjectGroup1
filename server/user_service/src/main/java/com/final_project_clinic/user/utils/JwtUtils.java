@@ -1,6 +1,7 @@
 package com.final_project_clinic.user.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,19 @@ public class JwtUtils {
 
     // Extract all claims from the token
     public Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(publicKey) // Use the public key to verify JWT
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(publicKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token has expired");
+            throw e; // Re-throw to handle it in validateToken
+        } catch (Exception e) {
+            System.out.println("Token is invalid");
+            throw e; // Re-throw to handle it in validateToken
+        }
     }
 
     // Validate the token by checking its expiration date

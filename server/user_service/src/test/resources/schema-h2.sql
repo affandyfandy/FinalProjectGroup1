@@ -1,4 +1,4 @@
-CREATE TABLE "user" (
+CREATE TABLE user (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     fullName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE "user" (
     updated_by VARCHAR(255)
 );
 
-CREATE TABLE "patient" (
+CREATE TABLE patient (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
     nik INT NOT NULL UNIQUE,
@@ -22,5 +22,5 @@ CREATE TABLE "patient" (
     updated_time TIMESTAMP,
     created_by VARCHAR(255) NOT NULL,
     updated_by VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES "user"(id)
+    FOREIGN KEY (user_id) REFERENCES user(id)
 );
