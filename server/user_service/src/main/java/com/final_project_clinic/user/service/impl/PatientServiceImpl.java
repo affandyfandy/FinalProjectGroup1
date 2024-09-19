@@ -27,6 +27,9 @@ public class PatientServiceImpl implements PatientService {
     private final UserRepository userRepository;
     private final PatientMapper patientMapper;
 
+    private static final String PATIENT_NOT_FOUND = "Patient Not Found";
+    private static final String USER_NOT_FOUND = "User Not Found";
+
     @Autowired
     public PatientServiceImpl(PatientRepository patientRepository, PatientMapper patientMapper,
             UserRepository userRepository) {
@@ -45,22 +48,22 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientShowDTO findPatientById(UUID id) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(PATIENT_NOT_FOUND));
         return patientMapper.toPatientShowDTO(patient);
     }
 
     @Override
     public PatientDTO createPatient(PatientSaveDTO patientSaveDTO) {
         // Find and validate the existing user
-        User existingUser = userRepository.findById(patientSaveDTO.getUser_id())
+        User existingUser = userRepository.findById(patientSaveDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "User with id " + patientSaveDTO.getUser_id() + " not found."));
+                        USER_NOT_FOUND));
 
         // Check if the user already has a patient
         Patient existingPatientForUser = patientRepository.findByUser(existingUser);
         if (existingPatientForUser != null) {
             throw new IllegalArgumentException(
-                    "User with id " + patientSaveDTO.getUser_id() + " already has a patient.");
+                    USER_NOT_FOUND);
         }
 
         // Check if another patient with the same NIK exists
@@ -92,12 +95,12 @@ public class PatientServiceImpl implements PatientService {
 
         // Find and validate the existing patient
         Patient existingPatient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(PATIENT_NOT_FOUND));
 
         // Find and validate the existing user
-        User existingUser = userRepository.findById(patientSaveDTO.getUser_id())
+        User existingUser = userRepository.findById(patientSaveDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "User with id " + patientSaveDTO.getUser_id() + " not found."));
+                        USER_NOT_FOUND));
 
         // Check if the user already has a patient
         Patient existingPatientForUser = patientRepository.findByUser(existingUser);
@@ -105,7 +108,7 @@ public class PatientServiceImpl implements PatientService {
         // Allow update if the user is already associated with the patient being updated
         if (existingPatientForUser != null && !existingPatientForUser.getId().equals(id)) {
             throw new IllegalArgumentException(
-                    "User with id " + patientSaveDTO.getUser_id() + " already has a patient.");
+                    "User with id " + patientSaveDTO.getUserId() + " already has a patient.");
         }
 
         // Check if another patient with the same NIK exists
@@ -141,7 +144,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void deletePatient(UUID id) {
         if (!patientRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Patient with id " + id + " not found.");
+            throw new ResourceNotFoundException(PATIENT_NOT_FOUND);
         }
         patientRepository.deleteById(id);
     }

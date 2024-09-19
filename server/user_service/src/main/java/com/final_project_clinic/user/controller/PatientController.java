@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.final_project_clinic.user.dto.PatientDTO;
@@ -20,6 +21,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/all/patients")
+@Validated
 public class PatientController {
 
     private final PatientService patientService;
@@ -27,19 +29,6 @@ public class PatientController {
     @Autowired
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
-    }
-
-    @GetMapping("/public")
-    public ResponseEntity<Page<PatientShowDTO>> getAllPatientsPublic(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<PatientShowDTO> patients = patientService.findAllPatients(pageable);
-
-        if (patients.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
 
     // Get all patients with pagination

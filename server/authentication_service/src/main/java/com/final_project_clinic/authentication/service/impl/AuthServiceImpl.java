@@ -38,16 +38,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }
-
-    @Override
-    public Patient findPatientByNik(Long nik) {
-        return patientRepository.findPatientByNik(nik);
-    }
-
-    @Override
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) throws AuthException {
         // Find the user by email
         User user = userRepository.findUserByEmail(loginRequestDTO.getEmail());
@@ -85,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
         // Create new User object
         User user = new User();
         user.setEmail(registerRequestDTO.getEmail());
-        user.setFull_name(registerRequestDTO.getFull_name());
+        user.setFullName(registerRequestDTO.getFullName());
         user.setPassword(PasswordUtils.hashPassword(registerRequestDTO.getPassword())); // Hash the password
         user.setCreatedTime(LocalDateTime.now());
         user.setUpdatedTime(LocalDateTime.now());
@@ -105,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
             return new RegisterResponseDTO(
                     "Registered Successfully",
                     null,
-                    savedUser.getFull_name(),
+                    savedUser.getFullName(),
                     savedUser.getEmail(),
                     null,
                     savedUser.getRole());
@@ -114,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
         // Create Patient object and set the NIK
         Patient patient = new Patient();
         patient.setNik(registerRequestDTO.getNik()); // Set the NIK from the request DTO
-        patient.setUser_id(savedUser.getId());
+        patient.setUserId(savedUser.getId());
         patient.setCreatedBy(savedUser.getEmail());
         patient.setCreatedTime(LocalDateTime.now());
 
@@ -123,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
         return new RegisterResponseDTO(
                 "Registered Successfully",
                 patient.getNik(),
-                savedUser.getFull_name(),
+                savedUser.getFullName(),
                 savedUser.getEmail(),
                 null, // Don't include the password in the response for security reasons
                 savedUser.getRole());
@@ -139,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Return profile data as ProfileResponseDTO
         return new ProfileResponseDTO(
-                user.getFull_name(),
+                user.getFullName(),
                 user.getEmail(),
                 null, // We don't return password for security reasons
                 user.getRole(),

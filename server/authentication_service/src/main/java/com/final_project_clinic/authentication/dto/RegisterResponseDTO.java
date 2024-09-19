@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 public class RegisterResponseDTO {
     private String message = "Registered Successfully";
     private Long nik;
-    private String full_name;
+    private String fullName;
     private String email;
     private String password;
     private String role;

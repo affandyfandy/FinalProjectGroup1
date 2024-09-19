@@ -54,10 +54,23 @@ export class SignupFormComponent implements OnInit {
 
     this.signupForm = this.fb.group(
       {
-        nik: ['', [Validators.required, Validators.minLength(8)]],
-        full_name: ['', Validators.required],
+        nik: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
+        fullName: [
+          '',
+          Validators.required,
+          Validators.pattern('^[a-zA-Z\\s]+$'),
+        ],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(12),
+            Validators.pattern(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).+$/
+            ),
+          ],
+        ],
         confirmPassword: ['', Validators.required],
       },
       { validators: this.passwordsMatchValidator }
@@ -76,7 +89,7 @@ export class SignupFormComponent implements OnInit {
       const registerData = this.signupForm.value;
       const saveData: UserRequestRegister = {
         nik: registerData.nik,
-        full_name: registerData.full_name,
+        fullName: registerData.fullName,
         email: registerData.email,
         password: registerData.password,
         role: 'PATIENT',
@@ -119,8 +132,8 @@ export class SignupFormComponent implements OnInit {
     return this.signupForm.get('nik');
   }
 
-  get full_name() {
-    return this.signupForm.get('full_name');
+  get fullName() {
+    return this.signupForm.get('fullName');
   }
 
   get email() {

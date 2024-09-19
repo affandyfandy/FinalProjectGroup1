@@ -82,7 +82,7 @@ import { PatientListComponent } from './patient-list.component';
         <ng-icon name="bootstrapEyeFill"></ng-icon> View
       </button>
       <hlm-dialog-content
-        class="max-w-[500px] bg-white lg:max-w-[700px] text-left h-[82vh]"
+        class="max-w-[500px] bg-white lg:max-w-[700px] text-left h-[95vh]"
         *brnDialogContent="let ctx"
       >
         <hlm-dialog-header class="w-full text-left">

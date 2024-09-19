@@ -1,49 +1,45 @@
 package com.final_project_clinic.user.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.final_project_clinic.user.data.model.User;
 import com.final_project_clinic.user.dto.TokenDTO;
-
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
 
-    private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
     @Autowired
-    public JwtUtils(PrivateKey privateKey, PublicKey publicKey) {
-        this.privateKey = privateKey;
+    public JwtUtils(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
     // Extract all claims from the token
     public Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(publicKey) // Use the public key to verify JWT
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(publicKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token has expired");
+            throw e; // Re-throw to handle it in validateToken
+        } catch (Exception e) {
+            System.out.println("Token is invalid");
+            throw e; // Re-throw to handle it in validateToken
+        }
     }
 
     // Validate the token by checking its expiration date
     public boolean validateToken(String token) {
         Claims claims = extractAllClaims(token);
         return !claims.getExpiration().before(new Date());
-        // try {
-            // Claims claims = extractAllClaims(token);
-        //     String userIdFromToken = claims.get("id", String.class);
-        //     return (userIdFromToken.equals(user.getId().toString()) && claims.getExpiration().after(new Date()));
-        // } catch (Exception e) {
-        //     return false;
-        // }
     }
 
     // Extract the username (email) from the token

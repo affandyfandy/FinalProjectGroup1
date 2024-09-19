@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
       (response) => {
         this.users = response;
         if (this.users) {
-          this.username = this.users.full_name;
+          this.username = this.users.fullName;
           this.isLoggedIn = true; // Set isLoggedIn to true
         }
       },

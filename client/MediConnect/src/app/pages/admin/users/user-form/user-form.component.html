@@ -6,15 +6,21 @@
         <input
           hlmInput
           type="text"
-          formControlName="full_name"
+          formControlName="fullName"
           class="w-full mt-1"
         />
       </label>
       <div
-        *ngIf="full_name?.errors?.['required'] && full_name?.touched"
+        *ngIf="fullName?.errors?.['required'] && fullName?.touched"
         class="text-red-500 text-sm"
       >
         Fullname is required.
+      </div>
+      <div
+        *ngIf="fullName?.errors?.['pattern'] && fullName?.touched"
+        class="text-red-500 text-sm"
+      >
+        Fullname can only contain letters and spaces.
       </div>
     </div>
 

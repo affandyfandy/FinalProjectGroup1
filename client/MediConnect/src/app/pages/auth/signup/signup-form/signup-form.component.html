@@ -30,16 +30,19 @@
       <input
         hlmInput
         type="text"
-        formControlName="full_name"
+        formControlName="fullName"
         placeholder="Fullname"
         class="w-full mt-1"
       />
     </label>
     <div
-      *ngIf="full_name?.errors?.['required'] && full_name?.touched"
+      *ngIf="fullName?.errors?.['required'] && fullName?.touched"
       class="text-red-500 text-sm"
     >
       Fullname is required.
+    </div>
+    <div *ngIf="fullName?.errors?.['pattern']" class="text-red-500 text-sm">
+      Fullname can only contain letters and spaces.
     </div>
   </div>
 
@@ -103,7 +106,14 @@
       *ngIf="password?.errors?.['minlength'] && password?.touched"
       class="text-red-500 text-sm"
     >
-      Password must be at least 6 characters.
+      Password must be at least 12 characters long.
+    </div>
+    <div
+      *ngIf="password?.errors?.['pattern'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      Password must contain at least one uppercase letter, one lowercase letter,
+      one digit, and one special character.
     </div>
   </div>
 

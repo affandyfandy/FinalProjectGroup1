@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 import { Patient } from '../../../../models/patient.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
 import { ToastrService } from 'ngx-toastr';
+import { DateFormatPipe } from '../../../../core/pipes/date.pipe';
+import { DobFormatPipe } from '../../../../core/pipes/dob-format.pipe';
 @Component({
   selector: 'app-patient-list',
   standalone: true,
@@ -39,10 +41,10 @@ export class PatientListComponent implements OnInit {
       valueGetter: (params) => params.data.nik ?? 'N/A',
     },
     {
-      field: 'user.full_name',
+      field: 'user.fullName',
       headerName: 'Full Name',
       minWidth: 150,
-      valueGetter: (params) => params.data.user?.full_name ?? 'N/A',
+      valueGetter: (params) => params.data.user?.fullName ?? 'N/A',
     },
     {
       field: 'user.email',
@@ -60,17 +62,8 @@ export class PatientListComponent implements OnInit {
       field: 'dateOfBirth',
       headerName: 'Date of Birth',
       minWidth: 150,
-      valueFormatter: (params) => {
-        if (
-          !params.value ||
-          !Array.isArray(params.value) ||
-          params.value.length !== 3
-        ) {
-          return 'N/A';
-        }
-        const [year, month, day] = params.value;
-        return new Date(year, month - 1, day).toLocaleDateString();
-      },
+      valueFormatter: (params: any) =>
+        new DobFormatPipe().transform(params.value),
     },
     {
       headerName: 'Actions',
@@ -118,15 +111,33 @@ export class PatientListComponent implements OnInit {
   }
 
   loadPatients() {
-    this.patientService.getPatients().subscribe({
-      next: (response) => {
-        this.patients = response.content;
-        console.log('Patients loaded:', this.patients);
-      },
-      error: (error) => {
-        console.error('Error loading patients:', error);
-      },
-    });
+    this.patients = []; // Clear the users array before fetching
+    this.fetchAllPatients(0, 20); // Start fetching from page 0 with size 20
+  }
+
+  fetchAllPatients(page: number, size: number) {
+    const tempUsers: Patient[] = []; // Temporary array to hold all users
+
+    const fetchPage = (pageNum: number) => {
+      this.patientService.getPatients(pageNum, size).subscribe({
+        next: (response) => {
+          tempUsers.push(...response.content); // Add new users to tempUsers
+
+          if (response.totalPages > pageNum + 1) {
+            // If there are more pages, fetch the next page
+            fetchPage(pageNum + 1);
+          } else {
+            // When all pages are fetched, set the final user list and update the grid
+            this.patients = tempUsers;
+            this.gridApi.applyTransaction({ add: this.patients });
+          }
+        },
+        error: (error) => console.error('Failed to load patients', error),
+      });
+    };
+
+    // Start fetching from the initial page
+    fetchPage(page);
   }
 
   deleteOnePatient(id: string): void {

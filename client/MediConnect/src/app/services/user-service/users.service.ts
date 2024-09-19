@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AppConstants } from '../../config/app.constants';
 import { User, UserSaveDTO, UserShowDTO } from '../../models/user.model';
 
@@ -25,24 +26,40 @@ export class UserService {
     });
   }
 
-  // Get users publicly accessible
+  // Get users publicly accessible, excluding patients
   getUsersPublic(page: number = 0, size: number = 20): Observable<any> {
     const headers = this.getHeaders();
-    let params = new HttpParams();
-    if (page !== undefined && size !== undefined) {
-      params = params.set('page', page.toString()).set('size', size.toString());
-    }
-    return this.http.get<any>(`${this.apiUrl}/public`, { headers, params });
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(this.apiUrl, { headers, params }).pipe(
+      map((response) => {
+        // Ensure response.content is an array of User objects
+        response.content = response.content.filter(
+          (user: User) => user.role !== 'PATIENT'
+        );
+        return response;
+      })
+    );
   }
 
-  // Get users restricted (SUPERADMIN only)
+  // Get users restricted (SUPERADMIN only), excluding patients
   getUsers(page: number = 0, size: number = 20): Observable<any> {
     const headers = this.getHeadersRestricted();
-    let params = new HttpParams();
-    if (page !== undefined && size !== undefined) {
-      params = params.set('page', page.toString()).set('size', size.toString());
-    }
-    return this.http.get<any>(this.apiUrl, { headers, params });
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(this.apiUrl, { headers, params }).pipe(
+      map((response) => {
+        // Ensure response.content is an array of User objects
+        response.content = response.content.filter(
+          (user: User) => user.role !== 'PATIENT'
+        );
+        return response;
+      })
+    );
   }
 
   // Get user by ID (SUPERADMIN only)

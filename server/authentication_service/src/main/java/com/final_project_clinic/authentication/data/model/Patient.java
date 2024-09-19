@@ -1,6 +1,5 @@
 package com.final_project_clinic.authentication.data.model;
 
-import java.util.Date;
 import java.util.UUID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import lombok.Data;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -29,8 +29,9 @@ public class Patient {
     private UUID id;
 
     @Column(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID user_id;
+    private UUID userId;
 
+    @NotNull(message = "NIK cannot be null")
     @Column(name = "nik", nullable = false, unique = true)
     private Long nik;
 

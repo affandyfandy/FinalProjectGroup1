@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.final_project_clinic.authentication.utils.JwtUtils;
 import com.final_project_clinic.authentication.dto.LoginRequestDTO;
 import com.final_project_clinic.authentication.dto.LoginResponseDTO;
 import com.final_project_clinic.authentication.dto.ProfileResponseDTO;
@@ -18,21 +17,23 @@ import com.final_project_clinic.authentication.dto.RegisterRequestDTO;
 import com.final_project_clinic.authentication.dto.RegisterResponseDTO;
 import com.final_project_clinic.authentication.service.AuthService;
 
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/authentication")
+@Validated
 public class AuthenticationController {
 
-    private final JwtUtils jwtUtil;
     private final AuthService authService;
 
     @Autowired
-    public AuthenticationController(AuthService authService, JwtUtils jwtUtil) {
+    public AuthenticationController(AuthService authService) {
         this.authService = authService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
-    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody LoginRequestDTO authRequest) {
+    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody @Valid LoginRequestDTO authRequest) {
         // Call the single service method to handle login and token generation
         LoginResponseDTO response = authService.login(authRequest);
 
@@ -41,7 +42,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> registerUser(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<RegisterResponseDTO> registerUser(@RequestBody @Valid RegisterRequestDTO request) {
         // Call the register method in the service
         RegisterResponseDTO response = authService.register(request);
 
