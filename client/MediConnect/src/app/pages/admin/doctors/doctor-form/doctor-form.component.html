@@ -1,0 +1,164 @@
+<form
+  [formGroup]="doctorForm"
+  (ngSubmit)="onSubmit()"
+  class="w-full text-left"
+>
+  <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 mt-8">
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Name
+        <input
+          hlmInput
+          type="text"
+          formControlName="name"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="name?.errors?.['required'] && name?.touched"
+        class="text-red-500 text-sm"
+      >
+        Name is required.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Specialization
+        <input
+          hlmInput
+          type="text"
+          formControlName="specialization"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="specialization?.errors?.['required'] && specialization?.touched"
+        class="text-red-500 text-sm"
+      >
+        Specialization is required.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        SIP
+        <input
+          hlmInput
+          type="text"
+          formControlName="identificationNumber"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="identificationNumber?.errors?.['required'] && identificationNumber?.touched"
+        class="text-red-500 text-sm"
+      >
+        Identification Number is required.
+      </div>
+
+      <div
+        *ngIf="identificationNumber?.errors?.['identificationNumber'] && identificationNumber?.touched"
+        class="text-red-500 text-sm"
+      >
+        SIP must be a 6-digit number.
+      </div>
+
+      <div
+        *ngIf="identificationNumber?.errors?.['duplicate'] && identificationNumber?.touched"
+        class="text-red-500 text-sm"
+      >
+        Identification Number already exists.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Phone Number
+        <input
+          hlmInput
+          type="text"
+          formControlName="phoneNumber"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="phoneNumber?.errors?.['required'] && phoneNumber?.touched"
+        class="text-red-500 text-sm"
+      >
+        Phone Number is required.
+      </div>
+      <div
+        *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
+        class="text-red-500 text-sm"
+      >
+        Enter a valid Phone Number address.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Gender
+        <select hlmInput formControlName="gender" class="w-full mt-1">
+          <option value="" disabled>Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </label>
+      <div
+        *ngIf="gender?.errors?.['required'] && gender?.touched"
+        class="text-red-500 text-sm"
+      >
+        Gender Number is required.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Date of Birth
+        <input
+          hlmInput
+          type="date"
+          formControlName="dateOfBirth"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="dateOfBirth?.errors?.['required'] && dateOfBirth?.touched"
+        class="text-red-500 text-sm"
+      >
+        Date of birth is required.
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label hlmLabel>
+        Address
+        <input
+          hlmInput
+          type="text"
+          formControlName="address"
+          class="w-full mt-1"
+        />
+      </label>
+      <div
+        *ngIf="address?.errors?.['required'] && address?.touched"
+        class="text-red-500 text-sm"
+      >
+        Address is required.
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full flex justify-center items-center gap-x-4 mt-8 text-white">
+    <a
+      routerLink="/admin/dashboard/doctors"
+      class="drop-shadow-button-dropShadow-fpt bg-gray-400 rounded-full text-center px-8 py-2"
+    >
+      <p>Cancel</p>
+    </a>
+    <button hlmBtn type="submit" variant="fpt" class="text-center px-8 py-2">
+      Submit
+    </button>
+  </div>
+</form>

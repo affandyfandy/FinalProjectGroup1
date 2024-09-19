@@ -1,0 +1,63 @@
+<div class="flow-root w-96">
+  <dl class="-my-3 divide-y divide-gray-100 text-sm">
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">SIP</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.identificationNumber }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Name</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.name }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Specialization</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.specialization }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Phone Number</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.phoneNumber }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Gender</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.gender }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Date of Birth</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.dateOfBirth }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Address</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.address }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Patient Total</dt>
+      <dd class="text-gray-700 sm:col-span-2">{{ doctor.patientTotal }}</dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Created By</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        <p class="text-base">{{ doctor.createdBy }}</p>
+        <p class="text-xs text-gray-500">
+          {{ doctor.createdTime | date : "fullDate" }}
+        </p>
+      </dd>
+    </div>
+
+    <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+      <dt class="font-medium text-gray-900">Updated By</dt>
+      <dd class="text-gray-700 sm:col-span-2">
+        <p class="text-base">{{ doctor.updatedBy }}</p>
+        <p class="text-xs text-gray-500">
+          {{ doctor.updatedTime | date : "fullDate" }}
+        </p>
+      </dd>
+    </div>
+  </dl>
+</div>

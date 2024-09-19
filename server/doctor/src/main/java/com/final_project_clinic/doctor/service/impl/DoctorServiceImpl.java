@@ -69,7 +69,7 @@ public class DoctorServiceImpl implements DoctorService {
     public Optional<DoctorDTO> editDoctor(UUID id, DoctorDTO doctorDTO) {
         return doctorRepository.findById(id).map(doctor -> {
             Doctor existingDoctor = doctorRepository.findByIdentificationNumber(doctorDTO.getIdentificationNumber());
-            if (existingDoctor != null) {
+            if (existingDoctor != null && !existingDoctor.getId().equals(doctor.getId())) {
                 throw new DuplicateIdentificationNumberException("Identification number already exists: " + doctorDTO.getIdentificationNumber());
             }
 
