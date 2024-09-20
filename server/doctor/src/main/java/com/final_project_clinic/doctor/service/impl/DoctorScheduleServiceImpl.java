@@ -158,4 +158,11 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
 
         scheduleTimeRepository.delete(scheduleTimeToDelete);
     }
+
+    // buat appointment
+    @Override
+    public Optional<DoctorScheduleDTO> getDoctorScheduleByDay(UUID doctorId, String day) {
+        Optional<DoctorSchedule> doctorSchedule = doctorScheduleRepository.findByDoctorIdAndDay(doctorId, day);
+        return doctorSchedule.map(doctorScheduleMapper::toDoctorScheduleDTO);
+    }
 }

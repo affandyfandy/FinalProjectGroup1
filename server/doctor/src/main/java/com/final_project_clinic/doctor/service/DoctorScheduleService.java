@@ -27,4 +27,6 @@ public interface DoctorScheduleService {
     void deleteSchedule(UUID id);
 
     void deleteScheduleTime(UUID scheduleId, LocalTime startWorkingHour);
+
+    Optional<DoctorScheduleDTO> getDoctorScheduleByDay(UUID doctorId, String day);
 }

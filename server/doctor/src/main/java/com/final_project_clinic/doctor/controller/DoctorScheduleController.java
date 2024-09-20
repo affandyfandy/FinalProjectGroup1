@@ -92,4 +92,14 @@ public class DoctorScheduleController {
         doctorScheduleService.deleteScheduleTime(scheduleId, startHour);
         return ResponseEntity.noContent().build();
     }
+
+    // buat appointment
+    @GetMapping("/doctor/{doctorId}/day/{day}")
+    public ResponseEntity<DoctorScheduleDTO> getDoctorScheduleByDay(
+            @PathVariable UUID doctorId,
+            @PathVariable String day) {
+        Optional<DoctorScheduleDTO> schedule = doctorScheduleService.getDoctorScheduleByDay(doctorId, day);
+        return schedule.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
