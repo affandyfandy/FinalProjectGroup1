@@ -57,7 +57,7 @@ class PatientControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String expectedJson = objectMapper.writeValueAsString(patientPage);
 
-        mockMvc.perform(get("/api/v1/all/patients")
+        mockMvc.perform(get("/api/v1/patients")
                         .param("page", "0")
                         .param("size", "20")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -73,7 +73,7 @@ class PatientControllerTest {
         when(patientService.findAllPatients(any(Pageable.class)))
                 .thenReturn(emptyPage);
 
-        mockMvc.perform(get("/api/v1/all/patients")
+        mockMvc.perform(get("/api/v1/patients")
                         .param("page", "0")
                         .param("size", "20")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -87,7 +87,7 @@ class PatientControllerTest {
 
         when(patientService.findPatientById(patientId)).thenReturn(patientShowDTO);
 
-        mockMvc.perform(get("/api/v1/all/patients/{id}", patientId)
+        mockMvc.perform(get("/api/v1/patients/{id}", patientId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":\"" + patientId + "\",\"nik\":123456789012,\"phoneNumber\":\"+62123456789\",\"address\":\"Some address\",\"gender\":\"Male\"}"));
@@ -122,7 +122,7 @@ class PatientControllerTest {
 
         when(patientService.createPatient(any(PatientSaveDTO.class))).thenReturn(patientDTO);
 
-        mockMvc.perform(post("/api/v1/all/patients")
+        mockMvc.perform(post("/api/v1/patients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -139,7 +139,7 @@ class PatientControllerTest {
     void shouldCreatePatient_withInvalidFormat() throws Exception {
         String requestBody = "{ \"nik\": \"invalid\", \"phoneNumber\": \"123456\", \"address\": \"Some address\", \"gender\": \"Male\" }";
 
-        mockMvc.perform(post("/api/v1/all/patients")
+        mockMvc.perform(post("/api/v1/patients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -177,7 +177,7 @@ class PatientControllerTest {
         when(patientService.updatePatient(any(UUID.class), any(PatientSaveDTO.class))).thenReturn(patientDTO);
 
         // Perform the PUT request and check response
-        mockMvc.perform(put("/api/v1/all/patients/{id}", patientId)
+        mockMvc.perform(put("/api/v1/patients/{id}", patientId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
@@ -195,7 +195,7 @@ class PatientControllerTest {
     void shouldDeletePatient_withValidId() throws Exception {
         UUID patientId = UUID.randomUUID();
 
-        mockMvc.perform(delete("/api/v1/all/patients/{id}", patientId)
+        mockMvc.perform(delete("/api/v1/patients/{id}", patientId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }

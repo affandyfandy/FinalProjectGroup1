@@ -38,10 +38,11 @@
                 }}</span>
               </hlm-avatar>
               <div class="flex flex-col text-start md:block hidden">
-                <div class="text-base font-semibold">
+                <div class="flex items-center font-semibold gap-2">
                   {{ username }}
+                  <p class="text-slate-500 text-[9px]"> {{ users?.role }}</p>
                 </div>
-                <div class="text-slate-700 text-xs">{{ users?.email }}</div>
+                <p class="text-slate-700 text-xs">{{ users?.email }}</p>
               </div>
             </button>
             <!-- Dropdown Logout Button -->

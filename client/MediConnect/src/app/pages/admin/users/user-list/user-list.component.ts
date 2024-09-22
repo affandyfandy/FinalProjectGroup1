@@ -16,6 +16,7 @@ import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
 import { ToastrService } from 'ngx-toastr';
 import { DateFormatPipe } from '../../../../core/pipes/date.pipe';
+import { AuthService } from '../../../../services/auth-service/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -27,10 +28,12 @@ import { DateFormatPipe } from '../../../../core/pipes/date.pipe';
 export class UserListComponent implements OnInit {
   private gridApi!: GridApi;
   users: User[] = [];
+  isSuperAdmin = false;
 
   constructor(
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {}
 
   public colDefs: ColDef[] = [
@@ -96,6 +99,11 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.loadUsers();
+    if (this.authService.getRole() === 'PATIENT') {
+      this.isSuperAdmin = false;
+    } else if (this.authService.getRole() === 'SUPERADMIN') {
+      this.isSuperAdmin = true;
+    }
   }
 
   onGridReady(params: any) {

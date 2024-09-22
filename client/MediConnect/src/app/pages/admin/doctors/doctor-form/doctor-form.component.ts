@@ -48,7 +48,7 @@ export class DoctorFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.doctorForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')]],
       specialization: ['', [Validators.required]],
       identificationNumber: [
         '',
@@ -56,7 +56,7 @@ export class DoctorFormComponent implements OnInit {
       ],
       phoneNumber: [
         '',
-        [Validators.required, Validators.pattern('^\\+62[0-9]{9,17}$')],
+        [Validators.required, Validators.pattern(/^\+62[0-9]{8,13}$/)],
       ],
       gender: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],

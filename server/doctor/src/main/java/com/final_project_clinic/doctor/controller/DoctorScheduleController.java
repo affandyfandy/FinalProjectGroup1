@@ -92,8 +92,7 @@ public class DoctorScheduleController {
         doctorScheduleService.deleteScheduleTime(scheduleId, startHour);
         return ResponseEntity.noContent().build();
     }
-
-    // buat appointment
+  
     @GetMapping("/doctor/{doctorId}/day/{day}")
     public ResponseEntity<DoctorScheduleDTO> getDoctorScheduleByDay(
             @PathVariable UUID doctorId,

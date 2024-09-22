@@ -9,7 +9,7 @@ import { User, UserSaveDTO, UserShowDTO } from '../../models/user.model';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = `${AppConstants.BASE_API_URL}/all/users`;
+  private apiUrl = `${AppConstants.BASE_API_URL}/users`;
 
   constructor(private http: HttpClient) {}
 
@@ -72,6 +72,14 @@ export class UserService {
   createUser(userSaveDTO: UserSaveDTO): Observable<User> {
     const headers = this.getHeadersRestricted();
     return this.http.post<User>(this.apiUrl, userSaveDTO, { headers });
+  }
+
+  // Update an existing user (SUPERADMIN only)
+  updateUserPatient(id: string, userSaveDTO: UserSaveDTO): Observable<User> {
+    const headers = this.getHeadersRestricted();
+    return this.http.put<User>(`${this.apiUrl}/patient/${id}`, userSaveDTO, {
+      headers,
+    });
   }
 
   // Update an existing user (SUPERADMIN only)

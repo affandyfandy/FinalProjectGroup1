@@ -35,10 +35,10 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
 
     @Autowired
     public DoctorScheduleServiceImpl(DoctorScheduleRepository doctorScheduleRepository,
-                                     ScheduleTimeRepository scheduleTimeRepository,
-                                     DoctorRepository doctorRepository,
-                                     DoctorScheduleMapper doctorScheduleMapper,
-                                     ScheduleTimeMapper scheduleTimeMapper) {
+            ScheduleTimeRepository scheduleTimeRepository,
+            DoctorRepository doctorRepository,
+            DoctorScheduleMapper doctorScheduleMapper,
+            ScheduleTimeMapper scheduleTimeMapper) {
         this.doctorScheduleRepository = doctorScheduleRepository;
         this.scheduleTimeRepository = scheduleTimeRepository;
         this.doctorRepository = doctorRepository;
@@ -106,7 +106,8 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
         return doctorScheduleMapper.toDoctorScheduleDTO(doctorSchedules);
     }
 
-    public DoctorScheduleDTO editScheduleTime(UUID scheduleId, LocalTime startWorkingHour, ScheduleTimeDTO scheduleTimeDTO) {
+    public DoctorScheduleDTO editScheduleTime(UUID scheduleId, LocalTime startWorkingHour,
+            ScheduleTimeDTO scheduleTimeDTO) {
         Optional<DoctorSchedule> doctorScheduleOpt = doctorScheduleRepository.findById(scheduleId);
         if (doctorScheduleOpt.isEmpty()) {
             throw new IllegalArgumentException("Schedule not found");
@@ -142,7 +143,7 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     public void deleteScheduleTime(UUID scheduleId, LocalTime startWorkingHour) {
         Optional<DoctorSchedule> doctorScheduleOpt = doctorScheduleRepository.findById(scheduleId);
         if (doctorScheduleOpt.isEmpty()) {
-           throw new IllegalArgumentException("Schedule not found");
+            throw new IllegalArgumentException("Schedule not found");
         }
 
         DoctorSchedule doctorSchedule = doctorScheduleOpt.get();
@@ -159,7 +160,6 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
         scheduleTimeRepository.delete(scheduleTimeToDelete);
     }
 
-    // buat appointment
     @Override
     public Optional<DoctorScheduleDTO> getDoctorScheduleByDay(UUID doctorId, String day) {
         Optional<DoctorSchedule> doctorSchedule = doctorScheduleRepository.findByDoctorIdAndDay(doctorId, day);

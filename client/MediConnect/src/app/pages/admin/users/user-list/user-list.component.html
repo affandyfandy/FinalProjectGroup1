@@ -2,7 +2,7 @@
   class="min-h-screen px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 pb-8"
 >
   <div class="w-full min-h-[75vh] p-3 bg-white shadow-md rounded-lg">
-    <div class="px-2">
+    <div class="px-2" *ngIf="isSuperAdmin">
       <h2 class="text-lg font-medium">Manage User Data</h2>
       <a href="/admin/dashboard/users/create">
         <button
@@ -26,6 +26,20 @@
           >>
         </ag-grid-angular>
       </div>
+    </div>
+    <div class="px-2 w-full h-[75vh] flex flex-col justify-center items-center" *ngIf="!isSuperAdmin">
+      <p class="text-2xl font-semibold md:text-3xl">
+        Sorry, you don't have permission to access this page.
+      </p>
+      <p class="mt-4 mb-8 text-gray-600">
+        But don't worry, you can head back to our homepage for other options.
+      </p>
+      <a
+        rel="noopener noreferrer"
+        routerLink="/admin/dashboard"
+        class="px-8 py-3 font-semibold rounded bg-fpt-colors text-gray-50"
+        >Back to homepage</a
+      >
     </div>
   </div>
 </div>

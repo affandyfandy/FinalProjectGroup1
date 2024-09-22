@@ -55,7 +55,7 @@ class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String expectedJson = objectMapper.writeValueAsString(userPage);
 
-        mockMvc.perform(get("/api/v1/all/users")
+        mockMvc.perform(get("/api/v1/users")
                         .param("page", "0")
                         .param("size", "20")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ class UserControllerTest {
 
         when(userService.findAllUsers(any(Pageable.class))).thenReturn(emptyPage);
 
-        mockMvc.perform(get("/api/v1/all/users")
+        mockMvc.perform(get("/api/v1/users")
                         .param("page", "0")
                         .param("size", "20")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +84,7 @@ class UserControllerTest {
 
         when(userService.findUserById(userId)).thenReturn(userShowDTO);
 
-        mockMvc.perform(get("/api/v1/all/users/{id}", userId)
+        mockMvc.perform(get("/api/v1/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":\"" + userId + "\",\"fullName\":\"John Doe\",\"email\":\"johndoe@example.com\",\"role\":\"ADMIN\"}"));
@@ -102,7 +102,7 @@ class UserControllerTest {
         when(userService.createUser(any(UserSaveDTO.class))).thenReturn(new UserDTO(dummyUser.getId(),"John Doe","email@gmail.com","ADMIN", LocalDateTime.now(), LocalDateTime.now().plusDays(1),"Admin@gmail.com","Admin@gmail.com"
         ));
 
-        mockMvc.perform(post("/api/v1/all/users")
+        mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -120,7 +120,7 @@ class UserControllerTest {
         when(userService.updateUser(any(UUID.class), any(UserSaveDTO.class))).thenReturn(new UserDTO(userId,"John Doe","email@gmail.com","ADMIN", LocalDateTime.now(), LocalDateTime.now().plusDays(1),"Admin@gmail.com","Admin@gmail.com"
         ));
 
-        mockMvc.perform(put("/api/v1/all/users/{id}", userId)
+        mockMvc.perform(put("/api/v1/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
@@ -131,7 +131,7 @@ class UserControllerTest {
     void shouldDeleteUser_withValidId() throws Exception {
         UUID userId = UUID.randomUUID();
 
-        mockMvc.perform(delete("/api/v1/all/users/{id}", userId)
+        mockMvc.perform(delete("/api/v1/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
