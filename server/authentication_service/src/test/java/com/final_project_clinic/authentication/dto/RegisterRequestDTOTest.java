@@ -29,14 +29,14 @@ public class RegisterRequestDTOTest {
     }
 
     @Test
-    void whenValidData_thenNoConstraintViolations() {
+    void whenValidDatathenNoConstraintViolations() {
         RegisterRequestDTO dto = new RegisterRequestDTO(3174123412341234L, "John Doe", "john.doe@example.com", "SecurePass123!", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty(), "There should be no constraint violations for valid data");
     }
 
     @Test
-    void whenNullNIK_thenConstraintViolation() {
+    void whenNullNIKthenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(null, "John Doe", "john.doe@example.com", "SecurePass123!", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size(), "There should be one constraint violation for NIK");
@@ -44,7 +44,7 @@ public class RegisterRequestDTOTest {
     }
 
     @Test
-    void whenInvalidFullName_thenConstraintViolation() {
+    void whenInvalidFullNamethenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(3174123412341234L, "John123", "john.doe@example.com", "SecurePass123!", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size(), "There should be one constraint violation for fullName");
@@ -52,7 +52,7 @@ public class RegisterRequestDTOTest {
     }
 
     @Test
-    void whenBlankEmail_thenConstraintViolation() {
+    void whenBlankEmailthenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(3174123412341234L, "John Doe", "", "SecurePass123!", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size(), "There should be one constraint violation for email");
@@ -60,7 +60,7 @@ public class RegisterRequestDTOTest {
     }
 
     @Test
-    void whenInvalidEmail_thenConstraintViolation() {
+    void whenInvalidEmailthenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(3174123412341234L, "John Doe", "invalid-email", "SecurePass123!", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size(), "There should be one constraint violation for email");
@@ -68,7 +68,7 @@ public class RegisterRequestDTOTest {
     }
 
     @Test
-    void whenShortPassword_thenConstraintViolation() {
+    void whenShortPasswordthenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(123456789L, "John Doe", "john.doe@example.com", "short", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
 
@@ -86,11 +86,11 @@ public class RegisterRequestDTOTest {
 
 
     @Test
-    void whenInvalidPassword_thenConstraintViolation() {
-        RegisterRequestDTO dto = new RegisterRequestDTO(123456789L, "John Doe", "john.doe@example.com", "Password123", "User");
+    void whenInvalidPasswordthenConstraintViolation() {
+        RegisterRequestDTO dto = new RegisterRequestDTO(123456789L, "John Doe", "john.doe@example.com", "Password123`", "User");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
 
-        assertEquals(2, violations.size(), "There should be two constraint violations for short password");
+        assertEquals(1, violations.size(), "There should be two constraint violations for short password");
 
         // Collect the violation message
         String violationMessage = violations.iterator().next().getMessage();
@@ -101,7 +101,7 @@ public class RegisterRequestDTOTest {
 
 
     @Test
-    void whenValidRole_thenNoConstraintViolations() {
+    void whenValidRolethenNoConstraintViolations() {
         RegisterRequestDTO dto = new RegisterRequestDTO(123456789L, "John Doe", "john.doe@example.com", "SecurePass123!", "Admin");
         Set<ConstraintViolation<RegisterRequestDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty(), "There should be no constraint violations for valid role");

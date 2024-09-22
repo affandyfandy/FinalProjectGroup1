@@ -16,11 +16,8 @@
     >
       NIK is required.
     </div>
-    <div
-      *ngIf="nik?.errors?.['minlength'] && nik?.touched"
-      class="text-red-500 text-sm"
-    >
-      NIK must be at least 8 characters.
+    <div *ngIf="nik?.errors?.['pattern']" class="text-red-500 text-sm">
+      NIK must be numbers and exactly 16 digits.
     </div>
   </div>
 
@@ -103,7 +100,7 @@
       Password is required.
     </div>
     <div
-      *ngIf="password?.errors?.['minlength'] && password?.touched"
+      *ngIf="password?.errors?.['minLength'] && password?.touched"
       class="text-red-500 text-sm"
     >
       Password must be at least 12 characters long.

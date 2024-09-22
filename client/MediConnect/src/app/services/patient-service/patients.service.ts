@@ -12,7 +12,7 @@ import {
   providedIn: 'root',
 })
 export class PatientsService {
-  private apiUrl = `${AppConstants.BASE_API_URL}/all/patients`;
+  private apiUrl = `${AppConstants.BASE_API_URL}/patients`;
 
   constructor(private http: HttpClient) {}
 
