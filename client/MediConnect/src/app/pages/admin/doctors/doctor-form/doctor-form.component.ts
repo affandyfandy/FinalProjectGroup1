@@ -30,7 +30,7 @@ import { DoctorsService } from '../../../../services/doctor-service/doctors.serv
     RouterModule,
   ],
   templateUrl: './doctor-form.component.html',
-  styleUrl: './doctor-form.component.css'
+  styleUrl: './doctor-form.component.css',
 })
 export class DoctorFormComponent implements OnInit {
   @Input() isEditMode: boolean = false;
@@ -48,12 +48,15 @@ export class DoctorFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.doctorForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')]],
       specialization: ['', [Validators.required]],
-      identificationNumber: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+      identificationNumber: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{6}$')],
+      ],
       phoneNumber: [
         '',
-        [Validators.required],
+        [Validators.required, Validators.pattern(/^\+62[0-9]{8,13}$/)],
       ],
       gender: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -77,7 +80,7 @@ export class DoctorFormComponent implements OnInit {
           gender: doctor.gender,
           dateOfBirth: doctor.dateOfBirth,
           address: doctor.address,
-          patientTotal: doctor.patientTotal
+          patientTotal: doctor.patientTotal,
         });
       },
       error: (err) => {
@@ -120,8 +123,10 @@ export class DoctorFormComponent implements OnInit {
   }
 
   handleServerError(error: any): void {
-    if (error.status === 409 ) {
-      this.doctorForm.get('identificationNumber')?.setErrors({ duplicate: true });
+    if (error.status === 409) {
+      this.doctorForm
+        .get('identificationNumber')
+        ?.setErrors({ duplicate: true });
     } else {
       this.toastr.error('Failed to create doctor.');
     }

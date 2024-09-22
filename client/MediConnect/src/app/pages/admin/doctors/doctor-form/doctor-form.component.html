@@ -1,8 +1,4 @@
-<form
-  [formGroup]="doctorForm"
-  (ngSubmit)="onSubmit()"
-  class="w-full text-left"
->
+<form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="w-full text-left">
   <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 mt-8">
     <div class="w-full mb-4">
       <label hlmLabel>
@@ -19,6 +15,12 @@
         class="text-red-500 text-sm"
       >
         Name is required.
+      </div>
+      <div
+        *ngIf="name?.errors?.['pattern'] && name?.touched"
+        class="text-red-500 text-sm"
+      >
+        Name can only character and white spaces.
       </div>
     </div>
 
@@ -58,7 +60,7 @@
       </div>
 
       <div
-        *ngIf="identificationNumber?.errors?.['identificationNumber'] && identificationNumber?.touched"
+        *ngIf="identificationNumber?.errors?.['pattern'] && identificationNumber?.touched"
         class="text-red-500 text-sm"
       >
         SIP must be a 6-digit number.
@@ -89,10 +91,10 @@
         Phone Number is required.
       </div>
       <div
-        *ngIf="phoneNumber?.errors?.['phoneNumber'] && phoneNumber?.touched"
+        *ngIf="phoneNumber?.errors?.['pattern'] && phoneNumber?.touched"
         class="text-red-500 text-sm"
       >
-        Enter a valid Phone Number address.
+        Enter a valid Phone Number address. start with (+62)
       </div>
     </div>
 
