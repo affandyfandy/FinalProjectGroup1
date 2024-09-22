@@ -25,9 +25,24 @@
       <dt class="font-medium text-gray-900">Created By</dt>
       <dd class="text-gray-700 sm:col-span-2">
         <p class="text-base">{{ user.createdBy }}</p>
-        <p class="text-xs text-gray-500">
-          {{ user.createdTime | date : "full" }}
-        </p>
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-xs text-gray-500" *ngIf="!showDate">
+              {{ user.createdTime | timeAgo }}
+            </p>
+            <p class="text-xs text-gray-500" *ngIf="showDate">
+              {{ user.createdTime | date : "EEEE, MMMM d, y, h:mm a" }}
+            </p>
+          </div>
+          <label class="text-xs flex items-center gap-x-2 text-gray-500">
+            Show Date
+            <input
+              type="checkbox"
+              (change)="onToggleFormat($event)"
+              [checked]="showDate"
+            />
+          </label>
+        </div>
       </dd>
     </div>
 
@@ -36,7 +51,7 @@
       <dd class="text-gray-700 sm:col-span-2">
         <p class="text-base">{{ user.updatedBy }}</p>
         <p class="text-xs text-gray-500">
-          {{ user.updatedTime | date : "full" }}
+          {{ user.updatedTime | timeAgo }}
         </p>
       </dd>
     </div>

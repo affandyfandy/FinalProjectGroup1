@@ -14,10 +14,10 @@
       *ngIf="nik?.errors?.['required'] && nik?.touched"
       class="text-red-500 text-sm"
     >
-      NIK is required.
+      {{ messageErrorField }}
     </div>
     <div *ngIf="nik?.errors?.['pattern']" class="text-red-500 text-sm">
-      NIK must be numbers and exactly 16 digits.
+      {{ messageValidationNIKPattern }}
     </div>
   </div>
 
@@ -36,10 +36,10 @@
       *ngIf="fullName?.errors?.['required'] && fullName?.touched"
       class="text-red-500 text-sm"
     >
-      Fullname is required.
+      {{ messageErrorField }}
     </div>
     <div *ngIf="fullName?.errors?.['pattern']" class="text-red-500 text-sm">
-      Fullname can only contain letters and spaces.
+      {{ messageValidationFullnamePattern }}
     </div>
   </div>
 
@@ -58,13 +58,13 @@
       *ngIf="email?.errors?.['required'] && email?.touched"
       class="text-red-500 text-sm"
     >
-      Email is required.
+      {{ messageErrorField }}
     </div>
     <div
       *ngIf="email?.errors?.['email'] && email?.touched"
       class="text-red-500 text-sm"
     >
-      Enter a valid email address.
+      {{ messageValidationEmailPattern }}
     </div>
   </div>
 
@@ -97,20 +97,19 @@
       *ngIf="password?.errors?.['required'] && password?.touched"
       class="text-red-500 text-sm"
     >
-      Password is required.
+      {{ messageErrorField }}
     </div>
     <div
-      *ngIf="password?.errors?.['minLength'] && password?.touched"
+      *ngIf="password?.errors?.['minlength'] && password?.touched"
       class="text-red-500 text-sm"
     >
-      Password must be at least 12 characters long.
+      {{ messageValidationPasswordSize }}
     </div>
     <div
       *ngIf="password?.errors?.['pattern'] && password?.touched"
       class="text-red-500 text-sm"
     >
-      Password must contain at least one uppercase letter, one lowercase letter,
-      one digit, and one special character.
+      {{ messageValidationPasswordPattern }}
     </div>
   </div>
 

@@ -102,7 +102,7 @@ export class UserListComponent implements OnInit {
     if (this.authService.getRole() === 'PATIENT') {
       this.isSuperAdmin = false;
     } else if (this.authService.getRole() === 'SUPERADMIN') {
-      this.isSuperAdmin = false;
+      this.isSuperAdmin = true;
     }
   }
 
