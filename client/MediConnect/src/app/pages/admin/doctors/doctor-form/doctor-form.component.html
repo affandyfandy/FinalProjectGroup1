@@ -8,6 +8,7 @@
           type="text"
           formControlName="name"
           class="w-full mt-1"
+          placeholder="Doctor Name"
         />
       </label>
       <div
@@ -94,7 +95,7 @@
         *ngIf="phoneNumber?.errors?.['pattern'] && phoneNumber?.touched"
         class="text-red-500 text-sm"
       >
-        Enter a valid Phone Number address. start with (+62)
+        Enter a valid Phone Number address. sample (+62xxxx)
       </div>
     </div>
 

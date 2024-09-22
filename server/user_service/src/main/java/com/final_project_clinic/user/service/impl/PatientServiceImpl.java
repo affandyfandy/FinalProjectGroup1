@@ -2,6 +2,7 @@ package com.final_project_clinic.user.service.impl;
 
 import java.util.UUID;
 
+import com.final_project_clinic.user.exception.DuplicatePhoneNumberException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,14 +70,14 @@ public class PatientServiceImpl implements PatientService {
         // Check if another patient with the same NIK exists
         Patient existingPatientWithNik = patientRepository.findPatientByNik(patientSaveDTO.getNik());
         if (existingPatientWithNik != null) {
-            throw new DuplicateNikException("NIK already exists: " + patientSaveDTO.getNik());
+            throw new DuplicateNikException("NIK already exists");
         }
 
         // Check if another patient with the same phone number exists
         Patient existingPatientPhoneNumber = patientRepository
                 .findPatientByPhoneNumber(patientSaveDTO.getPhoneNumber());
         if (existingPatientPhoneNumber != null) {
-            throw new DuplicateNikException("Phone number already exists: " + patientSaveDTO.getPhoneNumber());
+            throw new DuplicatePhoneNumberException("Phone number already exists");
         }
 
         // Map DTO to entity and set user
@@ -108,20 +109,20 @@ public class PatientServiceImpl implements PatientService {
         // Allow update if the user is already associated with the patient being updated
         if (existingPatientForUser != null && !existingPatientForUser.getId().equals(id)) {
             throw new IllegalArgumentException(
-                    "User with id " + patientSaveDTO.getUserId() + " already has a patient.");
+                    "User already has a patient.");
         }
 
         // Check if another patient with the same NIK exists
         Patient existingPatientWithNik = patientRepository.findPatientByNik(patientSaveDTO.getNik());
         if (existingPatientWithNik != null && !existingPatientWithNik.getId().equals(id)) {
-            throw new DuplicateNikException("NIK already exists: " + patientSaveDTO.getNik());
+            throw new DuplicateNikException("NIK already exists");
         }
 
         // Check if another patient with the same phone number exists
         Patient existingPatientPhoneNumber = patientRepository
                 .findPatientByPhoneNumber(patientSaveDTO.getPhoneNumber());
         if (existingPatientPhoneNumber != null && !existingPatientPhoneNumber.getId().equals(id)) {
-            throw new DuplicateNikException("Phone number already exists: " + patientSaveDTO.getPhoneNumber());
+            throw new DuplicatePhoneNumberException("Phone number already exists");
         }
 
         // Update fields from the save DTO

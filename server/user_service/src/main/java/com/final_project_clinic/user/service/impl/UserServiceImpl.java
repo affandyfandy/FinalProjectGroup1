@@ -2,6 +2,7 @@ package com.final_project_clinic.user.service.impl;
 
 import java.util.UUID;
 
+import com.final_project_clinic.user.exception.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,10 +55,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserSaveDTO userSaveDTO) {
+        // Check for existing user with the same email
+        User existingUser = userRepository.findByEmail(userSaveDTO.getEmail());
+        if (existingUser != null) {
+            throw new DuplicateEmailException("Email already exists: " + userSaveDTO.getEmail());
+        }
+
         User user = userMapper.toUser(userSaveDTO);
         String role = (userSaveDTO.getRole() != null && !userSaveDTO.getRole().isEmpty())
                 ? userSaveDTO.getRole()
                 : Role.PATIENT.toString();
+
         user.setRole(role);
         user.setPassword(PasswordUtils.hashPassword(userSaveDTO.getPassword()));
         user = userRepository.save(user);
@@ -68,6 +76,12 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(UUID id, UserSaveDTO userSaveDTO) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+
+        // Check if another user with the same email exists (excluding the current user)
+        User userWithEmail = userRepository.findByEmail(userSaveDTO.getEmail());
+        if (userWithEmail != null && !userWithEmail.getId().equals(id)) {
+            throw new DuplicateEmailException("Email already exists: " + userSaveDTO.getEmail());
+        }
 
         // Update fields from UserSaveDTO
         existingUser.setFullName(userSaveDTO.getFullName());

@@ -84,7 +84,6 @@ public class RegisterRequestDTOTest {
         assertTrue(violationMessages.contains("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"));
     }
 
-
     @Test
     void whenInvalidPasswordthenConstraintViolation() {
         RegisterRequestDTO dto = new RegisterRequestDTO(123456789L, "John Doe", "john.doe@example.com", "Password123`", "User");
@@ -98,7 +97,6 @@ public class RegisterRequestDTOTest {
         // Check the expected message for password complexity
         assertEquals("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character", violationMessage);
     }
-
 
     @Test
     void whenValidRolethenNoConstraintViolations() {

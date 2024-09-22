@@ -1,4 +1,4 @@
-<div class="flow-root w-96">
+<div class="flow-root w-[550px]">
   <dl class="-my-3 divide-y divide-gray-100 text-sm">
     <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
       <dt class="font-medium text-gray-900">SIP</dt>
@@ -45,7 +45,7 @@
       <dd class="text-gray-700 sm:col-span-2">
         <p class="text-base">{{ doctor.createdBy }}</p>
         <p class="text-xs text-gray-500">
-          {{ doctor.createdTime | date : "fullDate" }}
+          {{ doctor.createdTime | date : "full" }}
         </p>
       </dd>
     </div>
@@ -55,7 +55,7 @@
       <dd class="text-gray-700 sm:col-span-2">
         <p class="text-base">{{ doctor.updatedBy }}</p>
         <p class="text-xs text-gray-500">
-          {{ doctor.updatedTime | date : "fullDate" }}
+          {{ doctor.updatedTime | date : "full" }}
         </p>
       </dd>
     </div>
