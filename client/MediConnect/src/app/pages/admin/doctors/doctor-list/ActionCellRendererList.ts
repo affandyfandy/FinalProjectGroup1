@@ -16,7 +16,6 @@ import {
   HlmAlertDialogOverlayDirective,
   HlmAlertDialogTitleDirective,
 } from '@spartan-ng/ui-alertdialog-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
   bootstrapTrash,
   bootstrapPencilSquare,
@@ -72,7 +71,6 @@ import { DoctorListComponent } from './doctor-list.component';
     provideIcons({ bootstrapTrash, bootstrapPencilSquare, bootstrapEyeFill }),
   ],
   template: `
-    <!-- Dialog Content for Viewing Invoice -->
     <hlm-dialog>
       <button
         class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-blue-600 mr-1.5 disabled:bg-blue-300 disabled:cursor-not-allowed"
@@ -92,9 +90,6 @@ import { DoctorListComponent } from './doctor-list.component';
           </p>
         </hlm-dialog-header>
         <app-doctor-modal [doctor]="params.data"></app-doctor-modal>
-        <!-- <hlm-dialog-footer>
-          <button hlmButton hlmDialogClose>Close</button>
-        </hlm-dialog-footer> -->
       </hlm-dialog-content>
     </hlm-dialog>
     <a [routerLink]="['/admin/dashboard/doctors', params.data.id]">
