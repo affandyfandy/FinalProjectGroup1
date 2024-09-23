@@ -1,12 +1,15 @@
 package com.final_project_clinic.doctor.config.filter;
 
+import com.final_project_clinic.doctor.exception.KeyLoadingException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.security.KeyFactory;
+import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
@@ -14,16 +17,44 @@ import java.util.Base64;
 public class JwtKeyConfig {
 
     @Bean
-    public PublicKey publicKey() throws Exception {
-        String publicKeyPEM = new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("keys/public.pem").toURI())));
-        publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
+    public PublicKey publicKey() throws KeyLoadingException {
+        try {
+            // Load public key from PEM file
+            ClassPathResource resource = new ClassPathResource("keys/public.pem");
+            try (InputStream inputStream = resource.getInputStream()) {
+                byte[] keyBytes = inputStream.readAllBytes();
+                String publicKeyPEM = new String(keyBytes)
+                        .replace("-----BEGIN PUBLIC KEY-----", "")
+                        .replace("-----END PUBLIC KEY-----", "")
+                        .replaceAll("\\s+", "");
+                byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
+                X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoded);
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                return keyFactory.generatePublic(keySpec);
+            }
+        } catch (Exception e) {
+            throw new KeyLoadingException("Failed to load the public key", e);
+        }
+    }
 
-        byte[] encoded = Base64.getDecoder().decode(publicKeyPEM);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-        return keyFactory.generatePublic(keySpec);
+    @Bean
+    public PrivateKey privateKey() throws KeyLoadingException {
+        try {
+            // Load private key from PEM file
+            ClassPathResource resource = new ClassPathResource("keys/private.pem");
+            try (InputStream inputStream = resource.getInputStream()) {
+                byte[] keyBytes = inputStream.readAllBytes();
+                String privateKeyPEM = new String(keyBytes)
+                        .replace("-----BEGIN PRIVATE KEY-----", "")
+                        .replace("-----END PRIVATE KEY-----", "")
+                        .replaceAll("\\s+", "");
+                byte[] decoded = Base64.getDecoder().decode(privateKeyPEM);
+                PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoded);
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                return keyFactory.generatePrivate(keySpec);
+            }
+        } catch (Exception e) {
+            throw new KeyLoadingException("Failed to load the private key", e);
+        }
     }
 }

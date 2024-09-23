@@ -16,6 +16,18 @@ import { CommonModule } from '@angular/common';
 import { UserRequestLogin } from '../../../../models/user.model';
 import { AuthService } from '../../../../services/auth-service/auth.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import {
+  MessageInvalidLogin,
+  MessageValidLogin,
+} from '../../../../utils/message';
+import {
+  MessageInvalidValidation,
+  MessageError,
+  MessageValidationPasswordSize,
+  MessageValidationPasswordPattern,
+  MessageErrorRequiredField,
+  MessageValidationEmailPattern,
+} from '../../../../utils/message';
 
 @Component({
   selector: 'app-signin-form',
@@ -41,6 +53,15 @@ export class SigninFormComponent implements OnInit {
   signinForm!: FormGroup;
   showConfirmPassword: boolean = false;
 
+  messageInvalidValidation = MessageInvalidValidation;
+  messageErrorGeneral = MessageError;
+  messageSuccesLogin = MessageValidLogin;
+  messageInvalidLogin = MessageInvalidLogin;
+  messageValidationPasswordSize = MessageValidationPasswordSize;
+  messageValidationPasswordPattern = MessageValidationPasswordPattern;
+  messageErrorField = MessageErrorRequiredField;
+  messageValidationEmailPattern = MessageValidationEmailPattern;
+
   @ViewChild(ToastContainerDirective, { static: true })
   toastContainer!: ToastContainerDirective;
 
@@ -56,7 +77,16 @@ export class SigninFormComponent implements OnInit {
 
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(12),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).+$/
+          ),
+        ],
+      ],
     });
   }
 
@@ -77,7 +107,7 @@ export class SigninFormComponent implements OnInit {
                 this.authService.setRole(userRole);
                 this.toastrService.success(
                   'Welcome Back!!',
-                  'Login successful!'
+                  this.messageSuccesLogin
                 );
                 if (userRole === 'PATIENT') {
                   this.router.navigate(['/dashboard']);
@@ -88,7 +118,7 @@ export class SigninFormComponent implements OnInit {
                 }
               },
               error: (profileError) => {
-                this.toastrService.error('Failed to fetch user profile');
+                this.toastrService.error(this.messageErrorGeneral);
               },
             });
           }
@@ -98,12 +128,10 @@ export class SigninFormComponent implements OnInit {
           if (error.status === 401) {
             this.toastrService.error(
               'Try Again!!',
-              error.error || 'Validation error occurred.'
+              error.error || this.messageInvalidValidation
             );
           } else {
-            this.toastrService.error(
-              'Unexpected error occurred. Please try again later.'
-            );
+            this.toastrService.error(this.messageErrorGeneral);
           }
         },
       });

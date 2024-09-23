@@ -195,7 +195,7 @@ export class PatientsFormComponent implements OnInit {
       password: this.patientForm.get('password')?.value,
     };
 
-    this.userService.updateUser(this.createdUserId, userUpdateDTO).subscribe({
+    this.userService.updateUserPatient(this.createdUserId, userUpdateDTO).subscribe({
       next: (response) => {
         console.log(response);
         this.toastr.success('User updated successfully!');

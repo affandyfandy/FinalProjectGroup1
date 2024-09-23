@@ -15,13 +15,13 @@
       *ngIf="email?.errors?.['required'] && email?.touched"
       class="text-red-500 text-sm"
     >
-      Email is required.
+      {{ messageErrorField }}
     </div>
     <div
       *ngIf="email?.errors?.['email'] && email?.touched"
       class="text-red-500 text-sm"
     >
-      Enter a valid email address.
+      {{ messageValidationEmailPattern }}
     </div>
   </div>
 
@@ -54,7 +54,19 @@
       *ngIf="password?.errors?.['required'] && password?.touched"
       class="text-red-500 text-sm"
     >
-      Password is required.
+      {{ messageErrorField }}
+    </div>
+    <div
+      *ngIf="password?.errors?.['minlength'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      {{ messageValidationPasswordSize }}
+    </div>
+    <div
+      *ngIf="password?.errors?.['pattern'] && password?.touched"
+      class="text-red-500 text-sm"
+    >
+      {{ messageValidationPasswordPattern }}
     </div>
   </div>
   <div class="w-full text-left text-white">

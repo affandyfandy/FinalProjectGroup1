@@ -37,7 +37,8 @@ class ProfileResponseDTOTest {
         LocalDateTime updatedTime = LocalDateTime.now();
 
         // When
-        ProfileResponseDTO dto = new ProfileResponseDTO(fullName, email, password, role, createdBy, createdTime, updatedBy, updatedTime);
+        ProfileResponseDTO dto = new ProfileResponseDTO(fullName, email, password, role, createdBy, createdTime,
+                updatedBy, updatedTime);
 
         // Then
         assertEquals(fullName, dto.getFullName());
@@ -84,37 +85,48 @@ class ProfileResponseDTOTest {
         assertEquals(updatedTime, dto.getUpdatedTime());
     }
 
-    // @Test
-    // void testEquals() {
-    //     // Given
-    //     ProfileResponseDTO dto1 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin", "system", LocalDateTime.now(), "admin", LocalDateTime.now());
-    //     ProfileResponseDTO dto2 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin", "system", LocalDateTime.now(), "admin", LocalDateTime.now());
-    //     ProfileResponseDTO dto3 = new ProfileResponseDTO("Jane Doe", "jane.doe@gmail.com", "DifferentPass123!", "User", "admin", LocalDateTime.now(), "admin", LocalDateTime.now());
+    @Test
+    void testEquals() {
+        // Given
+        LocalDateTime now = LocalDateTime.now(); // Reuse the same timestamp
 
-    //     // Then
-    //     assertEquals(dto1, dto2, "DTOs with same values should be equal");
-    //     assertNotEquals(dto1, dto3, "DTOs with different values should not be equal");
-    //     assertNotEquals(dto1, null, "DTO should not be equal to null");
-    // }
+        ProfileResponseDTO dto1 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin",
+                "system", now, "admin", now);
+        ProfileResponseDTO dto2 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin",
+                "system", now, "admin", now);
+        ProfileResponseDTO dto3 = new ProfileResponseDTO("Jane Doe", "jane.doe@gmail.com", "DifferentPass123!", "User",
+                "admin", now, "admin", now);
 
-    // @Test
-    // void testHashCode() {
-    //     // Given
-    //     ProfileResponseDTO dto1 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin", "system", LocalDateTime.now(), "admin", LocalDateTime.now());
-    //     ProfileResponseDTO dto2 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin", "system", LocalDateTime.now(), "admin", LocalDateTime.now());
+        // Then
+        assertEquals(dto1, dto2, "DTOs with same values should be equal");
+        assertNotEquals(dto1, dto3, "DTOs with different values should not be equal");
+        assertNotEquals(dto1, null, "DTO should not be equal to null");
+    }
 
-    //     // Then
-    //     assertEquals(dto1.hashCode(), dto2.hashCode(), "DTOs with same values should have the same hash code");
-    // }
+    @Test
+    void testHashCode() {
+        // Given
+        LocalDateTime now = LocalDateTime.now(); // Reuse the same timestamp
+
+        ProfileResponseDTO dto1 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin",
+                "system", now, "admin", now);
+        ProfileResponseDTO dto2 = new ProfileResponseDTO("John Doe", "john.doe@gmail.com", "SecurePass123!", "Admin",
+                "system", now, "admin", now);
+
+        // Then
+        assertEquals(dto1.hashCode(), dto2.hashCode(), "DTOs with same values should have the same hash code");
+    }
 
     @Test
     void testToString() {
         // Given
         LocalDateTime now = LocalDateTime.now();
-        ProfileResponseDTO dto = new ProfileResponseDTO("John Doe", "john.doe@example.com", "SecurePass123!", "Admin", "system", now, "admin", now);
+        ProfileResponseDTO dto = new ProfileResponseDTO("John Doe", "john.doe@example.com", "SecurePass123!", "Admin",
+                "system", now, "admin", now);
 
         // When
-        String expectedString = "ProfileResponseDTO(fullName=John Doe, email=john.doe@example.com, password=SecurePass123!, role=Admin, createdBy=system, createdTime=" + now + ", updatedBy=admin, updatedTime=" + now + ")";
+        String expectedString = "ProfileResponseDTO(fullName=John Doe, email=john.doe@example.com, password=SecurePass123!, role=Admin, createdBy=system, createdTime="
+                + now + ", updatedBy=admin, updatedTime=" + now + ")";
         String actualString = dto.toString();
 
         // Then

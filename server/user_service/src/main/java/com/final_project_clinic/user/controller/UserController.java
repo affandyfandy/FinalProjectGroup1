@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/all/users")
+@RequestMapping("/api/v1/users")
 @Validated
 public class UserController {
 
@@ -64,6 +64,15 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserSaveDTO userSaveDTO) {
         UserDTO newUser = userService.createUser(userSaveDTO);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PutMapping("/patient/{id}")
+    public ResponseEntity<UserDTO> updateUserPatient(
+            @PathVariable UUID id,
+            @RequestBody @Valid UserSaveDTO userSaveDTO) {
+        UserDTO updatedUser = userService.updateUser(id, userSaveDTO);
+        return ResponseEntity.ok(updatedUser);
     }
 
     // Update an existing user (Only SUPERADMIN can update)

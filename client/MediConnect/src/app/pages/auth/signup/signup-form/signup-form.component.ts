@@ -16,7 +16,17 @@ import { CommonModule } from '@angular/common';
 import { UserRequestRegister } from '../../../../models/user.model';
 import { AuthService } from '../../../../services/auth-service/auth.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-
+import {
+  MessageInvalidValidation,
+  MessageError,
+  MessageValidRegister,
+  MessageValidationPasswordSize,
+  MessageValidationPasswordPattern,
+  MessageErrorRequiredField,
+  MessageValidationNIKPattern,
+  MessageValidationFullnamePattern,
+  MessageValidationEmailPattern,
+} from '../../../../utils/message';
 @Component({
   selector: 'app-signup-form',
   standalone: true,
@@ -38,6 +48,16 @@ export class SignupFormComponent implements OnInit {
   signupForm!: FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  
+  messageInvalidValidation = MessageInvalidValidation;
+  messageErrorGeneral = MessageError;
+  messageSuccesRegister = MessageValidRegister;
+  messageValidationPasswordSize = MessageValidationPasswordSize;
+  messageValidationPasswordPattern = MessageValidationPasswordPattern;
+  messageErrorField = MessageErrorRequiredField;
+  messageValidationNIKPattern = MessageValidationNIKPattern;
+  messageValidationFullnamePattern = MessageValidationFullnamePattern;
+  messageValidationEmailPattern = MessageValidationEmailPattern;
 
   @ViewChild(ToastContainerDirective, { static: true })
   toastContainer!: ToastContainerDirective;
@@ -72,7 +92,7 @@ export class SignupFormComponent implements OnInit {
         ],
         confirmPassword: ['', Validators.required],
       },
-      { validators: this.passwordsMatchValidator }
+      { validators: this.passwordsMatchValidator } // Synchronous validator
     );
   }
 
@@ -96,7 +116,7 @@ export class SignupFormComponent implements OnInit {
       this.authService.register(saveData).subscribe({
         next: (response) => {
           if (response) {
-            this.toastrService.success('Register successful!');
+            this.toastrService.success(this.messageSuccesRegister);
             this.router.navigate(['/signin']);
           }
         },
@@ -105,12 +125,10 @@ export class SignupFormComponent implements OnInit {
           if (error.status === 409) {
             this.toastrService.error(
               'Try Again!!',
-              error.error || 'Validation error occurred.'
+              error.error || this.messageErrorGeneral
             );
           } else {
-            this.toastrService.error(
-              'Unexpected error occurred. Please try again later.'
-            );
+            this.toastrService.error(this.messageErrorGeneral);
           }
           console.log('Error:', error);
         },

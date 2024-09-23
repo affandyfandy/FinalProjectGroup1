@@ -125,6 +125,11 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			dc65e7498c41c1a4e382d2254ad1c981403ba4e9
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
