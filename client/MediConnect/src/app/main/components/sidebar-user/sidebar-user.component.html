@@ -1,0 +1,59 @@
+<div class="fixed min-h-screen flex flex-row bg-gray-100">
+  <div class="flex flex-col justify-between w-64 bg-white overflow-hidden">
+    <div class="flex flex-col items-center justify-center h-20 shadow-md">
+      <h1 class="text-2xl font-bold text-fpt-colors tracking-wide uppercase">
+        MediConnect
+      </h1>
+      <p class="text-sm font-medium">User Panel</p>
+    </div>
+    <ul class="flex flex-col justify-start items-start gap-y-2 py-4 h-full">
+      <li>
+        <a
+          routerLink="/admin/dashboard"
+          class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+        >
+          <span
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapHouse"></ng-icon
+          ></span>
+          <span class="text-sm font-medium">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/admin/dashboard/patients"
+          class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+        >
+          <span
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapPeopleFill"></ng-icon
+          ></span>
+          <span class="text-sm font-medium">Create Appointment</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/admin/dashboard/doctors"
+          class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+        >
+          <span
+            class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+            ><ng-icon name="bootstrapPersonHearts"></ng-icon>
+          </span>
+          <span class="text-sm font-medium">History Appointment Data</span>
+        </a>
+      </li>
+    </ul>
+    <button (click)="handleLogout()">
+      <div
+        class="flex flex-row items-center h-20 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+      >
+        <span
+          class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900"
+          ><ng-icon name="bootstrapDoorOpen"></ng-icon
+        ></span>
+        <span class="text-sm font-medium">Logout</span>
+      </div>
+    </button>
+  </div>
+</div>
