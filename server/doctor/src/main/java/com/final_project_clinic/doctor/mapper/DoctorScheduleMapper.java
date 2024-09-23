@@ -6,9 +6,12 @@ import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = { DoctorMapper.class, ScheduleTimeMapper.class })
 public interface DoctorScheduleMapper {
+
+    DoctorScheduleMapper INSTANCE = Mappers.getMapper(DoctorScheduleMapper.class);
 
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(source = "scheduleTimes", target = "scheduleTimes")

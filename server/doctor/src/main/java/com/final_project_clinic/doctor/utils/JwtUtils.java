@@ -30,8 +30,4 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-    public boolean validateToken(String token) {
-        return !extractAllClaims(token).getExpiration().before(new java.util.Date());
-    }
 }

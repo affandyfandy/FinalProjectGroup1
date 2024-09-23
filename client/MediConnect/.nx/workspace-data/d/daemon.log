@@ -1,0 +1,11 @@
+[NX Daemon Server] - 2024-09-20T00:40:50.591Z - Started listening on: \\.\pipe\nx\C:\Users\USER\AppData\Local\Temp\bc842d6653d0d77b55d2\d.sock
+[NX Daemon Server] - 2024-09-20T00:40:50.602Z - [WATCHER]: Subscribed to changes within: c:\Users\USER\OneDrive\Documents\GitHub\FinalProjectGroup1\client\MediConnect (native)
+[NX Daemon Server] - 2024-09-20T00:40:50.613Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-09-20T00:40:50.622Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-09-20T00:40:50.622Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-09-20T00:40:50.629Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-09-20T00:40:50.634Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-09-20T00:40:50.635Z - Handled FORCE_SHUTDOWN. Handling time: 1. Response time: 6.
+[NX Daemon Server] - 2024-09-20T00:40:50.635Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-09-20T00:40:50.636Z - [WATCHER]: Stopping the watcher for c:\Users\USER\OneDrive\Documents\GitHub\FinalProjectGroup1\client\MediConnect (sources)
+[NX Daemon Server] - 2024-09-20T00:40:50.636Z - [WATCHER]: Stopping the watcher for c:\Users\USER\OneDrive\Documents\GitHub\FinalProjectGroup1\client\MediConnect (outputs)
