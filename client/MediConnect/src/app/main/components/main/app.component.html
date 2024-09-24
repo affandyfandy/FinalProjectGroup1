@@ -4,13 +4,17 @@
   <div class="min-h-[100vh]">
     <app-sidebar *ngIf="showSidebarAdmin"></app-sidebar>
     <app-sidebar-user *ngIf="showSidebarUser"></app-sidebar-user>
+    <app-sidebar-user *ngIf="showSidebarUserPublic"></app-sidebar-user>
     <div
       class="w-full h-full"
       [ngClass]="
-        showSidebarAdmin || showSidebarUser ? 'bg-[#F3FBFF] pl-64' : 'bg-white'
+        showSidebarAdmin || showSidebarUser || showSidebarUserPublic
+          ? 'bg-[#F3FBFF] pl-64'
+          : 'bg-white'
       "
     >
       <app-header-admin *ngIf="showSidebar"></app-header-admin>
+      <app-header-admin *ngIf="showSidebarUserPublic"></app-header-admin>
       <router-outlet></router-outlet>
     </div>
   </div>
