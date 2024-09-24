@@ -1,1 +1,84 @@
-<p>appointment-form works!</p>
+<form [formGroup]="appointmentForm" class="w-96">
+  <div class="py-4 flex justify-between items-center gap-4">
+    <div class="items-center grid grid-cols-4 gap-4">
+      <label hlmLabel for="date" class="text-right">Date</label>
+      <input
+        formControlName="date"
+        hlmInput
+        id="date"
+        type="date"
+        class="col-span-3 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+      />
+    </div>
+    <div class="items-center grid grid-cols-4 gap-4">
+      <label hlmLabel for="hour" class="text-right">Hour</label>
+      <input
+        formControlName="hour"
+        hlmInput
+        type="time"
+        class="col-span-3 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+      />
+    </div>
+  </div>
+
+  <div
+    *ngIf="
+      (date?.invalid && (date?.dirty || date?.touched)) ||
+      (hour?.invalid && (hour?.dirty || hour?.touched))
+    "
+    class="text-red-500 text-sm"
+  >
+    {{ messageErrorRequiredField }}
+  </div>
+
+  <div class="mt-8">
+    <textarea
+      formControlName="description"
+      class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+      rows="4"
+      placeholder="Enter a description..."
+    ></textarea>
+    <div
+      *ngIf="
+        description?.invalid && (description?.dirty || description?.touched)
+      "
+      class="text-red-500 text-sm"
+    >
+      {{ messageErrorRequiredField }}
+    </div>
+  </div>
+
+  <div class="w-full flex justify-center items-center">
+    <hlm-alert-dialog>
+      <button
+        class="text-center text-white font-bold text-sm px-5 mt-4 py-2 uppercase bg-gradient-fpt-3 rounded-lg"
+        brnAlertDialogTrigger
+        hlmBtn
+        type="submit"
+        [disabled]="!appointmentForm.valid"
+        (click)="submitForm()"
+      >
+        Submit Appointment
+      </button>
+      <hlm-alert-dialog-content
+        class="bg-white"
+        *brnAlertDialogContent="let ctx"
+      >
+        <hlm-alert-dialog-header>
+          <h3 hlmAlertDialogTitle>
+            Are you sure you want to make this appointment?
+          </h3>
+        </hlm-alert-dialog-header>
+        <hlm-alert-dialog-footer>
+          <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+          <button
+            hlmAlertDialogAction
+            (click)="confirmAndSubmit(ctx, dialogCtx)"
+          >
+            Yes
+          </button>
+        </hlm-alert-dialog-footer>
+      </hlm-alert-dialog-content>
+    </hlm-alert-dialog>
+  </div>
+</form>

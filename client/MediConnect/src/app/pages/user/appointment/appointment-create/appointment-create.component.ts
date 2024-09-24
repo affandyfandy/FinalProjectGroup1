@@ -26,13 +26,14 @@ import {
 } from '@spartan-ng/ui-dialog-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
+import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
 
 @Component({
   selector: 'app-appointment-create',
   standalone: true,
   imports: [
+    AppointmentFormComponent,
     BrnMenuTriggerDirective,
-
     HlmMenuComponent,
     HlmSubMenuComponent,
     HlmMenuItemDirective,
@@ -42,22 +43,20 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
     HlmMenuSeparatorComponent,
     HlmMenuItemIconDirective,
     HlmMenuGroupComponent,
-
     BrnDialogTriggerDirective,
     BrnDialogContentDirective,
-
     HlmDialogComponent,
     HlmDialogContentComponent,
     HlmDialogHeaderComponent,
     HlmDialogFooterComponent,
     HlmDialogTitleDirective,
     HlmDialogDescriptionDirective,
-
     HlmLabelDirective,
     HlmInputDirective,
     HlmButtonDirective,
   ],
   templateUrl: './appointment-create.component.html',
-  styleUrl: './appointment-create.component.css',
+  styleUrls: ['./appointment-create.component.css'],
 })
-export class AppointmentCreateComponent {}
+export class AppointmentCreateComponent {
+}
