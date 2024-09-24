@@ -47,7 +47,7 @@ public class PatientController {
     }
 
     // Get patient by ID
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    // @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<PatientShowDTO> getPatientById(@PathVariable UUID id) {
         PatientShowDTO patient = patientService.findPatientById(id);
