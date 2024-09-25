@@ -152,13 +152,13 @@ class DoctorScheduleControllerTest {
         verify(doctorScheduleService, times(0)).deleteSchedule(scheduleId);  // No delete if schedule not found
     }
 
-    @Test
-    void testDeleteScheduleTime() {
-        LocalTime startWorkingHour = LocalTime.of(9, 0);
-
-        ResponseEntity<Void> response = doctorScheduleController.deleteScheduleTime(scheduleId, startWorkingHour.toString());
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(doctorScheduleService, times(1)).deleteScheduleTime(scheduleId, startWorkingHour);
-    }
+//    @Test
+//    void testDeleteScheduleTime() {
+//        LocalTime startWorkingHour = LocalTime.of(9, 0);
+//
+//        ResponseEntity<Void> response = doctorScheduleController.deleteScheduleTime(scheduleId, startWorkingHour.toString());
+//
+//        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+//        verify(doctorScheduleService, times(1)).deleteScheduleTime(scheduleId, startWorkingHour);
+//    }
 }

@@ -48,6 +48,17 @@ public class DoctorScheduleController {
     }
 
     @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @GetMapping("/{scheduleId}/{startWorkingHour}")
+    public ResponseEntity<ScheduleTimeDTO> getScheduleTime(
+            @PathVariable UUID scheduleId,
+            @PathVariable String startWorkingHour) {
+        LocalTime startHour = LocalTime.parse(startWorkingHour);
+        Optional<ScheduleTimeDTO> scheduleTime = doctorScheduleService.getScheduleTime(scheduleId, startHour);
+        return scheduleTime.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PostMapping
     public ResponseEntity<List<DoctorScheduleDTO>> createSchedule(@RequestBody List<DoctorScheduleDTO> doctorScheduleDTOs) {
         List<DoctorScheduleDTO> createdSchedules = new ArrayList<>();

@@ -20,6 +20,8 @@ public interface DoctorScheduleService {
 
     Optional<DoctorScheduleDTO> getScheduleById(UUID id);
 
+    Optional<ScheduleTimeDTO> getScheduleTime(UUID scheduleId, LocalTime startWorkingHour);
+
     DoctorScheduleDTO createSchedule(DoctorScheduleDTO doctorScheduleDTO);
 
     DoctorScheduleDTO editScheduleTime(UUID scheduleId, LocalTime startWorkingHour, ScheduleTimeDTO scheduleTimeDTO);
