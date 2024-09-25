@@ -59,4 +59,14 @@ export class AppointmentService {
       headers: this.getHeadersRestricted(),
     });
   }
+
+  cancelAppointment(id: string): Observable<any> {
+    return this.http.put<any>(
+      `${this.apiUrl}/${id}/cancel`,
+      {},
+      {
+        headers: this.getHeadersRestricted(),
+      }
+    );
+  }
 }
