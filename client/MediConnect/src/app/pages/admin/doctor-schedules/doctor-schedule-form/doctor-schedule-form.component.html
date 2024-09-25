@@ -1,0 +1,117 @@
+<form [formGroup]="doctorScheduleForm" (ngSubmit)="onSubmit()" class="w-full text-left">
+  <div class="w-full mb-4">
+    <label hlmLabel>
+      Doctor
+      <select hlmInput formControlName="doctorId" class="w-full mt-1">
+        <option value="" disabled>Select Doctor</option>
+        <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.name }}</option>
+      </select>
+    </label>
+    <div *ngIf="doctorIdControl?.errors?.['required'] && doctorIdControl?.touched" class="text-red-500 text-sm">
+      Doctor is required.
+    </div>
+  </div>
+
+  <div formArrayName="schedules">
+    <div *ngFor="let schedule of schedules?.controls as FormArray; let i = index" [formGroupName]="i" class="schedule-group">
+        <div class="w-full mb-4">
+          <label hlmLabel>Day
+            <select hlmInput formControlName="day" class="w-full mt-1">
+              <option value="" disabled>Select Day</option>
+              <option value="Sunday">Sunday</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+            </select>
+          </label>
+          <div *ngIf="schedule.get('day')?.errors?.['required'] && schedule.get('day')?.touched" class="text-red-500 text-sm">
+            Day is required.
+          </div>
+        </div>
+
+        <div formArrayName="scheduleTimes">
+          <div *ngFor="let time of getScheduleTimes(i).controls; let j = index" [formGroupName]="j" class="schedule-time-group">
+
+            <div class="w-full grid grid-cols-1 lg:grid-cols-4 gap-x-4 mt-8 items-center">
+
+              <div class="w-full mb-4">
+                <label hlmLabel>Start Hour
+                  <input hlmInput type="time" formControlName="startWorkingHour" class="w-full mt-1" />
+                </label>
+                <div
+                  *ngIf="time.get('startWorkingHour')?.errors?.['required'] && time.get('startWorkingHour')?.touched"
+                  class="text-red-500 text-sm"
+                >
+                  Start hour is required.
+                </div>
+              </div>
+
+              <div class="w-full mb-4">
+                <label hlmLabel>End Hour
+                  <input hlmInput type="time" formControlName="endWorkingHour" class="w-full mt-1" />
+                </label>
+                <div
+                  *ngIf="time.get('endWorkingHour')?.errors?.['required'] && time.get('endWorkingHour')?.touched"
+                  class="text-red-500 text-sm"
+                >
+                  End hour is required.
+                </div>
+              </div>
+
+              <div class="w-full mb-4">
+                <label hlmLabel>Max Patient
+                  <input hlmInput type="number" formControlName="maxPatient" class="w-full mt-1" />
+                </label>
+                <div *ngIf="time.get('maxPatient')?.errors?.['required'] && time.get('maxPatient')?.touched" class="text-red-500 text-sm">
+                  Max patient is required.
+                </div>
+                <div
+                  *ngIf="time.get('maxPatient')?.errors?.['min'] && time.get('maxPatient')?.touched"
+                  class="text-red-500 text-sm"
+                >
+                  Max patient must be at least 1.
+                </div>
+              </div>
+
+              <button type="button" hlmBtn class="bg-red-500 text-white mt-1" (click)="removeScheduleTime(i, j)" *ngIf="getScheduleTimes(i).length > 1">
+                Remove Time Slot
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-end items-center gap-x-4 mt-8">
+          <button type="button" hlmBtn class="bg-blue-400 text-white" (click)="addScheduleTime(i)">Add Another Time Slot</button>
+        </div>
+
+      <div class="w-full flex justify-end">
+        <button type="button" hlmBtn class="bg-red-500 text-white mt-8" (click)="removeSchedule(i)" *ngIf="schedules.length > 1">Remove Day</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full flex justify-center items-center gap-x-4 mt-8">
+    <button type="button" hlmBtn class="bg-orange-400 text-center px-8 py-2 text-white" (click)="addSchedule()">
+      <span
+        class="inline-flex items-center justify-start h-12 w-8 text-lg text-white"
+        ><ng-icon name="bootstrapPlusCircle"></ng-icon>
+      </span>
+      <span>Add Another Day</span>
+    </button>
+  </div>
+
+  <div class="w-full flex justify-center items-center gap-x-4 mt-8 text-white">
+    <a
+      routerLink="/admin/dashboard/schedules"
+      class="drop-shadow-button-dropShadow-fpt bg-gray-400 rounded-full text-center px-8 py-2"
+    >
+      <p>Cancel</p>
+    </a>
+    <button hlmBtn type="submit" variant="fpt" class="text-center px-8 py-2">
+      Submit
+    </button>
+  </div>
+</form>

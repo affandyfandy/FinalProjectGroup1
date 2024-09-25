@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { DoctorSchedule } from '../../../../models/doctor-schedule.model';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DoctorSchedule, ListDoctorSchedule } from '../../../../models/doctor-schedule.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,5 +11,23 @@ import { CommonModule } from '@angular/common';
 })
 export class DoctorScheduleModalComponent {
   @Input() doctorSchedule !: DoctorSchedule;
+  @Input() listDoctorSchedule !: ListDoctorSchedule;
 
+  @Output() onUpdateSchedule = new EventEmitter<any>();
+
+  updatedData = {
+    startWorkingHour: '',
+    endWorkingHour: '',
+    maxPatient: 0,
+  };
+
+  ngOnInit() {
+    this.updatedData.startWorkingHour = this.listDoctorSchedule.startWorkingHour;
+    this.updatedData.endWorkingHour = this.listDoctorSchedule.endWorkingHour;
+    this.updatedData.maxPatient = this.listDoctorSchedule.maxPatient;
+  }
+
+  updateSchedule() {
+    this.onUpdateSchedule.emit(this.updatedData);
+  }
 }

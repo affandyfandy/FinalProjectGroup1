@@ -91,13 +91,13 @@ import { DoctorScheduleListComponent } from './doctor-schedule-list.component';
             Detailed information regarding the schedule's data
           </p>
         </hlm-dialog-header>
-        <app-doctor-schedule-modal [doctorSchedule]="params.data"></app-doctor-schedule-modal>
+        <app-doctor-schedule-modal [listDoctorSchedule]="params.data"></app-doctor-schedule-modal>
         <!-- <hlm-dialog-footer>
           <button hlmButton hlmDialogClose>Close</button>
         </hlm-dialog-footer> -->
       </hlm-dialog-content>
     </hlm-dialog>
-    <a [routerLink]="['/admin/dashboard/doctors', params.data.id]">
+    <a [routerLink]="['/admin/dashboard/schedules', params.data.id, params.data.startWorkingHour]">
       <button
         class="bg-gray-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-gray-600 mr-1.5 disabled:bg-gray-300 disabled:cursor-not-allowed"
       >
@@ -125,7 +125,7 @@ import { DoctorScheduleListComponent } from './doctor-schedule-list.component';
         </hlm-alert-dialog-header>
         <hlm-alert-dialog-footer>
           <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
-          <button hlmAlertDialogAction class="bg-gray-800 text-white" (click)="onDelete()">Delete doctor</button>
+          <button hlmAlertDialogAction class="bg-gray-800 text-white" (click)="onDelete()">Delete schedule</button>
         </hlm-alert-dialog-footer>
       </hlm-alert-dialog-content>
     </hlm-alert-dialog>
@@ -145,10 +145,13 @@ export class ActionCellRendererList implements ICellRendererAngularComp {
 
   onDelete(): void {
     const parentComponent = this.params.context as DoctorScheduleListComponent;
+    const scheduleId = this.params.data.id;
+    const startWorkingHour = this.params.data.startWorkingHour;
+
     if (parentComponent && parentComponent.deleteOneSchedule) {
-      parentComponent.deleteOneSchedule(this.params.data.id);
+      parentComponent.deleteOneSchedule(scheduleId, startWorkingHour);
     } else {
-      console.error('Parent component or deleteDoctor method not found.');
+      console.error('Parent component or deleteScheduleTime method not found.');
     }
   }
 }

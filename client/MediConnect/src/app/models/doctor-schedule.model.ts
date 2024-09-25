@@ -40,4 +40,8 @@ export interface ListDoctorSchedule {
   startWorkingHour: string;
   endWorkingHour: string;
   maxPatient: number;
+  createdBy: string;
+  createdTime: Date;
+  updatedBy: string;
+  updatedTime: Date;
 }
