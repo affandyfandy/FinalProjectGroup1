@@ -18,14 +18,13 @@
           <div class="text-base font-semibold">
             {{ getDoctorName(appointment.doctorId) }}
           </div>
-          <!-- Replace with actual doctor name if available -->
+
           <div class="text-slate-700 text-xs">Practice</div>
-          <!-- Replace with actual practice if available -->
         </div>
       </div>
     </hlm-td>
     <hlm-td class="flex-1">{{ appointment.date | date : "fullDate" }}</hlm-td>
-    <!-- Format date -->
+
     <hlm-td class="flex-1"
       >{{ appointment.startTime }} - {{ appointment.endTime }}</hlm-td
     >

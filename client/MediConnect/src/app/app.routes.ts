@@ -54,18 +54,6 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'public',
-    children: [
-      {
-        path: RouterConfig.USERDASHBOARD.path,
-        loadChildren: () =>
-          import('./pages/user/user.routes').then((m) => m.userRoutes),
-        title: RouterConfig.USERDASHBOARD.title,
-        data: RouterConfig.USERDASHBOARD.data,
-      },
-    ],
-  },
   { path: 'unauthorized', component: UnauthorizeComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', component: NotFoundComponent },

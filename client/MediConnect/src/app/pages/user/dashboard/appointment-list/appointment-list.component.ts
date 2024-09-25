@@ -78,7 +78,7 @@ export class AppointmentListComponent implements OnInit {
             this.loadAppointment(this.patientId);
           },
           (error) => {
-            this.authService.handleError(error);
+            // this.authService.handleError(error);
             console.error('Error loading profile', error);
           }
         );
@@ -109,7 +109,7 @@ export class AppointmentListComponent implements OnInit {
               });
             },
             (error) => {
-              this.authService.handleError(error);
+              // this.authService.handleError(error);
               console.error('Error loading doctor details', error);
             }
           );
