@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../../../services/user-service/users.service';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -11,7 +12,6 @@ import {
   GridSizeChangedEvent,
   FirstDataRenderedEvent,
 } from 'ag-grid-community';
-import { CommonModule } from '@angular/common';
 import { User } from '../../../../models/user.model';
 import { ActionCellRendererList } from './ActionCellRendererList';
 import { ToastrService } from 'ngx-toastr';

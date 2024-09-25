@@ -7,6 +7,7 @@ import com.final_project_clinic.doctor.data.repository.DoctorRepository;
 import com.final_project_clinic.doctor.data.repository.DoctorScheduleRepository;
 import com.final_project_clinic.doctor.data.repository.ScheduleTimeRepository;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
+import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
 import com.final_project_clinic.doctor.mapper.DoctorScheduleMapper;
 import com.final_project_clinic.doctor.mapper.ScheduleTimeMapper;
@@ -57,6 +58,14 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
         return schedules.stream()
                 .map(doctorScheduleMapper::toDoctorScheduleDTO)
                 .toList();
+    }
+
+    @Override
+    public List<DoctorScheduleShowDTO> getAllSchedulesDoctor() {
+        List<DoctorSchedule> schedules = doctorScheduleRepository.findAll();
+        return schedules.stream() // Use stream() to convert the List to a Stream
+                .map(doctorScheduleMapper::toDoctorScheduleDTOShow) // Apply the map function
+                .toList(); // Collect the result back into a List
     }
 
     @Override

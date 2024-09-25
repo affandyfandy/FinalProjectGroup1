@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
   showSidebarAdmin = false;
   showSidebarUser = false;
   showSidebar = false;
-  showSidebarUserPublic = false;
   title = 'MediConnect';
 
   constructor(private router: Router) {}
@@ -49,13 +48,11 @@ export class AppComponent implements OnInit {
           this.showSidebarAdmin = true;
           this.showSidebarUser = false; // Ensure user sidebar is hidden
           this.showSidebar = true;
-          this.showSidebarUserPublic = true;
         } else if (isDashboardRoute) {
           this.showNavAndFooter = false;
           this.showSidebarAdmin = false; // Ensure admin sidebar is hidden
           this.showSidebarUser = true; // Show user sidebar
           this.showSidebar = true;
-          this.showSidebarUserPublic = true;
         } else {
           // Check if the current URL is in RouterConfig
           const matchedRoute = Object.values(RouterConfig).find(
@@ -80,7 +77,6 @@ export class AppComponent implements OnInit {
           this.showSidebarAdmin = false;
           this.showSidebarUser = false;
           this.showSidebar = false;
-          this.showSidebarUserPublic = true;
         }
       });
   }

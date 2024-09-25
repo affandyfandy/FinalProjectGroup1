@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import com.final_project_clinic.user.data.model.Patient;
 import com.final_project_clinic.user.dto.PatientDTO;
 import com.final_project_clinic.user.dto.PatientSaveDTO;
 import com.final_project_clinic.user.dto.PatientShowDTO;
@@ -15,6 +17,8 @@ public interface PatientService {
 
     // Find patient by its id
     PatientShowDTO findPatientById(UUID id);
+
+    Patient findPatientByUserId(UUID userId);
 
     // Creating a new patient.
     PatientDTO createPatient(PatientSaveDTO patientSaveDTO);

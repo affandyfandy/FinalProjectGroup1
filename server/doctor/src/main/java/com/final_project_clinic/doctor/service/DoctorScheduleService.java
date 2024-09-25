@@ -1,6 +1,7 @@
 package com.final_project_clinic.doctor.service;
 
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
+import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,8 @@ public interface DoctorScheduleService {
     Page<DoctorScheduleDTO> getAllSchedules(Pageable pageable);
 
     List<DoctorScheduleDTO> getAllSchedulesList();
+
+    List<DoctorScheduleShowDTO> getAllSchedulesDoctor();
 
     Optional<DoctorScheduleDTO> getScheduleById(UUID id);
 

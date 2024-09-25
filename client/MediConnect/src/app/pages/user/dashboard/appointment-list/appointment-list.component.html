@@ -1,27 +1,32 @@
 <hlm-table class="w-full min-w-[400px]">
   <hlm-caption>A list of your recent invoices.</hlm-caption>
   <hlm-trow>
-    <hlm-th class="w-52">Doctor</hlm-th>
-    <hlm-th class="w-48">Date</hlm-th>
-    <hlm-th class="w-32">Time</hlm-th>
+    <hlm-th class="w-56">Doctor</hlm-th>
+    <hlm-th class="flex-1">Date</hlm-th>
+    <hlm-th class="flex-1">Time</hlm-th>
     <hlm-th class="flex-1">Queue Number</hlm-th>
   </hlm-trow>
 
-  <hlm-trow>
-    <hlm-td truncate class="font-medium w-52">
+  <hlm-trow *ngFor="let appointment of appointments">
+    <hlm-td truncate class="font-medium w-56">
       <div class="w-full flex gap-x-6">
         <hlm-avatar>
-          <img src="#" alt="ppp" hlmAvatarImage />
-          <span class="border border-black" hlmAvatarFallback>name</span>
+          <img src="#" alt="Doctor Profile Picture" hlmAvatarImage />
+          <span class="border border-black" hlmAvatarFallback>Doctor Name</span>
         </hlm-avatar>
         <div class="flex flex-col text-start md:block hidden">
-          <div class="text-base font-semibold">name</div>
-          <div class="text-slate-700 text-xs">practice</div>
+          <div class="text-base font-semibold">{{ appointment.doctorId }}</div>
+          <!-- Replace with actual doctor name if available -->
+          <div class="text-slate-700 text-xs">Practice</div>
+          <!-- Replace with actual practice if available -->
         </div>
-      </div></hlm-td
+      </div>
+    </hlm-td>
+    <hlm-td class="flex-1">{{ appointment.date | date : "fullDate" }}</hlm-td>
+    <!-- Format date -->
+    <hlm-td class="flex-1"
+      >{{ appointment.startTime }} - {{ appointment.endTime }}</hlm-td
     >
-    <hlm-td class="w-48">Monday, 20 May 2023</hlm-td>
-    <hlm-td class="w-32">09.00 - 14.00</hlm-td>
-    <hlm-td class="flex-1">12</hlm-td>
+    <hlm-td class="flex-1">{{ appointment.queueNumber }}</hlm-td>
   </hlm-trow>
 </hlm-table>
