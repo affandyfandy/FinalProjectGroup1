@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { AppointmentService } from '../../../../services/appointment-service/appoinment.service';
 import { AuthService } from '../../../../services/auth-service/auth.service';
@@ -7,9 +7,6 @@ import { PatientShowDTO } from '../../../../models/patient.model';
 import { CustomJwtPayload } from '../../../../models/user.model';
 import { AppointmentShowDTO } from '../../../../models/appointment.model';
 import { CommonModule } from '@angular/common';
-import { DoctorDTO } from '../../../../models/doctor.model';
-import { DoctorsService } from '../../../../services/doctor-service/doctors.service';
-import { forkJoin } from 'rxjs';
 import {
   HlmCaptionComponent,
   HlmTableComponent,
@@ -17,15 +14,33 @@ import {
   HlmThComponent,
   HlmTrowComponent,
 } from '@spartan-ng/ui-table-helm';
-
+import {
+  BrnAlertDialogContentDirective,
+  BrnAlertDialogTriggerDirective,
+} from '@spartan-ng/ui-alertdialog-brain';
+import {
+  HlmAlertDialogActionButtonDirective,
+  HlmAlertDialogCancelButtonDirective,
+  HlmAlertDialogComponent,
+  HlmAlertDialogContentComponent,
+  HlmAlertDialogDescriptionDirective,
+  HlmAlertDialogFooterComponent,
+  HlmAlertDialogHeaderComponent,
+  HlmAlertDialogOverlayDirective,
+  HlmAlertDialogTitleDirective,
+} from '@spartan-ng/ui-alertdialog-helm';
 import {
   HlmAvatarImageDirective,
   HlmAvatarComponent,
   HlmAvatarFallbackDirective,
 } from '@spartan-ng/ui-avatar-helm';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { DoctorDTO } from '../../../../models/doctor.model';
+import { DoctorsService } from '../../../../services/doctor-service/doctors.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-appointment-list',
+  selector: 'app-appointment-my',
   standalone: true,
   imports: [
     CommonModule,
@@ -38,24 +53,40 @@ import {
     HlmAvatarImageDirective,
     HlmAvatarComponent,
     HlmAvatarFallbackDirective,
-  ],
-  templateUrl: './appointment-list.component.html',
-  styleUrl: './appointment-list.component.css',
-})
-export class AppointmentListComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private patientsService: PatientsService,
-    private doctorsService: DoctorsService,
-    private appointmentService: AppointmentService
-  ) {}
 
+    BrnAlertDialogContentDirective,
+    BrnAlertDialogTriggerDirective,
+    HlmAlertDialogActionButtonDirective,
+    HlmAlertDialogCancelButtonDirective,
+    HlmAlertDialogComponent,
+    HlmAlertDialogContentComponent,
+    HlmAlertDialogDescriptionDirective,
+    HlmAlertDialogFooterComponent,
+    HlmAlertDialogHeaderComponent,
+    HlmAlertDialogOverlayDirective,
+    HlmAlertDialogTitleDirective,
+  ],
+  templateUrl: './appointment-my.component.html',
+  styleUrl: './appointment-my.component.css',
+})
+export class AppointmentMyComponent implements OnInit {
   token: string = '';
   userId: string = '';
   patientId: string = '';
   patient: PatientShowDTO | null = null;
   appointments: AppointmentShowDTO[] = [];
   doctorMap: { [doctorId: string]: DoctorDTO } = {};
+
+  constructor(
+    private authService: AuthService,
+    private patientsService: PatientsService,
+    private appointmentService: AppointmentService,
+    private doctorsService: DoctorsService,
+    private toastr: ToastrService
+  ) {}
+
+  @ViewChild(ToastContainerDirective, { static: true })
+  toastContainer!: ToastContainerDirective;
 
   ngOnInit(): void {
     this.loadProfile();
@@ -92,9 +123,10 @@ export class AppointmentListComponent implements OnInit {
     if (patientId) {
       this.appointmentService.getAppointmentByPatientId(patientId).subscribe(
         (response: AppointmentShowDTO[]) => {
-          // Specify type here
           console.log(response);
-          this.appointments = response;
+          this.appointments = response.filter((app) => app.status !== 'CANCEL');
+
+          // Fetch doctor details for each appointment
           const doctorRequests = this.appointments.map((appointment) =>
             this.doctorsService.getDoctorById(appointment.doctorId)
           );
@@ -125,5 +157,19 @@ export class AppointmentListComponent implements OnInit {
   getDoctorName(doctorId: string): string {
     console.log('Dwqdq', this.doctorMap[doctorId]?.name);
     return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
+  }
+
+  cancelAppointment(appointmentId: string, ctx: any): void {
+    this.appointmentService.cancelAppointment(appointmentId).subscribe({
+      next: () => {
+        this.toastr.success('Success cancel appointment');
+        ctx.close();
+        // this.loadAppointment(); // Reload products after deletion
+      },
+      error: (e) => {
+        this.toastr.error('Failed to cancel');
+        ctx.close();
+      },
+    });
   }
 }

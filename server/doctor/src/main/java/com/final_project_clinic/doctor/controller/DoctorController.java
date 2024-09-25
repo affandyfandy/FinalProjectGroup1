@@ -25,21 +25,21 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('PATIENT','SUPERADMIN', 'ADMIN')")
     @GetMapping
     public ResponseEntity<Page<DoctorDTO>> getAllDoctors(Pageable pageable) {
         Page<DoctorDTO> doctors = doctorService.getAllDoctors(pageable);
         return ResponseEntity.ok(doctors);
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('PATIENT','SUPERADMIN', 'ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<DoctorDTO>> getAllDoctorsList() {
         List<DoctorDTO> doctors = doctorService.getAllDoctorsList();
         return ResponseEntity.ok(doctors);
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('PATIENT','SUPERADMIN', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable UUID id) {
         Optional<DoctorDTO> doctor = doctorService.getDoctorById(id);
@@ -57,7 +57,7 @@ public class DoctorController {
     @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DoctorDTO> editDoctor(@PathVariable UUID id,
-                                                @RequestBody DoctorDTO doctorDTO) {
+            @RequestBody DoctorDTO doctorDTO) {
         Optional<DoctorDTO> updatedDoctor = doctorService.editDoctor(id, doctorDTO);
         return updatedDoctor.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

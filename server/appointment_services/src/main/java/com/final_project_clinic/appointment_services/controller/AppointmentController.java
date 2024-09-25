@@ -22,7 +22,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    @PostMapping    
+    @PostMapping
     public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentCreateDTO appointmentCreateDTO) {
         AppointmentDTO appointment = appointmentService.createAppointment(appointmentCreateDTO);
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
@@ -36,7 +36,6 @@ public class AppointmentController {
         List<AppointmentDTO> appointments = appointmentService.getAllAppointments(page, size);
         return ResponseEntity.ok(appointments);
     }
-
 
     // New: Get appointment by id
     @GetMapping("/{id}")
@@ -52,9 +51,16 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AppointmentDTO> updateAppointment(@PathVariable UUID id, @RequestBody AppointmentCreateDTO appointmentCreateDTO) {
+    public ResponseEntity<AppointmentDTO> updateAppointment(@PathVariable UUID id,
+            @RequestBody AppointmentCreateDTO appointmentCreateDTO) {
         AppointmentDTO updatedAppointment = appointmentService.updateAppointment(id, appointmentCreateDTO);
         return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<AppointmentDTO> cancelAppointment(@PathVariable UUID id) {
+        AppointmentDTO updatedAppointment = appointmentService.cancelAppointment(id);
+        return ResponseEntity.ok(updatedAppointment);
     }
 
     @GetMapping("/patient/{patientId}")
@@ -74,6 +80,5 @@ public class AppointmentController {
         List<AppointmentDTO> appointments = appointmentService.getAppointmentsByDoctorId(doctorId, page, size);
         return ResponseEntity.ok(appointments);
     }
-
 
 }

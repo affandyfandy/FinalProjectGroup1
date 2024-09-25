@@ -161,6 +161,14 @@ public class AppointmentService {
         appointmentRepository.delete(appointment);
     }
 
+    public AppointmentDTO cancelAppointment(UUID id) {
+        Appointment existingAppointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
+        existingAppointment.setStatus("CANCEL");
+        Appointment updatedAppointment = appointmentRepository.save(existingAppointment);
+        return appointmentMapper.toAppointmentDTO(updatedAppointment);
+    }
+
     public AppointmentDTO getAppointmentById(UUID id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));

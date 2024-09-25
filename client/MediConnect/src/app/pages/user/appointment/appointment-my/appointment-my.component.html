@@ -1,0 +1,87 @@
+<div class="w-full min-h-screen px-8">
+  <h1 class="text-2xl font-bold mb-4">My Appointments</h1>
+
+  <!-- Check if appointments are available -->
+  <div *ngIf="appointments.length > 0; else noAppointments">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Loop through each appointment -->
+      <div
+        *ngFor="let appointment of appointments"
+        class="bg-white shadow-md rounded-lg p-4"
+      >
+        <div class="flex items-center mb-4">
+          <!-- Avatar with doctor's name or fallback -->
+          <img
+            src="/assets/images/doctor.jpg"
+            alt="Doctor Image"
+            class="w-44 h-44 object-fill border-2 rounded"
+          />
+          <div class="ml-4 h-44 flex flex-col justify-between">
+            <h2 class="font-semibold text-lg">
+              Doctor: {{ getDoctorName(appointment.doctorId) }}
+              <!-- {{appointment.doctorId}} -->
+            </h2>
+
+            <div class="text-sm text-gray-600">
+              <p>
+                <span class="font-medium">Date :</span>
+                {{ appointment.date | date : "fullDate" }}
+              </p>
+              <p class="my-2">
+                <span class="font-medium">Time:</span>
+                {{ appointment.startTime }} -
+                {{ appointment.endTime }}
+              </p>
+              <p>
+                <span class="font-medium">Queue Number :</span>
+                {{ appointment.queueNumber }}
+              </p>
+            </div>
+
+            <div class="w-full flex justify-end mt-4">
+              <hlm-alert-dialog>
+                <button
+                  class="bg-gradient-fpt-3 text-white text-xs px-4 py-2.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
+                  brnAlertDialogTrigger
+                >
+                  Cancel Appointment
+                </button>
+                <hlm-alert-dialog-content
+                  *brnAlertDialogContent="let ctx"
+                  class="bg-white"
+                >
+                  <hlm-alert-dialog-header>
+                    <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+                    <p hlmAlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </p>
+                  </hlm-alert-dialog-header>
+                  <hlm-alert-dialog-footer>
+                    <button hlmAlertDialogCancel (click)="ctx.close()">
+                      Cancel
+                    </button>
+                    <button
+                      hlmAlertDialogAction
+                      class="bg-gray-800 text-white"
+                      (click)="
+                        cancelAppointment(appointment.appointmentId, ctx)
+                      "
+                    >
+                      Cancel Appointment
+                    </button>
+                  </hlm-alert-dialog-footer>
+                </hlm-alert-dialog-content>
+              </hlm-alert-dialog>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- If no appointments are available -->
+  <ng-template #noAppointments>
+    <p class="text-gray-500 text-center">You have no upcoming appointments.</p>
+  </ng-template>
+</div>
