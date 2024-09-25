@@ -7,19 +7,23 @@ import { PatientShowDTO } from '../../../../models/patient.model';
 import { CustomJwtPayload } from '../../../../models/user.model';
 import { AppointmentShowDTO } from '../../../../models/appointment.model';
 import { CommonModule } from '@angular/common';
+import { DoctorDTO } from '../../../../models/doctor.model';
+import { DoctorsService } from '../../../../services/doctor-service/doctors.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-history',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './appointment-history.component.html',
-  styleUrl: './appointment-history.component.css'
+  styleUrl: './appointment-history.component.css',
 })
 export class AppointmentHistoryComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private patientsService: PatientsService,
-    private appointmentService: AppointmentService,
+    private doctorsService: DoctorsService,
+    private appointmentService: AppointmentService
   ) {}
 
   token: string = '';
@@ -27,6 +31,8 @@ export class AppointmentHistoryComponent implements OnInit {
   patientId: string = '';
   patient: PatientShowDTO | null = null;
   appointments: AppointmentShowDTO[] = [];
+  doctorMap: { [doctorId: string]: DoctorDTO } = {};
+
   ngOnInit(): void {
     this.loadProfile();
   }
@@ -65,7 +71,25 @@ export class AppointmentHistoryComponent implements OnInit {
           // Specify type here
           console.log(response);
           this.appointments = response;
-         
+          // Fetch doctor details for each appointment
+          const doctorRequests = this.appointments.map((appointment) =>
+            this.doctorsService.getDoctorById(appointment.doctorId)
+          );
+
+          forkJoin(doctorRequests).subscribe(
+            (doctors: DoctorDTO[]) => {
+              doctors.forEach((doctor, index) => {
+                console.log('AAAA', doctor);
+                if (doctor) {
+                  this.doctorMap[this.appointments[index].doctorId] = doctor;
+                }
+              });
+            },
+            (error) => {
+              this.authService.handleError(error);
+              console.error('Error loading doctor details', error);
+            }
+          );
         },
         (error) => {
           this.authService.handleError(error);
@@ -73,5 +97,10 @@ export class AppointmentHistoryComponent implements OnInit {
         }
       );
     }
-  } 
+  }
+
+  getDoctorName(doctorId: string): string {
+    console.log('Dwqdq', this.doctorMap[doctorId]?.name);
+    return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
+  }
 }

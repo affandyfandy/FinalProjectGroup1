@@ -17,11 +17,14 @@
             class="w-44 h-44 object-fill border-2 rounded"
           />
           <div class="ml-4 h-44 flex flex-col justify-between">
-            <h2 class="font-semibold text-lg">Doctor: #</h2>
+            <h2 class="font-semibold text-lg">
+              Doctor: {{ getDoctorName(appointment.doctorId) }}
+            </h2>
 
             <div class="text-sm text-gray-600">
               <p>
-                <span class="font-medium">Date :</span> {{ appointment.date | date:'fullDate' }}
+                <span class="font-medium">Date :</span>
+                {{ appointment.date | date : "fullDate" }}
               </p>
               <p class="my-2">
                 <span class="font-medium">Time:</span>

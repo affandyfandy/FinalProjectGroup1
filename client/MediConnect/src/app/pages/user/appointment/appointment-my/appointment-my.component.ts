@@ -35,6 +35,9 @@ import {
   HlmAvatarFallbackDirective,
 } from '@spartan-ng/ui-avatar-helm';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { DoctorDTO } from '../../../../models/doctor.model';
+import { DoctorsService } from '../../../../services/doctor-service/doctors.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-my',
@@ -67,18 +70,24 @@ import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
   styleUrl: './appointment-my.component.css',
 })
 export class AppointmentMyComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private patientsService: PatientsService,
-    private appointmentService: AppointmentService,
-    private toastr: ToastrService
-  ) {}
-
   token: string = '';
   userId: string = '';
   patientId: string = '';
   patient: PatientShowDTO | null = null;
   appointments: AppointmentShowDTO[] = [];
+  doctorMap: { [doctorId: string]: DoctorDTO } = {};
+
+  constructor(
+    private authService: AuthService,
+    private patientsService: PatientsService,
+    private appointmentService: AppointmentService,
+    private doctorsService: DoctorsService,
+    private toastr: ToastrService
+  ) {}
+
+  @ViewChild(ToastContainerDirective, { static: true })
+  toastContainer!: ToastContainerDirective;
+
   ngOnInit(): void {
     this.loadProfile();
   }
@@ -114,11 +123,27 @@ export class AppointmentMyComponent implements OnInit {
     if (patientId) {
       this.appointmentService.getAppointmentByPatientId(patientId).subscribe(
         (response: AppointmentShowDTO[]) => {
-          // Specify type here
           console.log(response);
-          this.appointments = response;
-          this.appointments = response.filter(
-            (app) => app.status !== 'CANCEL'
+          this.appointments = response.filter((app) => app.status !== 'CANCEL');
+
+          // Fetch doctor details for each appointment
+          const doctorRequests = this.appointments.map((appointment) =>
+            this.doctorsService.getDoctorById(appointment.doctorId)
+          );
+
+          forkJoin(doctorRequests).subscribe(
+            (doctors: DoctorDTO[]) => {
+              doctors.forEach((doctor, index) => {
+                console.log('AAAA', doctor);
+                if (doctor) {
+                  this.doctorMap[this.appointments[index].doctorId] = doctor;
+                }
+              });
+            },
+            (error) => {
+              this.authService.handleError(error);
+              console.error('Error loading doctor details', error);
+            }
           );
         },
         (error) => {
@@ -127,6 +152,11 @@ export class AppointmentMyComponent implements OnInit {
         }
       );
     }
+  }
+
+  getDoctorName(doctorId: string): string {
+    console.log('Dwqdq', this.doctorMap[doctorId]?.name);
+    return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
   }
 
   cancelAppointment(appointmentId: string, ctx: any): void {
