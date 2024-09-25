@@ -6,6 +6,7 @@ import com.final_project_clinic.doctor.data.model.ScheduleTime;
 import com.final_project_clinic.doctor.data.repository.DoctorRepository;
 import com.final_project_clinic.doctor.data.repository.DoctorScheduleRepository;
 import com.final_project_clinic.doctor.data.repository.ScheduleTimeRepository;
+import com.final_project_clinic.doctor.dto.CriteriaDoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -71,6 +73,26 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     }
 
     @Override
+    public List<DoctorScheduleShowDTO> getFilteredSchedules(CriteriaDoctorScheduleDTO criteria) {
+        // Extract the day of the week from the provided LocalDate
+        String dayOfWeek = null;
+        if (criteria.getDate() != null) {
+            dayOfWeek = criteria.getDate().getDayOfWeek().name(); // E.g., "MONDAY"
+        }
+
+        // Call repository method with doctorName and the dayOfWeek
+        List<DoctorSchedule> schedules = doctorScheduleRepository.findByCriteria(
+                criteria.getDoctorName(),
+                criteria.getSpecialization(),
+                dayOfWeek);
+
+        // Map results to DTOs
+        return schedules.stream()
+                .map(doctorScheduleMapper::toDoctorScheduleDTOShow)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<DoctorScheduleDTO> getScheduleById(UUID id) {
         return doctorScheduleRepository.findById(id).map(doctorScheduleMapper::toDoctorScheduleDTO);
     }
@@ -90,8 +112,6 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
 
         return scheduleTimeOpt.map(scheduleTimeMapper::toScheduleTimeDTO);
     }
-
-
 
     @Override
     public DoctorScheduleDTO createSchedule(DoctorScheduleDTO doctorScheduleDTO) {
