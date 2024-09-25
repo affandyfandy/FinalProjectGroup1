@@ -1,76 +1,107 @@
 <div
   class="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 pb-4"
 >
-  <div
-    *ngFor="let doctorId of groupedSchedules | keyvalue"
-    class="w-full flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-8"
-  >
-    <div class="w-1/5 h-48">
-      <img src="/assets/images/doctor.jpg" alt="Doctor Image" class="w-full h-full object-fill border-2" />
-    </div>
-    <div class="w-full px-8">
-      <h2 class="text-xl font-bold">
-        {{ doctorId.value[0].doctor.name }}
-      </h2>
-      <p class="">{{ doctorId.value[0].doctor.specialization }}</p>
+  <div class="w-full grid grid-cols-3 gap-4">
+    <div
+      *ngFor="let doctorId of groupedSchedules | keyvalue"
+      class="w-full h-56 flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-5"
+    >
+      <div
+        class="w-full flex flex-col justify-center items-center gap-4 border shadow-lg rounded-lg bg-white p-4"
+      >
+        <div class="w-full flex justify-between">
+          <div class="w-1/3 flex items-center">
+            <div class="w-12 h-12">
+              <img
+                src="/assets/images/doctor.jpg"
+                alt="Doctor Image"
+                class="w-full h-full object-fill border-2 rounded-full"
+              />
+            </div>
+          </div>
+          <div class="w-full">
+            <h2 class="text-lg font-bold">
+              {{ doctorId.value[0].doctor.name }}
+            </h2>
+            <p class="text-sm text-gray-500">
+              {{ doctorId.value[0].doctor.specialization }}
+            </p>
+            <p class="text-sm text-gray-800">
+              {{ doctorId.value[0].doctor.identificationNumber }}
+            </p>
+          </div>
+        </div>
 
-      <ul class="w-full flex justify-between items-start h-20">
-        <li *ngFor="let schedule of doctorId.value">
-          <button
-            hlmBtn
-            variant="outline"
-            align="center"
-            [brnMenuTriggerFor]="menu"
-          >
-            {{ schedule.day }}
-          </button>
-          <ng-template #menu>
-            <hlm-menu class="w-60 bg-white">
-              <hlm-menu-label>Schedule Times</hlm-menu-label>
-              <hlm-menu-separator />
-              <hlm-menu-group>
-                <button hlmMenuItem *ngFor="let time of schedule.scheduleTimes">
-                  <span
-                    >{{ time.startWorkingHour }} -
-                    {{ time.endWorkingHour }}</span
+        <div class="w-full">
+          <div class="w-full flex gap-x-4 justify-between">
+            <!-- Schedule Dialog -->
+            <hlm-dialog>
+              <button
+                hlmBtn
+                brnDialogTrigger
+                class="text-center px-8 mt-4 py-2 uppercase border rounded-lg"
+              >
+                Schedule
+              </button>
+              <hlm-dialog-content
+                class="sm:max-w-[500px] bg-white"
+                *brnDialogContent="let dialogCtx"
+              >
+                <hlm-dialog-header>
+                  <h3 hlmDialogTitle>Doctor Schedules</h3>
+                </hlm-dialog-header>
+
+                <!-- Loop through the schedules for this doctor -->
+                <div *ngFor="let schedule of doctorId.value">
+                  <h4 class="mt-4 font-bold">{{ schedule.day }}</h4>
+
+                  <!-- Check if there are schedule times available -->
+                  <ng-container
+                    *ngIf="schedule.scheduleTimes.length > 0; else noSchedule"
                   >
-                  <hlm-menu-shortcut
-                    >Max: {{ time.maxPatient }}</hlm-menu-shortcut
-                  >
-                </button>
-              </hlm-menu-group>
-            </hlm-menu>
-          </ng-template>
-        </li>
-      </ul>
+                    <ul>
+                      <li *ngFor="let time of schedule.scheduleTimes">
+                        Time: {{ time.startWorkingHour }} to
+                        {{ time.endWorkingHour }} (Max Patients:
+                        {{ time.maxPatient }})
+                      </li>
+                    </ul>
+                  </ng-container>
 
-      <div class="w-full flex justify-between items-center mt-4">
-        <p>{{ doctorId.value[0].doctor.specialization }}</p>
-        <div>
-          <hlm-dialog>
-            <button
-              hlmBtn
-              brnDialogTrigger
-              class="text-center text-white px-8 mt-4 py-2 uppercase bg-gradient-fpt-3 rounded-lg"
-            >
-              Appointment
-            </button>
-            <hlm-dialog-content
-              class="sm:max-w-[500px] bg-white"
-              *brnDialogContent="let dialogCtx"
-            >
-              <hlm-dialog-header>
-                <h3 hlmDialogTitle>
-                  Make an Appointment with {{ doctorId.value[0].doctor.name }}
-                </h3>
-              </hlm-dialog-header>
+                  <!-- Show message when no schedules are available for the day -->
+                  <ng-template #noSchedule>
+                    <p>No schedule available today</p>
+                  </ng-template>
+                </div>
+              </hlm-dialog-content>
+            </hlm-dialog>
 
-              <app-appointment-form
-                [dialogCtx]="dialogCtx"
-                [doctorId]="doctorId.key"
-              ></app-appointment-form>
-            </hlm-dialog-content>
-          </hlm-dialog>
+            <!-- Appointment Dialog -->
+            <hlm-dialog>
+              <button
+                hlmBtn
+                brnDialogTrigger
+                class="text-center text-white px-8 mt-4 py-2 uppercase bg-gradient-fpt-3 rounded-lg"
+              >
+                Appointment
+              </button>
+              <hlm-dialog-content
+                class="sm:max-w-[500px] bg-white"
+                *brnDialogContent="let dialogCtx"
+              >
+                <hlm-dialog-header>
+                  <h3 hlmDialogTitle>
+                    Make an Appointment with {{ doctorId.value[0].doctor.name }}
+                  </h3>
+                </hlm-dialog-header>
+
+                <app-appointment-form
+                  [dialogCtx]="dialogCtx"
+                  [doctorId]="doctorId.key"
+                ></app-appointment-form>
+              </hlm-dialog-content>
+            </hlm-dialog>
+          </div>
         </div>
       </div>
     </div>

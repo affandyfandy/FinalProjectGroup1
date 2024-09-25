@@ -7,8 +7,7 @@ import { ProfileComponent } from './profile/profile.component';
 
 export const userRoutes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'appointment/create', component: AppointmentCreateComponent },
-  { path: 'appointment/history', component: AppointmentHistoryComponent },
-  { path: 'my-appointment', component: AppointmentMyComponent },
+  { path: 'appointment', component: AppointmentCreateComponent },
+  { path: 'history', component: AppointmentHistoryComponent },
   { path: 'profile', component: ProfileComponent },
 ];
