@@ -37,6 +37,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsList() {
+        List<AppointmentDTO> appointments = appointmentService.getAllAppointmentsList();
+        return ResponseEntity.ok(appointments);
+    }
 
     // New: Get appointment by id
     @GetMapping("/{id}")
