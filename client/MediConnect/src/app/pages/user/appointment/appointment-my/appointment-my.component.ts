@@ -141,18 +141,5 @@ export class AppointmentMyComponent implements OnInit {
         ctx.close();
       },
     });
-    // this.appointmentService.cancelAppointment(appointmentId).subscribe(
-    //   () => {
-    //     alert('successs cancel');
-    // this.appointments = this.appointments.filter(
-    //   (app) => app.appointmentId !== appointmentId
-    // );
-    //     // console.log(`Appointment ${appointmentId} cancelled.`);
-    //   },
-    //   (error) => {
-    //     this.authService.handleError(error);
-    //     console.error('Error canceling appointment', error);
-    //   }
-    // );
   }
 }

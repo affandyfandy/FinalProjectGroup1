@@ -14,62 +14,64 @@
           <img
             src="/assets/images/doctor.jpg"
             alt="Doctor Image"
-            class="w-1/2 h-full object-fill border-2"
+            class="w-44 h-44 object-fill border-2 rounded"
           />
-          <div class="ml-4">
-            <h2 class="font-semibold text-lg">
-              Appointment #{{ appointment.queueNumber }}
-            </h2>
-            <p class="text-sm text-gray-600">
-              Doctor: {{ appointment.doctorId }}
-            </p>
-          </div>
-        </div>
+          <div class="ml-4 h-44 flex flex-col justify-between">
+            <h2 class="font-semibold text-lg">Doctor: #</h2>
 
-        <!-- Appointment Details -->
-        <p><strong>Appointment ID:</strong> {{ appointment.appointmentId }}</p>
-        <p><strong>Date:</strong> {{ appointment.date }}</p>
-        <p>
-          <strong>Time:</strong> {{ appointment.startTime }} -
-          {{ appointment.endTime }}
-        </p>
-        <p><strong>Status:</strong> {{ appointment.status }}</p>
-        <p><strong>Complaint:</strong> {{ appointment.initialComplaint }}</p>
+            <div class="text-sm text-gray-600">
+              <p>
+                <span class="font-medium">Date :</span>
+                {{ appointment.date | date : "fullDate" }}
+              </p>
+              <p class="my-2">
+                <span class="font-medium">Time:</span>
+                {{ appointment.startTime }} -
+                {{ appointment.endTime }}
+              </p>
+              <p>
+                <span class="font-medium">Queue Number :</span>
+                {{ appointment.queueNumber }}
+              </p>
+            </div>
 
-        <!-- Cancel Button -->
-        <div class="mt-4">
-          <hlm-alert-dialog>
-            <button
-              class="bg-red-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
-              brnAlertDialogTrigger
-            >
-              Cancel Appointment
-            </button>
-            <hlm-alert-dialog-content
-              *brnAlertDialogContent="let ctx"
-              class="bg-white"
-            >
-              <hlm-alert-dialog-header>
-                <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
-                <p hlmAlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </p>
-              </hlm-alert-dialog-header>
-              <hlm-alert-dialog-footer>
-                <button hlmAlertDialogCancel (click)="ctx.close()">
-                  Cancel
-                </button>
+            <div class="w-full flex justify-end mt-4">
+              <hlm-alert-dialog>
                 <button
-                  hlmAlertDialogAction
-                  class="bg-gray-800 text-white"
-                  (click)="cancelAppointment(appointment.appointmentId, ctx)"
+                  class="bg-gradient-fpt-3 text-white text-xs px-4 py-2.5 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
+                  brnAlertDialogTrigger
                 >
                   Cancel Appointment
                 </button>
-              </hlm-alert-dialog-footer>
-            </hlm-alert-dialog-content>
-          </hlm-alert-dialog>
+                <hlm-alert-dialog-content
+                  *brnAlertDialogContent="let ctx"
+                  class="bg-white"
+                >
+                  <hlm-alert-dialog-header>
+                    <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+                    <p hlmAlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </p>
+                  </hlm-alert-dialog-header>
+                  <hlm-alert-dialog-footer>
+                    <button hlmAlertDialogCancel (click)="ctx.close()">
+                      Cancel
+                    </button>
+                    <button
+                      hlmAlertDialogAction
+                      class="bg-gray-800 text-white"
+                      (click)="
+                        cancelAppointment(appointment.appointmentId, ctx)
+                      "
+                    >
+                      Cancel Appointment
+                    </button>
+                  </hlm-alert-dialog-footer>
+                </hlm-alert-dialog-content>
+              </hlm-alert-dialog>
+            </div>
+          </div>
         </div>
       </div>
     </div>
