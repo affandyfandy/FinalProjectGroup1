@@ -18,6 +18,7 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'underline-offset-4 hover:underline text-primary',
         fpt: 'drop-shadow-button-dropShadow-fpt bg-fpt-colors rounded-full ',
+        fpt2: 'bg-gradient-fpt-3 bg-fpt-colors rounded-lg',
         cancel: 'drop-shadow-button-dropShadow-fpt bg-gray-400 rounded-full ',
       },
       size: {

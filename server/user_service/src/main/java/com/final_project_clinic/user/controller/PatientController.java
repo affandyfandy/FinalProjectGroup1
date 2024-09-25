@@ -16,6 +16,7 @@ import com.final_project_clinic.user.dto.PatientDTO;
 import com.final_project_clinic.user.dto.PatientSaveDTO;
 import com.final_project_clinic.user.dto.PatientShowDTO;
 import com.final_project_clinic.user.service.PatientService;
+import com.final_project_clinic.user.data.model.Patient;
 
 import jakarta.validation.Valid;
 
@@ -47,10 +48,16 @@ public class PatientController {
     }
 
     // Get patient by ID
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    // @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<PatientShowDTO> getPatientById(@PathVariable UUID id) {
         PatientShowDTO patient = patientService.findPatientById(id);
+        return new ResponseEntity<>(patient, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Patient> getPatientByUserId(@PathVariable UUID id) {
+        Patient patient = patientService.findPatientByUserId(id);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 

@@ -44,3 +44,11 @@ export interface UserShowDTO {
   role: string;
   createdTime: Date;
 }
+
+// Define a custom type for your JWT payload
+export interface CustomJwtPayload {
+  id: string;
+  email: string;
+  role: string;
+  sub: string;
+}

@@ -1,6 +1,15 @@
+import { Doctor } from './doctor.model';
+
 export interface DoctorSchedule {
   id: string;
   doctorId: string;
+  day: string;
+  scheduleTimes: ScheduleTime[];
+}
+
+export interface DoctorScheduleList {
+  id: string;
+  doctor: Doctor;
   day: string;
   scheduleTimes: ScheduleTime[];
 }

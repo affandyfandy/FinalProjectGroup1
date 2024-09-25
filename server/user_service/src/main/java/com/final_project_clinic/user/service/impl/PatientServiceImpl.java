@@ -54,6 +54,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Patient findPatientByUserId(UUID id) {
+        Patient patient = patientRepository.findPatientByUserId(id);
+        return patient;
+    }
+
+    @Override
     public PatientDTO createPatient(PatientSaveDTO patientSaveDTO) {
         // Find and validate the existing user
         User existingUser = userRepository.findById(patientSaveDTO.getUserId())

@@ -73,7 +73,7 @@ export class AuthService {
     if (error.status === 401 || error.status === 500) {
       console.error('JWT expired. Logging out.');
       this.logout();
-      this.router.navigate(['/signin']);
+      this.router.navigate(['/']);
     }
 
     return throwError(

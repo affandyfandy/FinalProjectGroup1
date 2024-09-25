@@ -1,6 +1,7 @@
 package com.final_project_clinic.doctor.controller;
 
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
+import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
 import com.final_project_clinic.doctor.service.DoctorScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class DoctorScheduleController {
         return ResponseEntity.ok(schedules);
     }
 
+    @GetMapping("/doctor/list")
+    public ResponseEntity<List<DoctorScheduleShowDTO>> getAllSchedulesListShow() {
+        List<DoctorScheduleShowDTO> schedules = doctorScheduleService.getAllSchedulesDoctor();
+        return ResponseEntity.ok(schedules);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<DoctorScheduleDTO> getScheduleById(@PathVariable UUID id) {
         Optional<DoctorScheduleDTO> schedule = doctorScheduleService.getScheduleById(id);
@@ -60,7 +67,8 @@ public class DoctorScheduleController {
 
     @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PostMapping
-    public ResponseEntity<List<DoctorScheduleDTO>> createSchedule(@RequestBody List<DoctorScheduleDTO> doctorScheduleDTOs) {
+    public ResponseEntity<List<DoctorScheduleDTO>> createSchedule(
+            @RequestBody List<DoctorScheduleDTO> doctorScheduleDTOs) {
         List<DoctorScheduleDTO> createdSchedules = new ArrayList<>();
         for (DoctorScheduleDTO doctorScheduleDTO : doctorScheduleDTOs) {
             DoctorScheduleDTO createdSchedule = doctorScheduleService.createSchedule(doctorScheduleDTO);
@@ -77,7 +85,8 @@ public class DoctorScheduleController {
             @PathVariable String startWorkingHour,
             @RequestBody ScheduleTimeDTO scheduleTimeDTO) {
         LocalTime startHour = LocalTime.parse(startWorkingHour);
-        DoctorScheduleDTO updatedSchedule = doctorScheduleService.editScheduleTime(scheduleId, startHour, scheduleTimeDTO);
+        DoctorScheduleDTO updatedSchedule = doctorScheduleService.editScheduleTime(scheduleId, startHour,
+                scheduleTimeDTO);
         return ResponseEntity.ok(updatedSchedule);
     }
 
@@ -103,7 +112,7 @@ public class DoctorScheduleController {
         doctorScheduleService.deleteScheduleTime(scheduleId, startHour);
         return ResponseEntity.noContent().build();
     }
-  
+
     @GetMapping("/doctor/{doctorId}/day/{day}")
     public ResponseEntity<DoctorScheduleDTO> getDoctorScheduleByDay(
             @PathVariable UUID doctorId,

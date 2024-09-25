@@ -58,6 +58,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    // @PreAuthorize("hasAuthority('PATIENT','ADMIN','SUPERADMIN')")
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<UserShowDTO> getUserPatientById(@PathVariable UUID id) {
+        UserShowDTO user = userService.findUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
     // Create a new user (Only SUPERADMIN can create)
     @PreAuthorize("hasAuthority('SUPERADMIN')")
     @PostMapping

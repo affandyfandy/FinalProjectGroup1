@@ -30,6 +30,8 @@
     "@spartan-ng/ui-formfield-brain": "0.0.1-alpha.355",
     "@spartan-ng/ui-forms-brain": "0.0.1-alpha.355",
     "@spartan-ng/ui-label-brain": "0.0.1-alpha.355",
+    "@spartan-ng/ui-menu-brain": "0.0.1-alpha.355",
+    "@spartan-ng/ui-table-brain": "0.0.1-alpha.355",
     "ag-grid-angular": "^32.1.0",
     "ag-grid-community": "^32.1.0",
     "class-variance-authority": "^0.6.0",

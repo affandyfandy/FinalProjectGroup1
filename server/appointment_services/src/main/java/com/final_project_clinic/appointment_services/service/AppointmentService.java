@@ -1,10 +1,12 @@
 package com.final_project_clinic.appointment_services.service;
 
 import com.final_project_clinic.appointment_services.client.DoctorServiceClient;
+import com.final_project_clinic.appointment_services.client.UserServiceClient;
 import com.final_project_clinic.appointment_services.dto.AppointmentCreateDTO;
 import com.final_project_clinic.appointment_services.dto.AppointmentDTO;
 import com.final_project_clinic.appointment_services.dto.DoctorScheduleDTO;
 import com.final_project_clinic.appointment_services.dto.ScheduleTimeDTO;
+import com.final_project_clinic.appointment_services.dto.UserDTO;
 import com.final_project_clinic.appointment_services.exception.DuplicateAppointmentException;
 import com.final_project_clinic.appointment_services.exception.MaxPatientExceededException;
 import com.final_project_clinic.appointment_services.exception.ResourceNotFoundException;
@@ -29,14 +31,17 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final DoctorServiceClient doctorServiceClient;
+    private final UserServiceClient userServiceClient;
     private final AppointmentMapper appointmentMapper;
 
     @Autowired
     public AppointmentService(AppointmentRepository appointmentRepository,
-                              DoctorServiceClient doctorServiceClient,
-                              AppointmentMapper appointmentMapper) {
+            DoctorServiceClient doctorServiceClient,
+            UserServiceClient userServiceClient,
+            AppointmentMapper appointmentMapper) {
         this.appointmentRepository = appointmentRepository;
         this.doctorServiceClient = doctorServiceClient;
+        this.userServiceClient = userServiceClient;
         this.appointmentMapper = appointmentMapper;
     }
 
@@ -50,6 +55,12 @@ public class AppointmentService {
             throw new ScheduleNotFoundException("Schedule not found for the specified doctor and day.");
         }
 
+        // Check if the patient exists
+        UserDTO patient = userServiceClient.getUserById(appointmentCreateDTO.getPatientId());
+        if (patient == null) {
+            throw new ResourceNotFoundException("Patient not found with ID: " + appointmentCreateDTO.getPatientId());
+        }
+
         // Mencari waktu yang sesuai berdasarkan startWorkingHour
         Optional<ScheduleTimeDTO> matchingTime = doctorSchedule.getScheduleTimes().stream()
                 .filter(time -> time.getStartWorkingHour().equals(appointmentCreateDTO.getStartTime()))
@@ -59,7 +70,8 @@ public class AppointmentService {
             throw new ResourceNotFoundException("No schedule found for the provided start working hour.");
         }
 
-        // Mengecek apakah user yang sama sudah memiliki janji dengan dokter yang sama di jam yang sama
+        // Mengecek apakah user yang sama sudah memiliki janji dengan dokter yang sama
+        // di jam yang sama
         boolean userHasAppointment = appointmentRepository.existsByDoctorIdAndDateAndStartTimeAndPatientId(
                 appointmentCreateDTO.getDoctorId(),
                 appointmentCreateDTO.getDate(),
@@ -67,10 +79,12 @@ public class AppointmentService {
                 appointmentCreateDTO.getPatientId());
 
         if (userHasAppointment) {
-            throw new DuplicateAppointmentException("You already have an appointment with this doctor at the same time.");
+            throw new DuplicateAppointmentException(
+                    "You already have an appointment with this doctor at the same time.");
         }
 
-        // Menghitung jumlah janji temu yang sudah ada pada kombinasi dokter, tanggal, dan waktu
+        // Menghitung jumlah janji temu yang sudah ada pada kombinasi dokter, tanggal,
+        // dan waktu
         long existingAppointmentsCount = appointmentRepository.countByDoctorIdAndDateAndStartTime(
                 appointmentCreateDTO.getDoctorId(),
                 appointmentCreateDTO.getDate(),
@@ -88,6 +102,7 @@ public class AppointmentService {
         Appointment appointment = Appointment.builder()
                 .doctorId(appointmentCreateDTO.getDoctorId())
                 .patientId(appointmentCreateDTO.getPatientId())
+                .initialComplaint(appointmentCreateDTO.getInitialComplaint())
                 .date(appointmentCreateDTO.getDate())
                 .startTime(appointmentCreateDTO.getStartTime())
                 .endTime(matchingTime.get().getEndWorkingHour()) // Set endTime dari jadwal
@@ -100,8 +115,6 @@ public class AppointmentService {
 
         return appointmentMapper.toAppointmentDTO(savedAppointment);
     }
-
-
 
     public List<AppointmentDTO> getAllAppointments(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -147,7 +160,6 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
         appointmentRepository.delete(appointment);
     }
-
 
     public AppointmentDTO getAppointmentById(UUID id) {
         Appointment appointment = appointmentRepository.findById(id)

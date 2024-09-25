@@ -10,4 +10,6 @@ import com.final_project_clinic.authentication.data.model.Patient;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, UUID> {
     Patient findPatientByNik(Long nik);
+
+    Patient findPatientByUserId(UUID userId);
 }

@@ -22,7 +22,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    @PostMapping
+    @PostMapping    
     public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentCreateDTO appointmentCreateDTO) {
         AppointmentDTO appointment = appointmentService.createAppointment(appointmentCreateDTO);
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);

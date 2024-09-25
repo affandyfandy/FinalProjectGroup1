@@ -63,6 +63,13 @@ export class PatientsService {
     });
   }
 
+  // Get patient by ID (authentication required)
+  getPatientByUserId(id: string): Observable<PatientShowDTO> {
+    return this.http.get<PatientShowDTO>(`${this.apiUrl}/user/${id}`, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
   // Create a new patient (authentication required)
   createPatient(patientSaveDTO: PatientSaveDTO): Observable<PatientDTO> {
     return this.http.post<PatientDTO>(this.apiUrl, patientSaveDTO, {

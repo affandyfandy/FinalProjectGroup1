@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../../config/app.constants';
-import { DoctorScheduleDTO } from '../../models/doctor-schedule.model';
+import {
+  DoctorScheduleDTO,
+  DoctorScheduleList,
+  ListDoctorSchedule,
+} from '../../models/doctor-schedule.model';
 import { ScheduleTimeDTO } from '../../models/doctor-schedule.model';
 
 @Injectable({
@@ -28,7 +32,21 @@ export class DoctorSchedulesService {
 
   // Get all schedules
   getSchedules(): Observable<DoctorScheduleDTO[]> {
-    return this.http.get<any>(this.apiUrl + "/list", {
+    return this.http.get<any>(this.apiUrl + '/list', {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Get all schedules
+  getSchedulesDoctor(): Observable<DoctorScheduleList[]> {
+    return this.http.get<any>(this.apiUrl + '/doctor/list', {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Get all schedules
+  getSchedulesDoctorByDay(id: string, day: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/doctor/${id}/day/${day}`, {
       headers: this.getHeadersRestricted(),
     });
   }
@@ -41,7 +59,9 @@ export class DoctorSchedulesService {
   }
 
   // Create a new schedule
-  createSchedule(doctorScheduleDTO: DoctorScheduleDTO): Observable<DoctorScheduleDTO> {
+  createSchedule(
+    doctorScheduleDTO: DoctorScheduleDTO
+  ): Observable<DoctorScheduleDTO> {
     return this.http.post<DoctorScheduleDTO>(this.apiUrl, doctorScheduleDTO, {
       headers: this.getHeadersRestricted(),
     });
@@ -52,9 +72,13 @@ export class DoctorSchedulesService {
     id: string,
     doctorScheduleDTO: DoctorScheduleDTO
   ): Observable<DoctorScheduleDTO> {
-    return this.http.put<DoctorScheduleDTO>(`${this.apiUrl}/${id}`, doctorScheduleDTO, {
-      headers: this.getHeadersRestricted(),
-    });
+    return this.http.put<DoctorScheduleDTO>(
+      `${this.apiUrl}/${id}`,
+      doctorScheduleDTO,
+      {
+        headers: this.getHeadersRestricted(),
+      }
+    );
   }
 
   // Fetch schedule by doctorId and startWorkingHour

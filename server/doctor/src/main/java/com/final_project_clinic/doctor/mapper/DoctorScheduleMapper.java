@@ -3,6 +3,8 @@ package com.final_project_clinic.doctor.mapper;
 import com.final_project_clinic.doctor.data.model.Doctor;
 import com.final_project_clinic.doctor.data.model.DoctorSchedule;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
+import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
+
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,6 +14,8 @@ import org.mapstruct.factory.Mappers;
 public interface DoctorScheduleMapper {
 
     DoctorScheduleMapper INSTANCE = Mappers.getMapper(DoctorScheduleMapper.class);
+
+    DoctorScheduleShowDTO toDoctorScheduleDTOShow(DoctorSchedule doctorSchedule);
 
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(source = "scheduleTimes", target = "scheduleTimes")
