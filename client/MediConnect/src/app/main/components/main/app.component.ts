@@ -8,11 +8,13 @@ import { RouterConfig } from '../../../config/app.constants';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderAdminComponent } from '../header-admin/header-admin.component';
 import { SidebarUserComponent } from '../sidebar-user/sidebar-user.component';
+import { HeaderUserComponent } from '../header-user/header-user.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    HeaderUserComponent,
     CommonModule,
     RouterOutlet,
     HeaderComponent,
@@ -28,7 +30,7 @@ export class AppComponent implements OnInit {
   showNavAndFooter = true;
   showSidebarAdmin = false;
   showSidebarUser = false;
-  showSidebar = false;
+  showPublicHeader = false;
   title = 'MediConnect';
 
   constructor(private router: Router) {}
@@ -41,18 +43,19 @@ export class AppComponent implements OnInit {
 
         // Check if the current URL starts with '/admin'
         const isAdminRoute = currentUrl.startsWith('admin');
-        const isDashboardRoute = currentUrl.startsWith('dashboard');
+        // const isDashboardRoute = currentUrl.startsWith('/dashboard');
+        const isDashboardRoute = currentUrl.startsWith('public');
 
         if (isAdminRoute) {
           this.showNavAndFooter = false;
           this.showSidebarAdmin = true;
           this.showSidebarUser = false; // Ensure user sidebar is hidden
-          this.showSidebar = true;
+          this.showPublicHeader = true;
         } else if (isDashboardRoute) {
           this.showNavAndFooter = false;
           this.showSidebarAdmin = false; // Ensure admin sidebar is hidden
           this.showSidebarUser = true; // Show user sidebar
-          this.showSidebar = true;
+          this.showPublicHeader = true;
         } else {
           // Check if the current URL is in RouterConfig
           const matchedRoute = Object.values(RouterConfig).find(
@@ -76,7 +79,7 @@ export class AppComponent implements OnInit {
           // Reset sidebar visibility for other routes
           this.showSidebarAdmin = false;
           this.showSidebarUser = false;
-          this.showSidebar = false;
+          this.showPublicHeader = false;
         }
       });
   }
