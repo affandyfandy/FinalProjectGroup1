@@ -81,9 +81,31 @@ export class DoctorSchedulesService {
     );
   }
 
+  // Fetch schedule by doctorId and startWorkingHour
+getScheduleTime(id: string, startWorkingHour: string): Observable<ScheduleTimeDTO> {
+  return this.http.get<ScheduleTimeDTO>(`${this.apiUrl}/${id}/${startWorkingHour}`, {
+    headers: this.getHeadersRestricted(),
+  });
+}
+
+// Update schedule time by id and startWorkingHour
+updateScheduleTime(id: string, startWorkingHour: string, scheduleTimeDTO: ScheduleTimeDTO): Observable<ScheduleTimeDTO> {
+  return this.http.put<ScheduleTimeDTO>(`${this.apiUrl}/${id}/${startWorkingHour}`, scheduleTimeDTO, {
+    headers: this.getHeadersRestricted(),
+  });
+}
+
+
   // Delete schedule by id
   deleteSchedule(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Delete schedule time
+  deleteScheduleTime(id: string, startWorkingHour: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}/${startWorkingHour}`, {
       headers: this.getHeadersRestricted(),
     });
   }

@@ -10,6 +10,9 @@ import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component
 import { DoctorUpdateComponent } from './doctors/doctor-update/doctor-update.component';
 import { DoctorCreateComponent } from './doctors/doctor-create/doctor-create.component';
 import { DoctorScheduleListComponent } from './doctor-schedules/doctor-schedule-list/doctor-schedule-list.component';
+import { DoctorScheduleCreateComponent } from './doctor-schedules/doctor-schedule-create/doctor-schedule-create.component';
+import { DoctorScheduleUpdateComponent } from './doctor-schedules/doctor-schedule-update/doctor-schedule-update.component';
+import { AppointmentListComponent } from './appointments/appointment-list/appointment-list.component';
 
 export const adminRoutes: Routes = [
   { path: '', component: DashboardComponent },
@@ -23,4 +26,7 @@ export const adminRoutes: Routes = [
   { path: 'doctors/create', component: DoctorCreateComponent },
   { path: 'doctors/:id', component: DoctorUpdateComponent },
   { path: 'schedules', component: DoctorScheduleListComponent },
+  { path: 'schedules/create', component: DoctorScheduleCreateComponent },
+  { path: 'schedules/:id/:startWorkingHour', component: DoctorScheduleUpdateComponent },
+  { path: 'appointments', component: AppointmentListComponent }
 ];

@@ -33,6 +33,7 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     private final ScheduleTimeRepository scheduleTimeRepository;
     private final DoctorRepository doctorRepository;
     private final DoctorScheduleMapper doctorScheduleMapper;
+    private final ScheduleTimeMapper scheduleTimeMapper;
 
     @Autowired
     public DoctorScheduleServiceImpl(DoctorScheduleRepository doctorScheduleRepository,
@@ -44,6 +45,7 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
         this.scheduleTimeRepository = scheduleTimeRepository;
         this.doctorRepository = doctorRepository;
         this.doctorScheduleMapper = doctorScheduleMapper;
+        this.scheduleTimeMapper = scheduleTimeMapper;
     }
 
     @Override
@@ -72,6 +74,24 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     public Optional<DoctorScheduleDTO> getScheduleById(UUID id) {
         return doctorScheduleRepository.findById(id).map(doctorScheduleMapper::toDoctorScheduleDTO);
     }
+
+    @Override
+    public Optional<ScheduleTimeDTO> getScheduleTime(UUID scheduleId, LocalTime startWorkingHour) {
+        Optional<DoctorSchedule> doctorScheduleOpt = doctorScheduleRepository.findById(scheduleId);
+        if (doctorScheduleOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        DoctorSchedule doctorSchedule = doctorScheduleOpt.get();
+
+        Optional<ScheduleTime> scheduleTimeOpt = doctorSchedule.getScheduleTimes().stream()
+                .filter(st -> st.getStartWorkingHour().equals(startWorkingHour))
+                .findFirst();
+
+        return scheduleTimeOpt.map(scheduleTimeMapper::toScheduleTimeDTO);
+    }
+
+
 
     @Override
     public DoctorScheduleDTO createSchedule(DoctorScheduleDTO doctorScheduleDTO) {

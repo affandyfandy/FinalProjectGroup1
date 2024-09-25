@@ -5,7 +5,7 @@ import { DoctorSchedulesService } from '../../../../services/doctor-schedule-ser
 import { DoctorsService } from '../../../../services/doctor-service/doctors.service';
 import { ListDoctorSchedule } from '../../../../models/doctor-schedule.model';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ActionCellRendererList } from '../../users/user-list/ActionCellRendererList';
+import { ActionCellRendererList } from '../../doctor-schedules/doctor-schedule-list/ActionCellRendererList';
 
 import {
   ColDef,
@@ -140,7 +140,11 @@ export class DoctorScheduleListComponent implements OnInit {
             name: this.getDoctorNameById(schedule.doctorId),
             startWorkingHour: time.startWorkingHour,
             endWorkingHour: time.endWorkingHour,
-            maxPatient: time.maxPatient
+            maxPatient: time.maxPatient,
+            createdBy: time.createdBy,
+            createdTime: time.createdTime,
+            updatedBy: time.createdBy,
+            updatedTime: time.updatedTime
           }))
         );
         console.log('List doctor schedules loaded:', this.listSchedules);
@@ -155,8 +159,10 @@ export class DoctorScheduleListComponent implements OnInit {
     return this.doctorNameMap.get(doctorId) || 'Unknown Doctor';
   }
 
-  deleteOneSchedule(id: string): void {
-    this.doctorScheduleService.deleteSchedule(id).subscribe({
+  deleteOneSchedule(id: string, startWorkingHour: string): void {
+    console.log("dwqdqw",startWorkingHour)
+    this.doctorScheduleService.deleteScheduleTime(id, startWorkingHour).subscribe({
+
       next: () => {
         this.toastr.success('Success delete schedule data');
         this.loadDoctorSchedules();
