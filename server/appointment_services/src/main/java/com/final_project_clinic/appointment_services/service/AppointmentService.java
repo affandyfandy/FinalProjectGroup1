@@ -124,6 +124,13 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    public List<AppointmentDTO> getAllAppointmentsList() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream()
+                .map(appointmentMapper::toAppointmentDTO)
+                .toList();
+    }
+
     public List<AppointmentDTO> getAppointmentsByPatientId(UUID patientId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Appointment> appointmentsPage = appointmentRepository.findByPatientId(patientId, pageable);
