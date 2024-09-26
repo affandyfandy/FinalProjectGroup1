@@ -51,6 +51,9 @@
       ],
       "@spartan-ng/ui-menu-helm": [
         ".\\src/app/components/ui-menu-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-pagination-helm": [
+        ".\\src/app/components/ui-pagination-helm/src/index.ts"
       ]
     }
   },

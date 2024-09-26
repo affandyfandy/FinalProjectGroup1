@@ -32,6 +32,18 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
 import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
 import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+import {
+  HlmPaginationContentDirective,
+  HlmPaginationDirective,
+  HlmPaginationEllipsisComponent,
+  HlmPaginationItemDirective,
+  HlmPaginationLinkDirective,
+  HlmPaginationNextComponent,
+  HlmPaginationPreviousComponent,
+} from '@spartan-ng/ui-pagination-helm';
 
 @Component({
   selector: 'app-appointment-create',
@@ -62,6 +74,15 @@ import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
     HlmInputDirective,
     HlmButtonDirective,
     DayFilterPipe, // Register the pipe as standalone
+    FormsModule,
+
+    HlmPaginationDirective,
+    HlmPaginationContentDirective,
+    HlmPaginationItemDirective,
+    HlmPaginationPreviousComponent,
+    HlmPaginationNextComponent,
+    HlmPaginationLinkDirective,
+    HlmPaginationEllipsisComponent,
   ],
   templateUrl: './appointment-create.component.html',
   styleUrls: ['./appointment-create.component.css'],
@@ -69,11 +90,22 @@ import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 export class AppointmentCreateComponent implements OnInit {
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
+  doctorName: string = '';
 
-  constructor(private doctorScheduleService: DoctorSchedulesService) {}
+  constructor(
+    private doctorScheduleService: DoctorSchedulesService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadSchedules();
+  }
+
+  onSearch() {
+    if (this.doctorName) {
+      // Navigate to the search route with the doctor's name
+      this.router.navigate([`/dashboard/search/${this.doctorName}`]);
+    }
   }
 
   loadSchedules() {
