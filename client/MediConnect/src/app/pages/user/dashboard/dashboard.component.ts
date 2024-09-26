@@ -3,7 +3,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { RouterModule } from '@angular/router';
 import { AppointmentListComponent } from './appointment-list/appointment-list.component';
 import { QueueListComponent } from './queue-list/queue-list.component';
-import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
+import { AppointmentSearchFormComponent } from './appointment-search-form/appointment-search-form.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -11,7 +11,7 @@ import { AppointmentFormComponent } from './appointment-form/appointment-form.co
     RouterModule,
     HlmButtonDirective,
     AppointmentListComponent,
-    AppointmentFormComponent,
+    AppointmentSearchFormComponent,
     QueueListComponent,
   ],
   templateUrl: './dashboard.component.html',

@@ -6,8 +6,9 @@
         Doctor Name
         <input
           hlmInput
-          type="email"
-          formControlName="email"
+          type="text"
+          [(ngModel)]="doctorName"
+          name="doctorName"
           placeholder="Doctor name"
           class="w-full mt-1"
         />
@@ -20,8 +21,8 @@
         <input
           hlmInput
           type="date"
-          formControlName="email"
-          placeholder="Doctor name"
+          [(ngModel)]="appointmentDate"
+          name="appointmentDate"
           class="w-full mt-1"
         />
       </label>
@@ -31,9 +32,10 @@
     <div class="flex justify-end">
       <button
         hlmBtn
-        type="submit"
+        type="button"
         variant="fpt"
         class="text-center px-8 py-2 text-white"
+        (click)="onSearch()"
       >
         Search
       </button>

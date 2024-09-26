@@ -30,10 +30,10 @@ import {
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
-import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
-import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
+import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 
 import {
   HlmPaginationContentDirective,
@@ -49,6 +49,7 @@ import {
   selector: 'app-appointment-create',
   standalone: true,
   imports: [
+    AppointmentFormComponent,
     CommonModule,
     RouterModule,
     AppointmentFormComponent,

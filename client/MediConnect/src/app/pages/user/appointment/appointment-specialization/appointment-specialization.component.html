@@ -1,15 +1,133 @@
-<div>
-  <h1>Doctor Schedules for {{ specialization }}</h1>
-  <!-- <div *ngIf="doctorSchedules.length > 0; else noSchedules">
-    <ul>
-      <li *ngFor="let schedule of doctorSchedules">
-        <strong>{{ schedule.doctorName }}</strong> -
-        {{ schedule.specialization }} <br />
-        Available on: {{ schedule.date }}
-      </li>
-    </ul>
+<div class="px-8">
+  <h1 class="text-xl font-bold">Doctor Schedules for {{ specialization }}</h1>
+
+  <div class="w-full grid grid-cols-3 gap-4">
+    <div
+      *ngFor="let doctorId of groupedSchedules | keyvalue"
+      class="w-full h-56 flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-5"
+    >
+      <div
+        class="w-full flex flex-col justify-center items-center gap-4 border shadow-lg rounded-lg bg-white p-4"
+      >
+        <div class="w-full flex justify-between">
+          <div class="w-1/3 flex items-center">
+            <div class="w-12 h-12">
+              <img
+                src="/assets/images/doctor.jpg"
+                alt="Doctor Image"
+                class="w-full h-full object-fill border-2 rounded-full"
+              />
+            </div>
+          </div>
+          <div class="w-full">
+            <h2 class="text-lg font-bold">
+              {{ doctorId.value[0].doctor.name }}
+            </h2>
+            <p class="text-sm text-gray-500">
+              {{ doctorId.value[0].doctor.specialization }}
+            </p>
+            <p class="text-sm text-gray-800">
+              {{ doctorId.value[0].doctor.identificationNumber }}
+            </p>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="w-full flex gap-x-4 justify-between">
+            <!-- Schedule Dialog -->
+            <hlm-dialog>
+              <button
+                hlmBtn
+                brnDialogTrigger
+                class="text-center px-8 mt-4 py-2 uppercase border rounded-lg"
+              >
+                Schedule
+              </button>
+              <hlm-dialog-content
+                class="sm:max-w-[500px] bg-white"
+                *brnDialogContent="let dialogCtx"
+              >
+                <hlm-dialog-header>
+                  <h3 hlmDialogTitle>Doctor Schedules</h3>
+                </hlm-dialog-header>
+
+                <!-- Loop through the schedules for this doctor -->
+                <div *ngFor="let schedule of doctorId.value">
+                  <h4 class="mt-4 font-bold">{{ schedule.day }}</h4>
+
+                  <!-- Check if there are schedule times available -->
+                  <ng-container
+                    *ngIf="schedule.scheduleTimes.length > 0; else noSchedule"
+                  >
+                    <ul>
+                      <li *ngFor="let time of schedule.scheduleTimes">
+                        Time: {{ time.startWorkingHour }} to
+                        {{ time.endWorkingHour }} (Max Patients:
+                        {{ time.maxPatient }})
+                      </li>
+                    </ul>
+                  </ng-container>
+
+                  <!-- Show message when no schedules are available for the day -->
+                  <ng-template #noSchedule>
+                    <p>No schedule available today</p>
+                  </ng-template>
+                </div>
+              </hlm-dialog-content>
+            </hlm-dialog>
+
+            <!-- Appointment Dialog -->
+            <hlm-dialog>
+              <button
+                hlmBtn
+                brnDialogTrigger
+                class="text-center text-white px-8 mt-4 py-2 uppercase bg-gradient-fpt-3 rounded-lg"
+              >
+                Appointment
+              </button>
+              <hlm-dialog-content
+                class="sm:max-w-[500px] bg-white"
+                *brnDialogContent="let dialogCtx"
+              >
+                <hlm-dialog-header>
+                  <h3 hlmDialogTitle>
+                    Make an Appointment with {{ doctorId.value[0].doctor.name }}
+                  </h3>
+                </hlm-dialog-header>
+
+                <app-appointment-form
+                  [dialogCtx]="dialogCtx"
+                  [doctorId]="doctorId.key"
+                ></app-appointment-form>
+              </hlm-dialog-content>
+            </hlm-dialog>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <ng-template #noSchedules>
-    <p>No schedules found for this specialization.</p>
-  </ng-template> -->
+  <div class="w-full flex justify-center items-center">
+    <nav hlmPagination>
+      <ul hlmPaginationContent>
+        <li hlmPaginationItem>
+          <hlm-pagination-previous link="/components/menubar" />
+        </li>
+        <li hlmPaginationItem>
+          <a hlmPaginationLink link="#">1</a>
+        </li>
+        <li hlmPaginationItem>
+          <a hlmPaginationLink link="#" isActive>2</a>
+        </li>
+        <li hlmPaginationItem>
+          <a hlmPaginationLink link="#">3</a>
+        </li>
+        <li hlmPaginationItem>
+          <hlm-pagination-ellipsis />
+        </li>
+        <li hlmPaginationItem>
+          <hlm-pagination-next link="/components/popover" />
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
