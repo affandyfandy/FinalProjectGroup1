@@ -44,6 +44,12 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsList() {
+        List<AppointmentDTO> appointments = appointmentService.getAllAppointmentsList();
+        return ResponseEntity.ok(appointments);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable UUID id) {
         appointmentService.deleteAppointment(id);
