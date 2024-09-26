@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { DayFilterPipe } from '../../../../core/pipes/dayfilter.pipe';
 import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
 import {
@@ -29,11 +30,13 @@ import {
 } from '@spartan-ng/ui-dialog-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
+import {
+  Specializations,
+  SpecializationData,
+} from '../../../../utils/clinic_specializations';
 
 import {
   HlmPaginationContentDirective,
@@ -45,10 +48,14 @@ import {
   HlmPaginationPreviousComponent,
 } from '@spartan-ng/ui-pagination-helm';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
+import { AppointmentSpecializationSymptompsComponent } from './appointment-specialization-symptomps/appointment-specialization-symptomps.component';
+import { AppointmentSpecializationPreventComponent } from './appointment-specialization-prevent/appointment-specialization-prevent.component';
 
 @Component({
   standalone: true,
   imports: [
+    AppointmentSpecializationSymptompsComponent,
+    AppointmentSpecializationPreventComponent,
     AppointmentFormComponent,
     CommonModule,
     RouterModule,
@@ -73,7 +80,7 @@ import { AppointmentFormComponent } from '../appointment-form/appointment-form.c
     HlmLabelDirective,
     HlmInputDirective,
     HlmButtonDirective,
-    DayFilterPipe, // Register the pipe as standalone
+    DayFilterPipe,
     FormsModule,
     HlmPaginationDirective,
     HlmPaginationContentDirective,
@@ -91,45 +98,43 @@ export class AppointmentSpecializationComponent implements OnInit {
   specialization: string = '';
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
-
+  specializationData: SpecializationData | null = null;
   constructor(
     private route: ActivatedRoute,
-    private doctorScheduleService: DoctorSchedulesService
+    private doctorScheduleService: DoctorSchedulesService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    // Get specialization from either path or query parameters
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.specialization = params.get('specialization') || '';
-      if (!this.specialization) {
-        this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
-          this.specialization = queryParams.get('specialization') || '';
-          this.loadSchedules();
-        });
-      } else {
-        this.loadSchedules();
-      }
+      let specialization = params.get('specialization') || '';
+      specialization = decodeURIComponent(specialization);
+      this.specialization = specialization;
+      this.loadSpecializationData(); // Change to load from imported data
+      this.loadSchedules();
     });
   }
 
-  // Method to load schedules based on specialization
+  loadSpecializationData() {
+    this.specializationData =
+      Specializations.find(
+        (spec) => spec.name.toLowerCase() === this.specialization.toLowerCase()
+      ) || null;
+  }
+
   loadSchedules() {
     if (this.specialization) {
-      console.log('Loading schedules for:', this.specialization);
       this.doctorScheduleService
         .getFilteredSchedules(undefined, undefined, this.specialization)
         .subscribe({
           next: (schedules: DoctorScheduleList[]) => {
             this.doctorSchedules = schedules;
             this.groupSchedulesByDoctor();
-            console.log('Received schedules:', schedules);
           },
           error: (error) => {
             console.error('Error fetching schedules:', error);
           },
         });
-    } else {
-      console.log('No specialization provided');
     }
   }
 
@@ -145,12 +150,10 @@ export class AppointmentSpecializationComponent implements OnInit {
     }, {} as { [key: string]: DoctorScheduleList[] });
   }
 
-  // Helper function to return object keys (doctor IDs)
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
 
-  // Sort schedules by day
   dayOrder: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   sortSchedulesByDay(schedules: any[]): any[] {

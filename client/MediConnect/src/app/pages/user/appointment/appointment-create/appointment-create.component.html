@@ -1,24 +1,24 @@
 <div
   class="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 pb-4"
 >
-  <div class="flex items-center w-full max-w-sm space-x-2">
-    <form (ngSubmit)="onSearch()" class="w-80 flex gap-4">
+  <div class="flex items-center w-full max-w-sm space-x-2 mb-4">
+    <form class="w-80 flex gap-4">
       <input
         aria-label="text"
         [(ngModel)]="doctorName"
+        (ngModelChange)="filterSchedules()"
         name="doctorName"
         class="w-80"
         hlmInput
         type="text"
         placeholder="Doctor Name"
       />
-      <button hlmBtn variant="outline" type="submit">Search</button>
     </form>
   </div>
 
   <div class="w-full grid grid-cols-3 gap-4">
     <div
-      *ngFor="let doctorId of groupedSchedules | keyvalue"
+      *ngFor="let doctorId of filteredSchedules | keyvalue"
       class="w-full h-56 flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-5"
     >
       <div
@@ -120,29 +120,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="w-full flex justify-center items-center">
-    <nav hlmPagination>
-      <ul hlmPaginationContent>
-        <li hlmPaginationItem>
-          <hlm-pagination-previous link="/components/menubar" />
-        </li>
-        <li hlmPaginationItem>
-          <a hlmPaginationLink link="#">1</a>
-        </li>
-        <li hlmPaginationItem>
-          <a hlmPaginationLink link="#" isActive>2</a>
-        </li>
-        <li hlmPaginationItem>
-          <a hlmPaginationLink link="#">3</a>
-        </li>
-        <li hlmPaginationItem>
-          <hlm-pagination-ellipsis />
-        </li>
-        <li hlmPaginationItem>
-          <hlm-pagination-next link="/components/popover" />
-        </li>
-      </ul>
-    </nav>
   </div>
 </div>

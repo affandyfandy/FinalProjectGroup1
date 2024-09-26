@@ -22,6 +22,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "clinic_specializations.json",
+                "input": "src/app/utils",
+                "output": "/assets/"
               }
             ],
             "styles": [

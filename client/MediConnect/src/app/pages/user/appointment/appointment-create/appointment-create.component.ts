@@ -91,6 +91,7 @@ import {
 export class AppointmentCreateComponent implements OnInit {
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
+  filteredSchedules: { [key: string]: DoctorScheduleList[] } = {}; // New property for filtered results
   doctorName: string = '';
 
   constructor(
@@ -104,8 +105,9 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSearch() {
     if (this.doctorName) {
-      // Navigate to the search route with the doctor's name
-      this.router.navigate([`/dashboard/search/${this.doctorName}`]);
+      this.filterSchedules(); // Call filter function on search
+    } else {
+      this.filteredSchedules = { ...this.groupedSchedules }; // Reset filtered schedules if input is empty
     }
   }
 
@@ -114,6 +116,7 @@ export class AppointmentCreateComponent implements OnInit {
       next: (response) => {
         this.doctorSchedules = response;
         this.groupSchedulesByDoctor();
+        this.filteredSchedules = { ...this.groupedSchedules }; // Initialize with all schedules
         console.log('Grouped schedules:', this.groupedSchedules);
       },
       error: (error) => {
@@ -132,6 +135,20 @@ export class AppointmentCreateComponent implements OnInit {
       acc[doctorId] = this.sortSchedulesByDay(acc[doctorId]);
       return acc;
     }, {} as { [key: string]: DoctorScheduleList[] });
+  }
+
+  filterSchedules() {
+    const searchTerm = this.doctorName.toLowerCase(); // Convert to lowercase for case insensitive search
+    this.filteredSchedules = Object.keys(this.groupedSchedules)
+      .filter((doctorId) => {
+        const doctorName =
+          this.groupedSchedules[doctorId][0].doctor.name.toLowerCase();
+        return doctorName.includes(searchTerm); // Check if the doctor's name includes the search term
+      })
+      .reduce((acc, doctorId) => {
+        acc[doctorId] = this.groupedSchedules[doctorId]; // Keep only the filtered doctors
+        return acc;
+      }, {} as { [key: string]: DoctorScheduleList[] });
   }
 
   // Helper function to return object keys (doctor IDs)
