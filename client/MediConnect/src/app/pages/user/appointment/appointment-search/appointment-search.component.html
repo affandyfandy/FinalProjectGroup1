@@ -1,5 +1,21 @@
 <div>
-  <div class="w-full grid grid-cols-3 gap-4">
+  <!-- Loading State -->
+  <div
+    *ngIf="isLoading"
+    class="w-full h-[75vh] flex justify-center items-center"
+  >
+    <p>Loading schedules...</p>
+  </div>
+
+  <!-- No Data Available State -->
+  <div
+    *ngIf="!isLoading && hasNoData"
+    class="w-full h-[75vh] flex justify-center items-center"
+  >
+    <p>No schedules available for the selected doctor or date.</p>
+  </div>
+  <div class="w-full grid grid-cols-3 gap-4 h-[75vh]">
+    <!-- Display Doctor Schedules -->
     <div
       *ngFor="let doctorId of groupedSchedules | keyvalue"
       class="w-full h-56 flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-5"
@@ -104,6 +120,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Pagination -->
   <div class="w-full flex justify-center items-center">
     <nav hlmPagination>
       <ul hlmPaginationContent>

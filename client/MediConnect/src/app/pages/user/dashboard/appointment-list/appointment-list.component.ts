@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { AppointmentService } from '../../../../services/appointment-service/appoinment.service';
 import { AuthService } from '../../../../services/auth-service/auth.service';
@@ -24,6 +24,23 @@ import {
   HlmAvatarFallbackDirective,
 } from '@spartan-ng/ui-avatar-helm';
 
+import {
+  BrnAlertDialogContentDirective,
+  BrnAlertDialogTriggerDirective,
+} from '@spartan-ng/ui-alertdialog-brain';
+import {
+  HlmAlertDialogActionButtonDirective,
+  HlmAlertDialogCancelButtonDirective,
+  HlmAlertDialogComponent,
+  HlmAlertDialogContentComponent,
+  HlmAlertDialogDescriptionDirective,
+  HlmAlertDialogFooterComponent,
+  HlmAlertDialogHeaderComponent,
+  HlmAlertDialogOverlayDirective,
+  HlmAlertDialogTitleDirective,
+} from '@spartan-ng/ui-alertdialog-helm';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { TimeOnlyPipe } from '../../../../core/pipes/time-only.pipe';
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
@@ -38,6 +55,31 @@ import {
     HlmAvatarImageDirective,
     HlmAvatarComponent,
     HlmAvatarFallbackDirective,
+
+    CommonModule,
+    HlmTableComponent,
+    HlmTrowComponent,
+    HlmThComponent,
+    HlmTdComponent,
+    HlmCaptionComponent,
+
+    HlmAvatarImageDirective,
+    HlmAvatarComponent,
+    HlmAvatarFallbackDirective,
+
+    BrnAlertDialogContentDirective,
+    BrnAlertDialogTriggerDirective,
+    HlmAlertDialogActionButtonDirective,
+    HlmAlertDialogCancelButtonDirective,
+    HlmAlertDialogComponent,
+    HlmAlertDialogContentComponent,
+    HlmAlertDialogDescriptionDirective,
+    HlmAlertDialogFooterComponent,
+    HlmAlertDialogHeaderComponent,
+    HlmAlertDialogOverlayDirective,
+    HlmAlertDialogTitleDirective,
+
+    TimeOnlyPipe,
   ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.css',
@@ -47,8 +89,12 @@ export class AppointmentListComponent implements OnInit {
     private authService: AuthService,
     private patientsService: PatientsService,
     private doctorsService: DoctorsService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private toastr: ToastrService
   ) {}
+
+  @ViewChild(ToastContainerDirective, { static: true })
+  toastContainer!: ToastContainerDirective;
 
   token: string = '';
   userId: string = '';
@@ -95,6 +141,7 @@ export class AppointmentListComponent implements OnInit {
           // Specify type here
           console.log(response);
           this.appointments = response;
+          this.appointments = response.filter((app) => app.status !== 'CANCEL');
           const doctorRequests = this.appointments.map((appointment) =>
             this.doctorsService.getDoctorById(appointment.doctorId)
           );
@@ -125,5 +172,19 @@ export class AppointmentListComponent implements OnInit {
   getDoctorName(doctorId: string): string {
     console.log('Dwqdq', this.doctorMap[doctorId]?.name);
     return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
+  }
+
+  cancelAppointment(appointmentId: string, ctx: any): void {
+    this.appointmentService.cancelAppointment(appointmentId).subscribe({
+      next: () => {
+        this.toastr.success('Success cancel appointment');
+        ctx.close();
+        // this.loadAppointment(); // Reload products after deletion
+      },
+      error: (e) => {
+        this.toastr.error('Failed to cancel');
+        ctx.close();
+      },
+    });
   }
 }

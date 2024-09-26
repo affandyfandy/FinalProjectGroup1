@@ -49,7 +49,8 @@ import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 @Component({
   selector: 'app-appointment-search',
   standalone: true,
-  imports: [ AppointmentFormComponent,
+  imports: [
+    AppointmentFormComponent,
     CommonModule,
     RouterModule,
     BrnMenuTriggerDirective,
@@ -81,7 +82,8 @@ import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
     HlmPaginationPreviousComponent,
     HlmPaginationNextComponent,
     HlmPaginationLinkDirective,
-    HlmPaginationEllipsisComponent,],
+    HlmPaginationEllipsisComponent,
+  ],
   templateUrl: './appointment-search.component.html',
   styleUrls: ['./appointment-search.component.css'], // Note: Corrected styleUrl to styleUrls
 })
@@ -90,6 +92,8 @@ export class AppointmentSearchComponent implements OnInit {
   date: string | '' = '';
   schedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
+  isLoading = true; // Add a loading flag
+  hasNoData = false; // Add a no-data flag
 
   constructor(
     private route: ActivatedRoute,
@@ -103,22 +107,32 @@ export class AppointmentSearchComponent implements OnInit {
 
       if (this.doctorName || this.date) {
         this.loadSchedules();
+      } else {
+        this.isLoading = false;
       }
     });
   }
 
   loadSchedules() {
+    this.isLoading = true; // Set loading to true when fetching data
     this.doctorSchedulesService
       .getFilteredSchedules(this.doctorName, this.date)
       .subscribe(
         (data: DoctorScheduleList[]) => {
           this.schedules = data;
-          console.log(data);
-          this.groupSchedulesByDoctor(); // Ensure you call the grouping after loading schedules
+          this.isLoading = false;
+
+          if (data.length === 0) {
+            this.hasNoData = true; // If no data, set the no-data flag
+          } else {
+            this.hasNoData = false; // Reset flag if data exists
+            this.groupSchedulesByDoctor(); // Group schedules if there is data
+          }
         },
         (error) => {
           console.error('Error fetching schedules:', error);
-          // Handle error (e.g., show error message to user)
+          this.isLoading = false;
+          this.hasNoData = true; // Treat error as no data
         }
       );
   }
@@ -138,12 +152,10 @@ export class AppointmentSearchComponent implements OnInit {
     );
   }
 
-  // Helper function to return object keys (doctor IDs)
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
 
-  // Sort schedules by day
   dayOrder: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   sortSchedulesByDay(schedules: any[]): any[] {
