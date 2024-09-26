@@ -8,11 +8,13 @@ import { RouterConfig } from '../../../config/app.constants';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderAdminComponent } from '../header-admin/header-admin.component';
 import { SidebarUserComponent } from '../sidebar-user/sidebar-user.component';
+import { HeaderUserComponent } from '../header-user/header-user.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    HeaderUserComponent,
     CommonModule,
     RouterOutlet,
     HeaderComponent,
@@ -46,15 +48,14 @@ export class AppComponent implements OnInit {
         if (isAdminRoute) {
           this.showNavAndFooter = false;
           this.showSidebarAdmin = true;
-          this.showSidebarUser = false; // Ensure user sidebar is hidden
+          this.showSidebarUser = false;
           this.showSidebar = true;
         } else if (isDashboardRoute) {
           this.showNavAndFooter = false;
-          this.showSidebarAdmin = false; // Ensure admin sidebar is hidden
-          this.showSidebarUser = true; // Show user sidebar
+          this.showSidebarAdmin = false;
+          this.showSidebarUser = true;
           this.showSidebar = true;
         } else {
-          // Check if the current URL is in RouterConfig
           const matchedRoute = Object.values(RouterConfig).find(
             (route) =>
               currentUrl === route.path ||

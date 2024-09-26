@@ -1,4 +1,4 @@
-<div class="font-poppins">
+<!-- <div class="font-poppins">
   <app-header *ngIf="showNavAndFooter"></app-header>
 
   <div class="min-h-[100vh]">
@@ -11,6 +11,23 @@
       "
     >
       <app-header-admin *ngIf="showSidebar"></app-header-admin>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <app-footer *ngIf="showNavAndFooter"></app-footer>
+</div> -->
+
+<div class="font-poppins">
+  <app-header *ngIf="showNavAndFooter"></app-header>
+  <app-header-user *ngIf="showSidebarUser"></app-header-user>
+  <div class="min-h-[100vh]">
+    <app-sidebar *ngIf="showSidebarAdmin"></app-sidebar>
+    <div
+      class="w-full h-full"
+      [ngClass]="showSidebarAdmin ? 'bg-[#F3FBFF] pl-64' : 'bg-white'"
+    >
+      <app-header-admin *ngIf="showSidebarAdmin"></app-header-admin>
       <router-outlet></router-outlet>
     </div>
   </div>

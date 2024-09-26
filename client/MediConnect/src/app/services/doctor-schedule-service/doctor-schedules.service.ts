@@ -82,19 +82,32 @@ export class DoctorSchedulesService {
   }
 
   // Fetch schedule by doctorId and startWorkingHour
-getScheduleTime(id: string, startWorkingHour: string): Observable<ScheduleTimeDTO> {
-  return this.http.get<ScheduleTimeDTO>(`${this.apiUrl}/${id}/${startWorkingHour}`, {
-    headers: this.getHeadersRestricted(),
-  });
-}
+  getScheduleTime(
+    id: string,
+    startWorkingHour: string
+  ): Observable<ScheduleTimeDTO> {
+    return this.http.get<ScheduleTimeDTO>(
+      `${this.apiUrl}/${id}/${startWorkingHour}`,
+      {
+        headers: this.getHeadersRestricted(),
+      }
+    );
+  }
 
-// Update schedule time by id and startWorkingHour
-updateScheduleTime(id: string, startWorkingHour: string, scheduleTimeDTO: ScheduleTimeDTO): Observable<ScheduleTimeDTO> {
-  return this.http.put<ScheduleTimeDTO>(`${this.apiUrl}/${id}/${startWorkingHour}`, scheduleTimeDTO, {
-    headers: this.getHeadersRestricted(),
-  });
-}
-
+  // Update schedule time by id and startWorkingHour
+  updateScheduleTime(
+    id: string,
+    startWorkingHour: string,
+    scheduleTimeDTO: ScheduleTimeDTO
+  ): Observable<ScheduleTimeDTO> {
+    return this.http.put<ScheduleTimeDTO>(
+      `${this.apiUrl}/${id}/${startWorkingHour}`,
+      scheduleTimeDTO,
+      {
+        headers: this.getHeadersRestricted(),
+      }
+    );
+  }
 
   // Delete schedule by id
   deleteSchedule(id: string): Observable<void> {
@@ -109,4 +122,34 @@ updateScheduleTime(id: string, startWorkingHour: string, scheduleTimeDTO: Schedu
       headers: this.getHeadersRestricted(),
     });
   }
+
+  // New method: Get schedules with filters (doctorName, date, specialization)
+  getFilteredSchedules(
+    doctorName?: string,
+    date?: string,
+    specialization?: string
+  ): Observable<DoctorScheduleList[]> {
+    let params = new HttpParams();
+
+    if (doctorName) {
+      params = params.set('doctorName', doctorName);
+    }
+
+    if (date) {
+      params = params.set('date', date);
+    }
+
+    if (specialization) {
+      params = params.set('specialization', specialization);
+    }
+
+    return this.http.get<DoctorScheduleList[]>(
+      `${this.apiUrl}/doctor/list/filter`,
+      {
+        headers: this.getHeadersRestricted(),
+        params: params,
+      }
+    );
+  } 
+ 
 }

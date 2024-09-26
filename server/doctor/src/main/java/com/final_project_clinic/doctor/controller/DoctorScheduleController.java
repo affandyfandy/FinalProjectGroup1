@@ -1,5 +1,6 @@
 package com.final_project_clinic.doctor.controller;
 
+import com.final_project_clinic.doctor.dto.CriteriaDoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
@@ -7,12 +8,14 @@ import com.final_project_clinic.doctor.service.DoctorScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +47,17 @@ public class DoctorScheduleController {
     @GetMapping("/doctor/list")
     public ResponseEntity<List<DoctorScheduleShowDTO>> getAllSchedulesListShow() {
         List<DoctorScheduleShowDTO> schedules = doctorScheduleService.getAllSchedulesDoctor();
+        return ResponseEntity.ok(schedules);
+    }
+
+    @GetMapping("/doctor/list/filter")
+    public ResponseEntity<List<DoctorScheduleShowDTO>> getAllSchedulesWithFilter(
+            @RequestParam(value = "doctorName", required = false) String doctorName,
+            @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "specialization", required = false) String specialization) {
+
+        CriteriaDoctorScheduleDTO criteria = new CriteriaDoctorScheduleDTO(doctorName, date, specialization);
+        List<DoctorScheduleShowDTO> schedules = doctorScheduleService.getFilteredSchedules(criteria);
         return ResponseEntity.ok(schedules);
     }
 

@@ -1,5 +1,6 @@
 package com.final_project_clinic.doctor.service;
 
+import com.final_project_clinic.doctor.dto.CriteriaDoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
 import com.final_project_clinic.doctor.dto.ScheduleTimeDTO;
@@ -20,6 +21,8 @@ public interface DoctorScheduleService {
     List<DoctorScheduleDTO> getAllSchedulesList();
 
     List<DoctorScheduleShowDTO> getAllSchedulesDoctor();
+
+    List<DoctorScheduleShowDTO> getFilteredSchedules(CriteriaDoctorScheduleDTO criteriaDTO);
 
     Optional<DoctorScheduleDTO> getScheduleById(UUID id);
 
