@@ -70,7 +70,7 @@ public class PatientController {
     }
 
     // Update existing patient
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
+    // @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<PatientDTO> updatePatient(
             @PathVariable UUID id,

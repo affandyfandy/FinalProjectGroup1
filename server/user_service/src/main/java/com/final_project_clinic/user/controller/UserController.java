@@ -73,7 +73,6 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN', 'ADMIN')")
     @PutMapping("/patient/{id}")
     public ResponseEntity<UserDTO> updateUserPatient(
             @PathVariable UUID id,
