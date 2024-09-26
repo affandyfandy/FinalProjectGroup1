@@ -1,0 +1,90 @@
+<form [formGroup]="appointmentForm" (ngSubmit)="submitForm()" class="w-full">
+  <div class="w-full flex">
+    <label hlmLabel for="patientId" class="w-full text-left"
+      >Select Patient
+      <select
+        id="patientId"
+        formControlName="patientId"
+        class="w-full"
+        (change)="onDoctorChange()"
+        hlmInput
+      >
+        <option value="">Select Patient</option>
+        <option *ngFor="let patient of patients" [value]="patient.id">
+          {{ patient.user?.fullName }}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <div class="w-full flex">
+    <label hlmLabel for="doctorId" class="w-full text-left"
+      >Select Doctor
+      <select
+        id="doctorId"
+        formControlName="doctorId"
+        class="w-full"
+        (change)="onDoctorChange()"
+        hlmInput
+      >
+        <option value="">Select Doctor</option>
+        <option *ngFor="let doctor of doctors" [value]="doctor.id">
+          {{ doctor.name }}
+        </option>
+      </select>
+    </label>
+  </div>
+  <div class="w-full flex gap-4 items-center">
+    <div class="w-full flex">
+      <label hlmLabel for="date" class="w-full text-left">
+        Date
+        <input
+          type="date"
+          id="date"
+          hlmInput
+          [attr.min]="today"
+          formControlName="date"
+          hlmInput
+          (change)="onDateChange()"
+        />
+      </label>
+    </div>
+
+    <div class="w-full flex">
+      <label hlmLabel for="hour" class="w-full text-left">
+        Select Hour
+        <select id="hour" formControlName="hour" class="w-full" hlmInput>
+          <option
+            *ngFor="let timeSlot of scheduleTimes"
+            [value]="
+              timeSlot.startWorkingHour + ' - ' + timeSlot.endWorkingHour
+            "
+          >
+            {{ timeSlot.startWorkingHour }} - {{ timeSlot.endWorkingHour }}
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div class="w-full flex">
+    <label hlmLabel for="initialComplaint" class="w-full text-left">
+      Initial Complaint
+      <textarea
+        id="initialComplaint"
+        formControlName="initialComplaint"
+        class="w-full mt-2 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+        rows="4"
+      ></textarea>
+    </label>
+  </div>
+  <div class="w-full flex justify-end">
+    <button
+      type="submit"
+      class="w-1/2 text-center text-white font-bold text-sm px-5 mt-4 py-2 uppercase bg-gradient-fpt-3 rounded-lg"
+      [disabled]="isSubmitting"
+      hlmBtn
+    >
+      Submit
+    </button>
+  </div>
+</form>

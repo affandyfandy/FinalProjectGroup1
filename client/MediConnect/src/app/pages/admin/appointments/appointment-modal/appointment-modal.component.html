@@ -1,0 +1,57 @@
+<div class="modal">
+  <div class="modal-content">
+    <div class="flow-root w-full">
+      <dl class="-my-3 divide-y divide-gray-100 text-sm">
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Queue Number</dt>
+          <dd class="text-gray-700 sm:col-span-2">
+            {{ appointment.queueNumber }}
+          </dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Patient Name</dt>
+          <dd class="text-gray-700 sm:col-span-2">{{ patientName }}</dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Doctor Name</dt>
+          <dd class="text-gray-700 sm:col-span-2">{{ doctorName }}</dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Date</dt>
+          <dd class="text-gray-700 sm:col-span-2">
+            {{ appointment.date | date : "fullDate" }}
+          </dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Start Time</dt>
+          <dd class="text-gray-700 sm:col-span-2">
+            {{ appointment.startTime | timeOnly }}
+          </dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">End Time</dt>
+          <dd class="text-gray-700 sm:col-span-2">
+            {{ appointment.endTime | timeOnly }}
+          </dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Status</dt>
+          <dd class="text-gray-700 sm:col-span-2">{{ appointment.status }}</dd>
+        </div>
+
+        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+          <dt class="font-medium text-gray-900">Initial Complaint</dt>
+          <dd class="text-gray-700 sm:col-span-2">
+            {{ appointment.initialComplaint }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

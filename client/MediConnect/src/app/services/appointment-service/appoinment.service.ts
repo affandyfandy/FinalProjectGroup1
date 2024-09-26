@@ -34,7 +34,7 @@ export class AppointmentService {
 
   // Get all appointments
   getAppointments(): Observable<AppointmentShowDTO[]> {
-    return this.http.get<any>(this.apiUrl + "/list", {
+    return this.http.get<any>(this.apiUrl + '/list', {
       headers: this.getHeadersRestricted(),
     });
   }
@@ -46,9 +46,26 @@ export class AppointmentService {
     });
   }
 
+  // Get appointment by ID
+  getAppointmentById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
   // Create a new appointment
   createAppointment(appointmentSave: AppointmentSaveDTO): Observable<any> {
     return this.http.post<any>(this.apiUrl, appointmentSave, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Update existing doctor by id
+  updateAppointment(
+    id: string,
+    appointmentDTO: AppointmentSaveDTO
+  ): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, appointmentDTO, {
       headers: this.getHeadersRestricted(),
     });
   }
