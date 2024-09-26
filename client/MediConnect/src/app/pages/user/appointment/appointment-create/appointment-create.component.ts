@@ -91,8 +91,10 @@ import {
 export class AppointmentCreateComponent implements OnInit {
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
-  filteredSchedules: { [key: string]: DoctorScheduleList[] } = {}; // New property for filtered results
+  filteredSchedules: { [key: string]: DoctorScheduleList[] } = {};
   doctorName: string = '';
+  isLoading: boolean = true;
+  noData: boolean = false;
 
   constructor(
     private doctorScheduleService: DoctorSchedulesService,
@@ -116,11 +118,14 @@ export class AppointmentCreateComponent implements OnInit {
       next: (response) => {
         this.doctorSchedules = response;
         this.groupSchedulesByDoctor();
-        this.filteredSchedules = { ...this.groupedSchedules }; // Initialize with all schedules
+        this.filteredSchedules = { ...this.groupedSchedules };
+        this.noData = Object.keys(this.filteredSchedules).length === 0; // Check if there are no schedules
+        this.isLoading = false; // Set loading to false after fetching
         console.log('Grouped schedules:', this.groupedSchedules);
       },
       error: (error) => {
         console.error('Error loading doctor schedules:', error);
+        this.isLoading = false;
       },
     });
   }
@@ -149,6 +154,7 @@ export class AppointmentCreateComponent implements OnInit {
         acc[doctorId] = this.groupedSchedules[doctorId]; // Keep only the filtered doctors
         return acc;
       }, {} as { [key: string]: DoctorScheduleList[] });
+    this.noData = Object.keys(this.filteredSchedules).length === 0;
   }
 
   // Helper function to return object keys (doctor IDs)

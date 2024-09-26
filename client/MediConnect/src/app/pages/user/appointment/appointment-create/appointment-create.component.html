@@ -16,7 +16,21 @@
     </form>
   </div>
 
-  <div class="w-full grid grid-cols-3 gap-4">
+  <div
+    *ngIf="isLoading"
+    class="w-full h-[75vh] flex justify-center items-center"
+  >
+    <p>Loading schedules...</p>
+  </div>
+  <!-- Loading indicator -->
+
+  <div
+    *ngIf="!isLoading && noData"
+    class="w-full h-[75vh] flex justify-center items-center"
+  >
+    No schedules available for the given search.
+  </div>
+  <div *ngIf="!isLoading && !noData" class="w-full grid grid-cols-3 gap-4">
     <div
       *ngFor="let doctorId of filteredSchedules | keyvalue"
       class="w-full h-56 flex justify-between p-5 gap-x-4 bg-white rounded-lg mb-5"

@@ -99,6 +99,9 @@ export class AppointmentSpecializationComponent implements OnInit {
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
   specializationData: SpecializationData | null = null;
+  isLoading = true; // Add a loading flag
+  hasNoData = false; // Add a no-data flag
+
   constructor(
     private route: ActivatedRoute,
     private doctorScheduleService: DoctorSchedulesService,
@@ -110,7 +113,7 @@ export class AppointmentSpecializationComponent implements OnInit {
       let specialization = params.get('specialization') || '';
       specialization = decodeURIComponent(specialization);
       this.specialization = specialization;
-      this.loadSpecializationData(); // Change to load from imported data
+      this.loadSpecializationData();
       this.loadSchedules();
     });
   }
@@ -124,14 +127,25 @@ export class AppointmentSpecializationComponent implements OnInit {
 
   loadSchedules() {
     if (this.specialization) {
+      this.isLoading = true; // Set loading to true when data fetching starts
+
       this.doctorScheduleService
         .getFilteredSchedules(undefined, undefined, this.specialization)
         .subscribe({
           next: (schedules: DoctorScheduleList[]) => {
+            this.isLoading = false; // Set loading to false when data is loaded
             this.doctorSchedules = schedules;
-            this.groupSchedulesByDoctor();
+
+            if (schedules.length === 0) {
+              this.hasNoData = true; // No data found
+            } else {
+              this.hasNoData = false; // Data exists
+              this.groupSchedulesByDoctor();
+            }
           },
           error: (error) => {
+            this.isLoading = false; // Set loading to false in case of error
+            this.hasNoData = true; // Treat as no data on error
             console.error('Error fetching schedules:', error);
           },
         });

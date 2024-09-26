@@ -67,6 +67,19 @@
         Schedule a consultation with our teams
       </p>
     </div>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="my-8 text-center">
+      <p class="text-lg text-gray-500">
+        Loading doctor schedules, please wait...
+      </p>
+    </div>
+
+    <!-- No Data Found -->
+    <div *ngIf="!isLoading && hasNoData" class="my-8 text-center">
+      <p class="text-lg text-gray-500">
+        No doctor schedules available for this specialization.
+      </p>
+    </div>
     <!-- Doctor Schedules -->
     <div class="w-full grid grid-cols-3 gap-4">
       <div

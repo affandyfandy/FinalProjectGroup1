@@ -32,6 +32,8 @@ export class AppointmentHistoryComponent implements OnInit {
   patient: PatientShowDTO | null = null;
   appointments: AppointmentShowDTO[] = [];
   doctorMap: { [doctorId: string]: DoctorDTO } = {};
+  isLoading: boolean = true; // Track loading state
+  hasNoData: boolean = false; // Track if there are no appointments
 
   ngOnInit(): void {
     this.loadProfile();
@@ -50,7 +52,7 @@ export class AppointmentHistoryComponent implements OnInit {
             console.log(response);
             this.patient = response;
             this.patientId = this.patient.id;
-            console.log('patinet', this.patientId);
+            console.log('Patient ID:', this.patientId);
             this.loadAppointment(this.patientId);
           },
           (error) => {
@@ -68,9 +70,11 @@ export class AppointmentHistoryComponent implements OnInit {
     if (patientId) {
       this.appointmentService.getAppointmentByPatientId(patientId).subscribe(
         (response: AppointmentShowDTO[]) => {
-          // Specify type here
           console.log(response);
           this.appointments = response;
+          this.appointments = response.filter((app) => app.status !== 'ONGOING');
+          this.hasNoData = this.appointments.length === 0;
+
           // Fetch doctor details for each appointment
           const doctorRequests = this.appointments.map((appointment) =>
             this.doctorsService.getDoctorById(appointment.doctorId)
@@ -79,28 +83,31 @@ export class AppointmentHistoryComponent implements OnInit {
           forkJoin(doctorRequests).subscribe(
             (doctors: DoctorDTO[]) => {
               doctors.forEach((doctor, index) => {
-                console.log('AAAA', doctor);
+                console.log('Doctor:', doctor);
                 if (doctor) {
                   this.doctorMap[this.appointments[index].doctorId] = doctor;
                 }
               });
+              this.isLoading = false; // Set loading to false once data is fetched
             },
             (error) => {
               this.authService.handleError(error);
               console.error('Error loading doctor details', error);
+              this.isLoading = false; // Ensure loading is set to false on error
             }
           );
         },
         (error) => {
           this.authService.handleError(error);
           console.error('Error loading appointments', error);
+          this.isLoading = false; // Ensure loading is set to false on error
         }
       );
     }
   }
 
   getDoctorName(doctorId: string): string {
-    console.log('Dwqdq', this.doctorMap[doctorId]?.name);
+    console.log('Doctor Name:', this.doctorMap[doctorId]?.name);
     return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
   }
 }
