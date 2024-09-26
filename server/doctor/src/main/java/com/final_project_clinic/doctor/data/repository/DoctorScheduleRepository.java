@@ -12,13 +12,15 @@ import java.util.*;
 
 public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, UUID> {
 
-    @Query("SELECT ds FROM DoctorSchedule ds WHERE (:doctorName IS NULL OR ds.doctor.name = :doctorName) " +
-            "AND (:specialization IS NULL OR ds.doctor.specialization = :specialization) " +
-            "AND (:dayOfWeek IS NULL OR UPPER(ds.day) = :dayOfWeek)")
-    List<DoctorSchedule> findByCriteria(
-            @Param("doctorName") String doctorName,
-            @Param("specialization") String specialization,
-            @Param("dayOfWeek") String dayOfWeek);
+        @Query("SELECT ds FROM DoctorSchedule ds WHERE (:doctorName IS NULL OR LOWER(ds.doctor.name) LIKE LOWER(CONCAT(:doctorName, '%'))) "
+                        +
+                        "AND (:specialization IS NULL OR LOWER(ds.doctor.specialization) LIKE LOWER(CONCAT(:specialization, '%'))) "
+                        +
+                        "AND (:dayOfWeek IS NULL OR UPPER(ds.day) = :dayOfWeek)")
+        List<DoctorSchedule> findByCriteria(
+                        @Param("doctorName") String doctorName,
+                        @Param("specialization") String specialization,
+                        @Param("dayOfWeek") String dayOfWeek);
 
-    Optional<DoctorSchedule> findByDoctorIdAndDay(UUID doctorId, String day);
+        Optional<DoctorSchedule> findByDoctorIdAndDay(UUID doctorId, String day);
 }
