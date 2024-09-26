@@ -36,9 +36,9 @@ public class AppointmentService {
 
     @Autowired
     public AppointmentService(AppointmentRepository appointmentRepository,
-            DoctorServiceClient doctorServiceClient,
-            UserServiceClient userServiceClient,
-            AppointmentMapper appointmentMapper) {
+                              DoctorServiceClient doctorServiceClient,
+                              UserServiceClient userServiceClient,
+                              AppointmentMapper appointmentMapper) {
         this.appointmentRepository = appointmentRepository;
         this.doctorServiceClient = doctorServiceClient;
         this.userServiceClient = userServiceClient;
@@ -124,13 +124,21 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    public List<AppointmentDTO> getAppointmentsByPatientId(UUID patientId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Appointment> appointmentsPage = appointmentRepository.findByPatientId(patientId, pageable);
-        return appointmentsPage.stream()
+    public List<AppointmentDTO> getAllAppointmentsList() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream()
                 .map(appointmentMapper::toAppointmentDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
+
+//    public List<AppointmentDTO> getAppointmentsByPatientId(UUID patientId, int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Appointment> appointmentPage = appointmentRepository.findByPatientId(patientId, pageable);
+//        return appointmentPage.getContent().stream()
+//                .map(appointmentMapper::toAppointmentDTO)
+//                .collect(Collectors.toList());
+//    }
+
 
     public List<AppointmentDTO> getAppointmentsByDoctorId(UUID doctorId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -173,5 +181,18 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
         return appointmentMapper.toAppointmentDTO(appointment);
+    }
+
+    public int getTotalAppointmentsByPatientId(UUID patientId) {
+        return appointmentRepository.countByPatientId(patientId);
+    }
+
+    public List<AppointmentDTO> getAppointmentsByPatientId(UUID patientId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointmentPage = appointmentRepository.findByPatientId(patientId, pageable);
+        return appointmentPage.getContent()
+                .stream()
+                .map(appointmentMapper::toAppointmentDTO)
+                .collect(Collectors.toList());
     }
 }

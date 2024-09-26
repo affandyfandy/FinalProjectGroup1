@@ -97,6 +97,13 @@ export class AppointmentCreateComponent implements OnInit {
     private router: Router
   ) {}
 
+  currentPage: number = 1; // Halaman aktif
+  itemsPerPage: number = 6; // Jumlah item per halaman (misalnya 2 dokter per halaman)
+  totalPages: number = 0; // Jumlah halaman total
+  displayedSchedules: { [key: string]: DoctorScheduleList[] } = {};
+  totalPagesArray: number[] = [];
+
+
   ngOnInit() {
     this.loadSchedules();
   }
@@ -108,10 +115,28 @@ export class AppointmentCreateComponent implements OnInit {
     }
   }
 
+  updateDisplayedSchedules() {
+    const doctorIds = Object.keys(this.groupedSchedules);
+    this.totalPages = Math.ceil(doctorIds.length / this.itemsPerPage);
+
+    // Generate array of total pages for pagination buttons
+    this.totalPagesArray = Array(this.totalPages).fill(0).map((x, i) => i + 1);
+
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+
+    const selectedDoctorIds = doctorIds.slice(start, end);
+
+    this.displayedSchedules = selectedDoctorIds.reduce((acc, doctorId) => {
+      acc[doctorId] = this.groupedSchedules[doctorId];
+      return acc;
+    }, {} as { [key: string]: DoctorScheduleList[] });
+  }
+
   loadSchedules() {
     this.doctorScheduleService.getSchedulesDoctor().subscribe({
-      next: (response) => {
-        this.doctorSchedules = response;
+      next: (response: any) => { // menggunakan 'any' untuk respons
+        this.doctorSchedules = response.content; // Akses ke 'content'
         this.groupSchedulesByDoctor();
         console.log('Grouped schedules:', this.groupedSchedules);
       },
@@ -121,6 +146,7 @@ export class AppointmentCreateComponent implements OnInit {
     });
   }
 
+  // Ubah metode groupSchedulesByDoctor untuk memanggil updateDisplayedSchedules
   groupSchedulesByDoctor() {
     this.groupedSchedules = this.doctorSchedules.reduce((acc, schedule) => {
       const doctorId = schedule.doctor.id;
@@ -131,6 +157,8 @@ export class AppointmentCreateComponent implements OnInit {
       acc[doctorId] = this.sortSchedulesByDay(acc[doctorId]);
       return acc;
     }, {} as { [key: string]: DoctorScheduleList[] });
+
+    this.updateDisplayedSchedules(); // Panggil untuk menampilkan jadwal pada halaman pertama
   }
 
   // Helper function to return object keys (doctor IDs)
@@ -145,5 +173,12 @@ export class AppointmentCreateComponent implements OnInit {
     return schedules.sort((a, b) => {
       return this.dayOrder.indexOf(a.day) - this.dayOrder.indexOf(b.day);
     });
+  }
+
+  goToPage(page: number) {
+    if (page > 0 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updateDisplayedSchedules();
+    }
   }
 }

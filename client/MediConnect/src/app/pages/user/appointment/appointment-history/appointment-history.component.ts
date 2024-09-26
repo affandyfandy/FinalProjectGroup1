@@ -33,6 +33,11 @@ export class AppointmentHistoryComponent implements OnInit {
   appointments: AppointmentShowDTO[] = [];
   doctorMap: { [doctorId: string]: DoctorDTO } = {};
 
+  currentPage: number = 1;
+    pageSize: number = 6; // Adjust as needed
+    totalItems: number = 0;
+    totalPages: number = 0;
+
   ngOnInit(): void {
     this.loadProfile();
   }
@@ -51,7 +56,7 @@ export class AppointmentHistoryComponent implements OnInit {
             this.patient = response;
             this.patientId = this.patient.id;
             console.log('patinet', this.patientId);
-            this.loadAppointment(this.patientId);
+            this.loadAppointment(this.patientId, this.currentPage);;
           },
           (error) => {
             this.authService.handleError(error);
@@ -64,43 +69,58 @@ export class AppointmentHistoryComponent implements OnInit {
     }
   }
 
-  loadAppointment(patientId: string) {
-    if (patientId) {
-      this.appointmentService.getAppointmentByPatientId(patientId).subscribe(
-        (response: AppointmentShowDTO[]) => {
-          // Specify type here
-          console.log(response);
-          this.appointments = response;
-          // Fetch doctor details for each appointment
-          const doctorRequests = this.appointments.map((appointment) =>
-            this.doctorsService.getDoctorById(appointment.doctorId)
-          );
+  loadAppointment(patientId: string, page: number) {
+      if (patientId) {
+        this.appointmentService
+          .getAppointmentByPatientIdWithPagination(
+            patientId,
+            page - 1, // Backend pagination usually starts at 0
+            this.pageSize
+          )
+          .subscribe(
+            (response) => {
+              console.log(response);
+              this.appointments = response.appointments;
+              this.totalItems = response.total;
+              this.totalPages = Math.ceil(this.totalItems / this.pageSize);
 
-          forkJoin(doctorRequests).subscribe(
-            (doctors: DoctorDTO[]) => {
-              doctors.forEach((doctor, index) => {
-                console.log('AAAA', doctor);
-                if (doctor) {
-                  this.doctorMap[this.appointments[index].doctorId] = doctor;
+              // Fetch doctor details for each appointment
+              const doctorRequests = this.appointments.map((appointment) =>
+                this.doctorsService.getDoctorById(appointment.doctorId)
+              );
+
+              forkJoin(doctorRequests).subscribe(
+                (doctors: DoctorDTO[]) => {
+                  doctors.forEach((doctor, index) => {
+                    console.log('Doctor:', doctor);
+                    if (doctor) {
+                      this.doctorMap[this.appointments[index].doctorId] = doctor;
+                    }
+                  });
+                },
+                (error) => {
+                  this.authService.handleError(error);
+                  console.error('Error loading doctor details', error);
                 }
-              });
+              );
             },
             (error) => {
               this.authService.handleError(error);
-              console.error('Error loading doctor details', error);
+              console.error('Error loading appointments', error);
             }
           );
-        },
-        (error) => {
-          this.authService.handleError(error);
-          console.error('Error loading appointments', error);
-        }
-      );
+      }
     }
-  }
 
-  getDoctorName(doctorId: string): string {
-    console.log('Dwqdq', this.doctorMap[doctorId]?.name);
-    return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
-  }
+  onPageChange(page: number) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+        this.loadAppointment(this.patientId, this.currentPage);
+      }
+    }
+
+    getDoctorName(doctorId: string): string {
+      console.log('Doctor Name:', this.doctorMap[doctorId]?.name);
+      return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
+    }
 }

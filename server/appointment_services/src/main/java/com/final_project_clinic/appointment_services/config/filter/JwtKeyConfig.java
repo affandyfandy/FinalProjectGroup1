@@ -77,4 +77,10 @@ public class JwtKeyConfig {
             throw new KeyLoadingException("Failed to load the private key", e);
         }
     }
+
+    @Bean
+    public JwtDecoder jwtDecoder(PublicKey publicKey) {
+        // Use NimbusJwtDecoder for verifying JWT with public key
+        return NimbusJwtDecoder.withPublicKey((java.security.interfaces.RSAPublicKey) publicKey).build();
+    }
 }

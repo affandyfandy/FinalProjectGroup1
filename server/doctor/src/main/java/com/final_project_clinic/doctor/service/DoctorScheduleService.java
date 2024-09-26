@@ -1,5 +1,6 @@
 package com.final_project_clinic.doctor.service;
 
+import com.final_project_clinic.doctor.data.model.Doctor;
 import com.final_project_clinic.doctor.dto.CriteriaDoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
@@ -20,7 +21,7 @@ public interface DoctorScheduleService {
 
     List<DoctorScheduleDTO> getAllSchedulesList();
 
-    List<DoctorScheduleShowDTO> getAllSchedulesDoctor();
+    Page<DoctorScheduleShowDTO> getAllSchedulesDoctor(Pageable pageable);
 
     List<DoctorScheduleShowDTO> getFilteredSchedules(CriteriaDoctorScheduleDTO criteriaDTO);
 
@@ -37,4 +38,6 @@ public interface DoctorScheduleService {
     void deleteScheduleTime(UUID scheduleId, LocalTime startWorkingHour);
 
     Optional<DoctorScheduleDTO> getDoctorScheduleByDay(UUID doctorId, String day);
+
+    Page<Doctor> getAllDoctorsWithSchedules(Pageable pageable);
 }

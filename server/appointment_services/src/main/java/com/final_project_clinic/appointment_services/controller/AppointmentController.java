@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -44,6 +49,12 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointmentsList() {
+        List<AppointmentDTO> appointments = appointmentService.getAllAppointmentsList();
+        return ResponseEntity.ok(appointments);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable UUID id) {
         appointmentService.deleteAppointment(id);
@@ -52,7 +63,7 @@ public class AppointmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AppointmentDTO> updateAppointment(@PathVariable UUID id,
-            @RequestBody AppointmentCreateDTO appointmentCreateDTO) {
+                                                            @RequestBody AppointmentCreateDTO appointmentCreateDTO) {
         AppointmentDTO updatedAppointment = appointmentService.updateAppointment(id, appointmentCreateDTO);
         return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
     }
@@ -64,12 +75,19 @@ public class AppointmentController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatientId(
+    public ResponseEntity<Map<String, Object>> getAppointmentsByPatientId(
             @PathVariable UUID patientId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
+
         List<AppointmentDTO> appointments = appointmentService.getAppointmentsByPatientId(patientId, page, size);
-        return ResponseEntity.ok(appointments);
+        long totalAppointments = appointmentService.getTotalAppointmentsByPatientId(patientId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("appointments", appointments);
+        response.put("total", totalAppointments);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/doctor/{doctorId}")

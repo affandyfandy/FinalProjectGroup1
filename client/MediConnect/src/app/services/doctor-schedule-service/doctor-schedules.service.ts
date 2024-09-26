@@ -38,8 +38,8 @@ export class DoctorSchedulesService {
   }
 
   // Get all schedules
-  getSchedulesDoctor(): Observable<DoctorScheduleList[]> {
-    return this.http.get<any>(this.apiUrl + '/doctor/list', {
+  getSchedulesDoctor(): Observable<PaginatedResponse<DoctorScheduleList>> {
+    return this.http.get<PaginatedResponse<DoctorScheduleList>>(this.apiUrl + '/doctor/list', {
       headers: this.getHeadersRestricted(),
     });
   }
@@ -150,6 +150,20 @@ export class DoctorSchedulesService {
         params: params,
       }
     );
-  } 
- 
+  }
+
+}
+
+export interface PaginatedResponse<T> {
+  content: T[];
+  pageable: any;
+  last: boolean;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  sort: any;
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }

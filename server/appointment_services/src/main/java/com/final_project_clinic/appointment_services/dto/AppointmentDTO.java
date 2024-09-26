@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 public class AppointmentDTO {
     private UUID appointmentId;
     private UUID patientId;

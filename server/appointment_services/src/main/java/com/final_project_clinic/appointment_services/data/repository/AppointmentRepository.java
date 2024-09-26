@@ -16,5 +16,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
 
     Page<Appointment> findByDoctorId(UUID doctorId, Pageable pageable);
+    boolean existsByDoctorIdAndDateAndStartTimeAndPatientIdAndAppointmentIdNot(
+            UUID doctorId, LocalDate date, LocalTime startTime, UUID patientId, UUID appointmentId);
+
+    int countByPatientId(UUID patientId);
+
 
 }

@@ -1,5 +1,6 @@
 package com.final_project_clinic.doctor.controller;
 
+import com.final_project_clinic.doctor.data.model.Doctor;
 import com.final_project_clinic.doctor.dto.CriteriaDoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleDTO;
 import com.final_project_clinic.doctor.dto.DoctorScheduleShowDTO;
@@ -45,8 +46,8 @@ public class DoctorScheduleController {
     }
 
     @GetMapping("/doctor/list")
-    public ResponseEntity<List<DoctorScheduleShowDTO>> getAllSchedulesListShow() {
-        List<DoctorScheduleShowDTO> schedules = doctorScheduleService.getAllSchedulesDoctor();
+    public ResponseEntity<Page<DoctorScheduleShowDTO>> getAllSchedulesListShow(Pageable pageable) {
+        Page<DoctorScheduleShowDTO> schedules = doctorScheduleService.getAllSchedulesDoctor(pageable);
         return ResponseEntity.ok(schedules);
     }
 
@@ -134,5 +135,11 @@ public class DoctorScheduleController {
         Optional<DoctorScheduleDTO> schedule = doctorScheduleService.getDoctorScheduleByDay(doctorId, day);
         return schedule.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/doctor/list")
+    public ResponseEntity<Page<Doctor>> getAllDoctorsWithSchedules(Pageable pageable) {
+        Page<Doctor> doctors = doctorScheduleService.getAllDoctorsWithSchedules(pageable);
+        return ResponseEntity.ok(doctors);
     }
 }

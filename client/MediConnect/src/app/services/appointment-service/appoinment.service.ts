@@ -9,6 +9,7 @@ import { AppConstants } from '../../config/app.constants';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { AppointmentSaveDTO } from '../../models/appointment.model';
+import { AppointmentShowDTO } from '../../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,16 +32,30 @@ export class AppointmentService {
     });
   }
 
-  // Get patient by ID (authentication required)
+  // Get all appointments
+  getAppointments(): Observable<AppointmentShowDTO[]> {
+    return this.http.get<any>(this.apiUrl + "/list", {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Get appointment by ID
   getAppointmentByPatientId(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patient/${id}`, {
       headers: this.getHeadersRestricted(),
     });
   }
 
-  // Create a new patient (authentication required)
+  // Create a new appointment
   createAppointment(appointmentSave: AppointmentSaveDTO): Observable<any> {
     return this.http.post<any>(this.apiUrl, appointmentSave, {
+      headers: this.getHeadersRestricted(),
+    });
+  }
+
+  // Delete appointment by id
+  deleteAppointment(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
       headers: this.getHeadersRestricted(),
     });
   }
@@ -51,6 +66,23 @@ export class AppointmentService {
       {},
       {
         headers: this.getHeadersRestricted(),
+      }
+    );
+  }
+getAppointmentByPatientIdWithPagination(
+    patientId: string,
+    page: number,
+    size: number
+  ): Observable<{ appointments: AppointmentShowDTO[]; total: number }> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<{ appointments: AppointmentShowDTO[]; total: number }>(
+      `${this.apiUrl}/patient/${patientId}`,
+      {
+        headers: this.getHeadersRestricted(),
+        params: params,
       }
     );
   }

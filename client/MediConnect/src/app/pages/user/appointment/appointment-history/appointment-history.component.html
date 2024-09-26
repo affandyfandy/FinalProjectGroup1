@@ -3,7 +3,7 @@
 
   <!-- Check if appointments are available -->
   <div *ngIf="appointments.length > 0; else noAppointments">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Loop through each appointment -->
       <div
         *ngFor="let appointment of appointments"
@@ -43,6 +43,25 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Pagination controls -->
+    <div class="flex justify-center mt-4">
+      <button
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 mx-1 bg-gray-300 rounded"
+      >
+        Previous
+      </button>
+      <span class="px-4 py-2 mx-1">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages || totalPages === 0"
+        class="px-4 py-2 mx-1 bg-gray-300 rounded"
+      >
+        Next
+      </button>
     </div>
   </div>
 

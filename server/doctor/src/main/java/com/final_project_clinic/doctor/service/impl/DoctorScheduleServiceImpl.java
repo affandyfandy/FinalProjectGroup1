@@ -65,11 +65,9 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     }
 
     @Override
-    public List<DoctorScheduleShowDTO> getAllSchedulesDoctor() {
-        List<DoctorSchedule> schedules = doctorScheduleRepository.findAll();
-        return schedules.stream() // Use stream() to convert the List to a Stream
-                .map(doctorScheduleMapper::toDoctorScheduleDTOShow) // Apply the map function
-                .toList(); // Collect the result back into a List
+    public Page<DoctorScheduleShowDTO> getAllSchedulesDoctor(Pageable pageable) {
+        Page<DoctorSchedule> schedules = doctorScheduleRepository.findAll(pageable);
+        return schedules.map(doctorScheduleMapper::toDoctorScheduleDTOShow);
     }
 
     @Override
@@ -213,5 +211,10 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     public Optional<DoctorScheduleDTO> getDoctorScheduleByDay(UUID doctorId, String day) {
         Optional<DoctorSchedule> doctorSchedule = doctorScheduleRepository.findByDoctorIdAndDay(doctorId, day);
         return doctorSchedule.map(doctorScheduleMapper::toDoctorScheduleDTO);
+    }
+
+    @Override
+    public Page<Doctor> getAllDoctorsWithSchedules(Pageable pageable) {
+        return doctorRepository.findAllWithSchedules(pageable);
     }
 }
