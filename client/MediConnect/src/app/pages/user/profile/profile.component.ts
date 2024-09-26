@@ -14,9 +14,12 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth-service/auth.service';
 import { PatientsService } from '../../../services/patient-service/patients.service';
+import { UserService } from '../../../services/user-service/users.service';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '../../../models/user.model';
-import { PatientShowDTO } from '../../../models/patient.model';
+import { PatientShowDTO, PatientSaveDTO } from '../../../models/patient.model';
+import { UserSaveDTO } from '../../../models/user.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -35,66 +38,48 @@ import { PatientShowDTO } from '../../../models/patient.model';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
-  profileForm: FormGroup; // Form group for profile data
+  profileForm: FormGroup;
   token: string = '';
   userId: string = '';
+  role: string = '';
   patientId: string = '';
   patient: PatientShowDTO | null = null;
+  isUserEditing: boolean = false;
+  isPatientEditing: boolean = false;
 
   constructor(
     private authService: AuthService,
     private patientsService: PatientsService,
-    private formBuilder: FormBuilder // Using FormBuilder to create the form
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private router: Router
   ) {
-    // Initialize the form with empty and disabled controls
     this.profileForm = this.formBuilder.group({
-      fullName: [{ value: '', disabled: true }, Validators.required],
-      email: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.email],
+      fullName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{10,20}$/)],
       ],
-      phoneNumber: [{ value: '', disabled: true }, Validators.required],
-      gender: [{ value: '', disabled: true }, Validators.required],
-      nik: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern('^[0-9]{16}$')],
-      ],
-      address: [{ value: '', disabled: true }, Validators.required],
-      dateOfBirth: [{ value: '', disabled: true }, Validators.required],
+      gender: ['', Validators.required],
+      nik: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
+      address: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    // Initialize the form group with default values and validators
-    this.profileForm = this.formBuilder.group({
-      fullName: [{ value: '', disabled: true }, [Validators.required]],
-      email: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.email],
-      ],
-      phoneNumber: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern(/^\d{10,20}$/)],
-      ],
-      gender: [{ value: '', disabled: true }, [Validators.required]],
-      nik: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern(/^\d{16}$/)],
-      ],
-      address: [{ value: '', disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: '', disabled: true }, [Validators.required]],
-    });
     this.loadProfile();
   }
 
-  // Function to load profile data
   loadProfile() {
     const token = this.authService.getToken();
     if (token) {
       this.token = token;
       const decoded = jwtDecode<CustomJwtPayload>(token);
       this.userId = decoded.id;
-
+      this.role = decoded.role;
       if (this.userId) {
         this.patientsService.getPatientByUserId(this.userId).subscribe(
           (response) => {
@@ -112,7 +97,6 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Function to load patient data into the form
   loadPatientData(id: string): void {
     this.patientsService.getPatientById(id).subscribe((patient) => {
       this.profileForm.patchValue({
@@ -124,6 +108,102 @@ export class ProfileComponent implements OnInit {
         gender: patient.gender,
         dateOfBirth: patient.dateOfBirth,
       });
+      this.disableForm();
     });
+  }
+
+  toggleEdit(section: 'user' | 'patient'): void {
+    if (section === 'user') {
+      this.isUserEditing = !this.isUserEditing;
+      this.isUserEditing ? this.enableUserForm() : this.disableUserForm();
+    } else if (section === 'patient') {
+      this.isPatientEditing = !this.isPatientEditing;
+      this.isPatientEditing
+        ? this.enablePatientForm()
+        : this.disablePatientForm();
+    }
+  }
+
+  enableUserForm(): void {
+    this.profileForm.get('fullName')?.enable();
+    this.profileForm.get('email')?.enable();
+  }
+
+  disableUserForm(): void {
+    this.profileForm.get('fullName')?.disable();
+    this.profileForm.get('email')?.disable();
+  }
+
+  enablePatientForm(): void {
+    this.profileForm.get('phoneNumber')?.enable();
+    this.profileForm.get('gender')?.enable();
+    this.profileForm.get('nik')?.enable();
+    this.profileForm.get('address')?.enable();
+    this.profileForm.get('dateOfBirth')?.enable();
+  }
+
+  disablePatientForm(): void {
+    this.profileForm.get('phoneNumber')?.disable();
+    this.profileForm.get('gender')?.disable();
+    this.profileForm.get('nik')?.disable();
+    this.profileForm.get('address')?.disable();
+    this.profileForm.get('dateOfBirth')?.disable();
+  }
+
+  updateUser(): void {
+    const userUpdateDTO: UserSaveDTO = {
+      fullName: this.profileForm.get('fullName')?.value,
+      email: this.profileForm.get('email')?.value,
+      role: this.role,
+      password: 'Password123!@',
+    };
+
+    this.userService.updateUserPatient(this.userId, userUpdateDTO).subscribe({
+      next: (response: any) => {
+        console.log(response);
+
+        this.toastr.success('User updated successfully!');
+      },
+      error: (error: any) => {
+        this.toastr.error('Failed to update user');
+        console.error('Error:', error);
+      },
+    });
+  }
+
+  onSubmit(): void {
+    if (this.isUserEditing) {
+      this.updateUser();
+    }
+
+    if (this.isPatientEditing) {
+      const updatedPatient: PatientSaveDTO = {
+        userId: this.userId,
+        phoneNumber: this.profileForm.get('phoneNumber')?.value,
+        gender: this.profileForm.get('gender')?.value,
+        nik: this.profileForm.get('nik')?.value,
+        address: this.profileForm.get('address')?.value,
+        dateOfBirth: this.profileForm.get('dateOfBirth')?.value,
+      };
+
+      this.patientsService
+        .updatePatient(this.patientId, updatedPatient)
+        .subscribe(
+          (response) => {
+            this.toastr.success('Patient updated successfully!');
+            this.isPatientEditing = false;
+            this.disablePatientForm();
+          },
+          (error) => {
+            console.error('Error updating profile', error);
+            this.toastr.error('Patient error updating');
+          }
+        );
+    }
+  }
+
+  disableForm(): void {
+    this.disableUserForm();
+    this.disablePatientForm();
   }
 }

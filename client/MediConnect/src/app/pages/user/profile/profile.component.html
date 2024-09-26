@@ -3,12 +3,17 @@
     <h1 class="text-3xl font-semibold">PROFILE</h1>
     <p class="text-lg text-gray-500">Profile Information</p>
   </div>
-  <form [formGroup]="profileForm" class="w-full">
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="w-full">
+    <!-- User Account Information Section -->
     <div class="mt-8 mb-4 border shadow rounded p-4">
       <div class="flex items-center justify-between mb-4">
         <p class="text-base font-medium">User Account Information</p>
+        <button hlmBtn variant="fpt" class="text-white" type="button" (click)="toggleEdit('user')">
+          {{ isUserEditing ? "Cancel" : "Edit User Info" }}
+        </button>
       </div>
-      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 text-black ">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 text-black">
         <div class="w-full mb-4">
           <label hlmLabel>
             Fullname
@@ -17,7 +22,6 @@
               type="text"
               formControlName="fullName"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
@@ -30,15 +34,20 @@
               type="email"
               formControlName="email"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
       </div>
     </div>
 
+    <!-- Patient Data Information Section -->
     <div class="border shadow rounded p-4">
-      <p class="text-base mb-4 font-medium">Patient data Information</p>
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-base mb-4 font-medium">Patient Data Information</p>
+        <button hlmBtn type="button" variant="fpt" class="text-white" (click)="toggleEdit('patient')">
+          {{ isPatientEditing ? "Cancel" : "Edit Patient Info" }}
+        </button>
+      </div>
 
       <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4">
         <div class="w-full mb-4">
@@ -49,7 +58,6 @@
               type="text"
               formControlName="phoneNumber"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
@@ -61,9 +69,8 @@
               hlmInput
               formControlName="gender"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             >
-              <option value="" [disabled]="true">Select Gender</option>
+              <option value="" disabled>Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
@@ -78,7 +85,6 @@
               type="text"
               formControlName="nik"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
@@ -91,7 +97,6 @@
               type="text"
               formControlName="address"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
@@ -104,11 +109,16 @@
               type="date"
               formControlName="dateOfBirth"
               class="w-full mt-1 text-black font-medium"
-              [disabled]="true"
             />
           </label>
         </div>
       </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button hlmBtn type="submit" [disabled]="profileForm.invalid">
+        Save Changes
+      </button>
     </div>
   </form>
 </div>
