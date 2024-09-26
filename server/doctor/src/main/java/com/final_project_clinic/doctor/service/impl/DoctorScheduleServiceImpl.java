@@ -78,10 +78,22 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
             dayOfWeek = criteria.getDate().getDayOfWeek().name(); // E.g., "MONDAY"
         }
 
-        // Call repository method with doctorName and the dayOfWeek
+        // Prepare the doctorName with a wildcard for LIKE operation
+        String doctorName = criteria.getDoctorName();
+        if (doctorName != null) {
+            doctorName = doctorName.trim(); // Remove any leading/trailing whitespace
+        }
+
+        // Prepare the specialization with a wildcard for LIKE operation
+        String specialization = criteria.getSpecialization();
+        if (specialization != null) {
+            specialization = specialization.trim(); // Remove any leading/trailing whitespace
+        }
+
+        // Call repository method with modified parameters
         List<DoctorSchedule> schedules = doctorScheduleRepository.findByCriteria(
-                criteria.getDoctorName(),
-                criteria.getSpecialization(),
+                doctorName != null ? doctorName : null,
+                specialization != null ? specialization : null,
                 dayOfWeek);
 
         // Map results to DTOs

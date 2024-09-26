@@ -32,6 +32,8 @@ export class AppointmentHistoryComponent implements OnInit {
   patient: PatientShowDTO | null = null;
   appointments: AppointmentShowDTO[] = [];
   doctorMap: { [doctorId: string]: DoctorDTO } = {};
+  isLoading: boolean = true; // Track loading state
+  hasNoData: boolean = false; // Track if there are no appointments
 
   currentPage: number = 1;
     pageSize: number = 6; // Adjust as needed
@@ -55,8 +57,13 @@ export class AppointmentHistoryComponent implements OnInit {
             console.log(response);
             this.patient = response;
             this.patientId = this.patient.id;
+<<<<<<< HEAD
             console.log('patinet', this.patientId);
             this.loadAppointment(this.patientId, this.currentPage);;
+=======
+            console.log('Patient ID:', this.patientId);
+            this.loadAppointment(this.patientId);
+>>>>>>> dev
           },
           (error) => {
             this.authService.handleError(error);
@@ -69,6 +76,7 @@ export class AppointmentHistoryComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
   loadAppointment(patientId: string, page: number) {
       if (patientId) {
         this.appointmentService
@@ -110,8 +118,48 @@ export class AppointmentHistoryComponent implements OnInit {
             }
           );
       }
+=======
+  loadAppointment(patientId: string) {
+    if (patientId) {
+      this.appointmentService.getAppointmentByPatientId(patientId).subscribe(
+        (response: AppointmentShowDTO[]) => {
+          console.log(response);
+          this.appointments = response;
+          this.appointments = response.filter((app) => app.status !== 'ONGOING');
+          this.hasNoData = this.appointments.length === 0;
+
+          // Fetch doctor details for each appointment
+          const doctorRequests = this.appointments.map((appointment) =>
+            this.doctorsService.getDoctorById(appointment.doctorId)
+          );
+
+          forkJoin(doctorRequests).subscribe(
+            (doctors: DoctorDTO[]) => {
+              doctors.forEach((doctor, index) => {
+                console.log('Doctor:', doctor);
+                if (doctor) {
+                  this.doctorMap[this.appointments[index].doctorId] = doctor;
+                }
+              });
+              this.isLoading = false; // Set loading to false once data is fetched
+            },
+            (error) => {
+              this.authService.handleError(error);
+              console.error('Error loading doctor details', error);
+              this.isLoading = false; // Ensure loading is set to false on error
+            }
+          );
+        },
+        (error) => {
+          this.authService.handleError(error);
+          console.error('Error loading appointments', error);
+          this.isLoading = false; // Ensure loading is set to false on error
+        }
+      );
+>>>>>>> dev
     }
 
+<<<<<<< HEAD
   onPageChange(page: number) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
@@ -123,4 +171,10 @@ export class AppointmentHistoryComponent implements OnInit {
       console.log('Doctor Name:', this.doctorMap[doctorId]?.name);
       return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
     }
+=======
+  getDoctorName(doctorId: string): string {
+    console.log('Doctor Name:', this.doctorMap[doctorId]?.name);
+    return this.doctorMap[doctorId]?.name || 'Unknown Doctor';
+  }
+>>>>>>> dev
 }

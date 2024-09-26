@@ -14,14 +14,14 @@ import {
   selector: 'app-header',
   standalone: true,
   imports: [
-    CommonModule,
     HlmButtonDirective,
+    CommonModule,
     RouterModule,
     HlmAvatarImageDirective,
     HlmAvatarComponent,
     HlmAvatarFallbackDirective,
     HlmButtonDirective,
-  ], // Import necessary modules
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })

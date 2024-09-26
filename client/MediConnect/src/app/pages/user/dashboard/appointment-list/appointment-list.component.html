@@ -1,10 +1,10 @@
 <hlm-table class="w-full min-w-[400px]">
-  <hlm-caption>A list of your recent appoinments.</hlm-caption>
   <hlm-trow>
     <hlm-th class="w-56">Doctor</hlm-th>
-    <hlm-th class="flex-1">Date</hlm-th>
+    <hlm-th class="w-44">Date</hlm-th>
     <hlm-th class="flex-1">Time</hlm-th>
-    <hlm-th class="flex-1">Queue Number</hlm-th>
+    <hlm-th class="w-20">Queue</hlm-th>
+    <hlm-th class="flex-1">Action</hlm-th>
   </hlm-trow>
 
   <hlm-trow *ngFor="let appointment of appointments">
@@ -23,11 +23,47 @@
         </div>
       </div>
     </hlm-td>
-    <hlm-td class="flex-1">{{ appointment.date | date : "fullDate" }}</hlm-td>
+    <hlm-td class="w-44">{{ appointment.date | date : "fullDate" }}</hlm-td>
 
+    <hlm-td class="flex-1">
+      {{ appointment.startTime | timeOnly }} -
+      {{ appointment.endTime | timeOnly }}
+    </hlm-td>
+
+    <hlm-td class="w-20">{{ appointment.queueNumber }}</hlm-td>
     <hlm-td class="flex-1"
-      >{{ appointment.startTime }} - {{ appointment.endTime }}</hlm-td
+      ><div class="w-ful mt-4">
+        <hlm-alert-dialog>
+          <button
+            class="bg-gradient-fpt-3 text-white text-xs px-4 py-2 rounded-xl shadow hover:bg-red-600 mr-1.5 disabled:bg-red-300 disabled:cursor-not-allowed"
+            brnAlertDialogTrigger
+          >
+            Cancel
+          </button>
+          <hlm-alert-dialog-content
+            *brnAlertDialogContent="let ctx"
+            class="bg-white"
+          >
+            <hlm-alert-dialog-header>
+              <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+              <p hlmAlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </p>
+            </hlm-alert-dialog-header>
+            <hlm-alert-dialog-footer>
+              <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+              <button
+                hlmAlertDialogAction
+                class="bg-gray-800 text-white"
+                (click)="cancelAppointment(appointment.appointmentId, ctx)"
+              >
+                Cancel Appointment
+              </button>
+            </hlm-alert-dialog-footer>
+          </hlm-alert-dialog-content>
+        </hlm-alert-dialog>
+      </div></hlm-td
     >
-    <hlm-td class="flex-1">{{ appointment.queueNumber }}</hlm-td>
   </hlm-trow>
 </hlm-table>

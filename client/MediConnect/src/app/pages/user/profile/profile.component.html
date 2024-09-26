@@ -1,70 +1,114 @@
-<div class="w-full flex flex-col justify-center items-center px-16 mt-10">
-  <div class="w-full  mb-4">
+<div class="w-full flex flex-col justify-center items-center px-16 mb-8">
+  <div class="w-full">
     <h1 class="text-3xl font-semibold">PROFILE</h1>
     <p class="text-lg text-gray-500">Profile Information</p>
   </div>
-  <div class="w-full grid grid-cols-2 gap-x-4 bg-white border-2 shadow-lg p-3">
-    <label class="text-sm mt-4">
-      Fullname
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Fullname
+  <form [formGroup]="profileForm" class="w-full">
+    <div class="mt-8 mb-4 border shadow rounded p-4">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-base font-medium">User Account Information</p>
       </div>
-    </label>
+      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 text-black ">
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Fullname
+            <input
+              hlmInput
+              type="text"
+              formControlName="fullName"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
 
-    <label class="text-sm mt-4">
-      NIK
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        NIK
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Email
+            <input
+              hlmInput
+              type="email"
+              formControlName="email"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
       </div>
-    </label>
+    </div>
 
-    <label class="text-sm mt-4">
-      Email
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Email
-      </div>
-    </label>
+    <div class="border shadow rounded p-4">
+      <p class="text-base mb-4 font-medium">Patient data Information</p>
 
-    <label class="text-sm mt-4">
-      Phone Number
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Phone Number
-      </div>
-    </label>
+      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4">
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Phone Number
+            <input
+              hlmInput
+              type="text"
+              formControlName="phoneNumber"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
 
-    <label class="text-sm mt-4">
-      Address
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Address
-      </div>
-    </label>
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Gender
+            <select
+              hlmInput
+              formControlName="gender"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            >
+              <option value="" [disabled]="true">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </label>
+        </div>
 
-    <label class="text-sm mt-4">
-      Sex
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Sex
-      </div>
-    </label>
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            NIK
+            <input
+              hlmInput
+              type="text"
+              formControlName="nik"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
 
-    <label class="text-sm mt-4">
-      Date Of Birth
-      <div
-        class="w-full mt-1 py-1 px-2 border rounded-lg text-base font-medium"
-      >
-        Date Of Birth
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Address
+            <input
+              hlmInput
+              type="text"
+              formControlName="address"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
+
+        <div class="w-full mb-4">
+          <label hlmLabel>
+            Date of Birth
+            <input
+              hlmInput
+              type="date"
+              formControlName="dateOfBirth"
+              class="w-full mt-1 text-black font-medium"
+              [disabled]="true"
+            />
+          </label>
+        </div>
       </div>
-    </label>
-  </div>
+    </div>
+  </form>
 </div>

@@ -5,10 +5,12 @@
         class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between"
       >
         <div>
-          <h1 class="text-2xl font-bold sm:text-3xl">Welcome User,</h1>
+          <h1 class="text-2xl font-bold sm:text-3xl">
+            Welcome {{ username }},
+          </h1>
 
           <p class="mt-1.5 text-sm text-gray-200">
-            You got 3 ongoing appointmets
+            You got {{ onGoingAppointmentCount }} ongoing appointmets
           </p>
         </div>
       </div>
@@ -20,28 +22,32 @@
       <app-appointment-list></app-appointment-list>
     </div>
     <div class="col-span-1 bg-white rounded-lg shadow-lg border">
-      <app-appointment-form></app-appointment-form>
+      <app-appointment-search-form></app-appointment-search-form>
     </div>
   </div>
   <div class="w-full">
-    <div class="w-full grid grid-cols-3 gap-x-8 px-8">
+    <div class="w-full grid grid-cols-3 gap-x-8 px-8 font-bold">
       <a routerLink="/dashboard/appointment/specialization/General Practice">
         <div
-          class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg"
+          class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg hover:scale-105 transition-all duration-300"
         >
           General Practice
         </div>
       </a>
-      <div
-        class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg"
-      >
-        Orthopedy
-      </div>
-      <div
-        class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg"
-      >
-        General Practice
-      </div>
+      <a routerLink="/dashboard/appointment/specialization/Dentistry">
+        <div
+          class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg hover:scale-105 transition-all duration-300"
+        >
+          Dentistry
+        </div>
+      </a>
+      <a routerLink="/dashboard/appointment/specialization/Ophthalmology">
+        <div
+          class="w-full h-28 bg-white border rounded-lg flex justify-center items-center shadow-lg hover:scale-105 transition-all duration-300"
+        >
+          Ophthalmology
+        </div>
+      </a>
     </div>
   </div>
 </div>

@@ -9,7 +9,7 @@ import { AppointmentSpecializationComponent } from './appointment/appointment-sp
 export const userRoutes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'appointment', component: AppointmentCreateComponent },
-  { path: 'appointment/search/:search', component: AppointmentSearchComponent },
+  { path: 'appointment/search', component: AppointmentSearchComponent },
   {
     path: 'appointment/specialization/:specialization',
     component: AppointmentSpecializationComponent,

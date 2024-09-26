@@ -30,10 +30,10 @@ import {
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
-import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
-import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DoctorSchedulesService } from '../../../../services/doctor-schedule-service/doctor-schedules.service';
+import { DoctorScheduleList } from '../../../../models/doctor-schedule.model';
 
 import {
   HlmPaginationContentDirective,
@@ -49,6 +49,7 @@ import {
   selector: 'app-appointment-create',
   standalone: true,
   imports: [
+    AppointmentFormComponent,
     CommonModule,
     RouterModule,
     AppointmentFormComponent,
@@ -90,7 +91,13 @@ import {
 export class AppointmentCreateComponent implements OnInit {
   doctorSchedules: DoctorScheduleList[] = [];
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
+  filteredSchedules: { [key: string]: DoctorScheduleList[] } = {};
   doctorName: string = '';
+  specializations: string[] = [];
+  selectedSpecializations: { [key: string]: boolean } = {};
+  isLoading: boolean = true;
+  noData: boolean = false;
+  isDropdownOpen: boolean = false;
 
   constructor(
     private doctorScheduleService: DoctorSchedulesService,
@@ -108,19 +115,31 @@ export class AppointmentCreateComponent implements OnInit {
     this.loadSchedules();
   }
 
-  onSearch() {
-    if (this.doctorName) {
-      // Navigate to the search route with the doctor's name
-      this.router.navigate([`/dashboard/search/${this.doctorName}`]);
-    }
+  loadSchedules() {
+    this.doctorScheduleService.getSchedulesDoctor().subscribe({
+      next: (response: any) => { // menggunakan 'any' untuk respons
+        this.doctorSchedules = response.content; // Akses ke 'content'
+        this.groupSchedulesByDoctor();
+        this.filteredSchedules = { ...this.groupedSchedules };
+        this.extractSpecializations();
+        this.noData = Object.keys(this.filteredSchedules).length === 0;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading doctor schedules:', error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // Toggle the dropdown open/close state
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   updateDisplayedSchedules() {
     const doctorIds = Object.keys(this.groupedSchedules);
     this.totalPages = Math.ceil(doctorIds.length / this.itemsPerPage);
-
-    // Generate array of total pages for pagination buttons
-    this.totalPagesArray = Array(this.totalPages).fill(0).map((x, i) => i + 1);
 
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
@@ -133,20 +152,6 @@ export class AppointmentCreateComponent implements OnInit {
     }, {} as { [key: string]: DoctorScheduleList[] });
   }
 
-  loadSchedules() {
-    this.doctorScheduleService.getSchedulesDoctor().subscribe({
-      next: (response: any) => { // menggunakan 'any' untuk respons
-        this.doctorSchedules = response.content; // Akses ke 'content'
-        this.groupSchedulesByDoctor();
-        console.log('Grouped schedules:', this.groupedSchedules);
-      },
-      error: (error) => {
-        console.error('Error loading doctor schedules:', error);
-      },
-    });
-  }
-
-  // Ubah metode groupSchedulesByDoctor untuk memanggil updateDisplayedSchedules
   groupSchedulesByDoctor() {
     this.groupedSchedules = this.doctorSchedules.reduce((acc, schedule) => {
       const doctorId = schedule.doctor.id;
@@ -154,25 +159,52 @@ export class AppointmentCreateComponent implements OnInit {
         acc[doctorId] = [];
       }
       acc[doctorId].push(schedule);
-      acc[doctorId] = this.sortSchedulesByDay(acc[doctorId]);
       return acc;
     }, {} as { [key: string]: DoctorScheduleList[] });
 
     this.updateDisplayedSchedules(); // Panggil untuk menampilkan jadwal pada halaman pertama
   }
 
-  // Helper function to return object keys (doctor IDs)
-  objectKeys(obj: any): string[] {
-    return Object.keys(obj);
+  // Extract unique specializations from the doctor list
+  extractSpecializations() {
+    const specializationsSet = new Set<string>();
+    this.doctorSchedules.forEach((schedule) => {
+      specializationsSet.add(schedule.doctor.specialization);
+    });
+    this.specializations = Array.from(specializationsSet);
   }
 
-  // Sort schedules by day
-  dayOrder: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  // Filter schedules based on the selected specializations and the doctor name
+  filterSchedules() {
+    const searchTerm = this.doctorName.toLowerCase();
+    this.filteredSchedules = Object.keys(this.groupedSchedules)
+      .filter((doctorId) => {
+        const doctor = this.groupedSchedules[doctorId][0].doctor;
+        const matchesName = doctor.name.toLowerCase().includes(searchTerm);
+        const matchesSpecialization =
+          this.selectedSpecializations[doctor.specialization] ||
+          this.noSpecializationFilter();
+        return matchesName && matchesSpecialization;
+      })
+      .reduce((acc, doctorId) => {
+        acc[doctorId] = this.groupedSchedules[doctorId];
+        return acc;
+      }, {} as { [key: string]: DoctorScheduleList[] });
+    this.noData = Object.keys(this.filteredSchedules).length === 0;
+  }
 
-  sortSchedulesByDay(schedules: any[]): any[] {
-    return schedules.sort((a, b) => {
-      return this.dayOrder.indexOf(a.day) - this.dayOrder.indexOf(b.day);
-    });
+  // Handle changes in the specialization filter
+  onFilterSpecializationChange() {
+    this.filterSchedules();
+  }
+
+  // Helper function to check if no specializations are selected (show all if no filter)
+  noSpecializationFilter(): boolean {
+    return !Object.values(this.selectedSpecializations).includes(true);
+  }
+
+  onSearch() {
+    this.filterSchedules();
   }
 
   goToPage(page: number) {
