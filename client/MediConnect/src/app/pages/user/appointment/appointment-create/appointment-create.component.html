@@ -1,35 +1,84 @@
 <div
   class="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 pb-4"
 >
-  <div class="flex items-center w-full max-w-sm space-x-2 mb-4">
-    <form class="w-80 flex gap-4">
-      <input
-        aria-label="text"
-        [(ngModel)]="doctorName"
-        (ngModelChange)="filterSchedules()"
-        name="doctorName"
-        class="w-80"
-        hlmInput
-        type="text"
-        placeholder="Doctor Name"
-      />
+  <div class="flex justify-start items-center w-full space-x-2 mb-4">
+    <form class="w-80 flex items-center gap-4">
+      <label hlmLabel for="doctorName"
+        >Search by Doctor Name
+        <input
+          aria-label="text"
+          [(ngModel)]="doctorName"
+          (ngModelChange)="onSearch()"
+          name="doctorName"
+          class="w-80"
+          hlmInput
+          type="text"
+          placeholder="Doctor Name"
+        />
+      </label>
     </form>
+
+    <!-- Specialization Dropdown with Checkboxes -->
+    <div class="relative w-80 inline-block text-left pt-2.5">
+      <button
+        class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+        (click)="toggleDropdown()"
+      >
+        Choose Spesific Specialization
+        <svg
+          class="-mr-1 ml-2 h-5 w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.707a1 1 0 011.414 0L10 11.414l3.293-3.707a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+
+      <!-- Conditionally render dropdown based on 'isDropdownOpen' -->
+      <div
+        *ngIf="isDropdownOpen"
+        class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+      >
+        <div class="py-1">
+          <label
+            *ngFor="let specialization of specializations"
+            class="block px-4 py-2 text-sm text-gray-700"
+          >
+            <input
+              type="checkbox"
+              [(ngModel)]="selectedSpecializations[specialization]"
+              (ngModelChange)="onFilterSpecializationChange()"
+            />
+            {{ specialization }}
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- Loading Indicator -->
   <div
     *ngIf="isLoading"
     class="w-full h-[75vh] flex justify-center items-center"
   >
     <p>Loading schedules...</p>
   </div>
-  <!-- Loading indicator -->
 
+  <!-- No Data Indicator -->
   <div
     *ngIf="!isLoading && noData"
     class="w-full h-[75vh] flex justify-center items-center"
   >
     No schedules available for the given search.
   </div>
+
+  <!-- Doctor Cards -->
   <div *ngIf="!isLoading && !noData" class="w-full grid grid-cols-3 gap-4">
     <div
       *ngFor="let doctorId of filteredSchedules | keyvalue"
@@ -63,7 +112,7 @@
 
         <div class="w-full">
           <div class="w-full flex gap-x-4 justify-between">
-            <!-- Schedule Dialog -->
+            <!-- Schedule Button -->
             <hlm-dialog>
               <button
                 hlmBtn
@@ -79,12 +128,8 @@
                 <hlm-dialog-header>
                   <h3 hlmDialogTitle>Doctor Schedules</h3>
                 </hlm-dialog-header>
-
-                <!-- Loop through the schedules for this doctor -->
                 <div *ngFor="let schedule of doctorId.value">
                   <h4 class="mt-4 font-bold">{{ schedule.day }}</h4>
-
-                  <!-- Check if there are schedule times available -->
                   <ng-container
                     *ngIf="schedule.scheduleTimes.length > 0; else noSchedule"
                   >
@@ -96,8 +141,6 @@
                       </li>
                     </ul>
                   </ng-container>
-
-                  <!-- Show message when no schedules are available for the day -->
                   <ng-template #noSchedule>
                     <p>No schedule available today</p>
                   </ng-template>
@@ -105,7 +148,7 @@
               </hlm-dialog-content>
             </hlm-dialog>
 
-            <!-- Appointment Dialog -->
+            <!-- Appointment Button -->
             <hlm-dialog>
               <button
                 hlmBtn
@@ -123,7 +166,6 @@
                     Make an Appointment with {{ doctorId.value[0].doctor.name }}
                   </h3>
                 </hlm-dialog-header>
-
                 <app-appointment-form
                   [dialogCtx]="dialogCtx"
                   [doctorId]="doctorId.key"

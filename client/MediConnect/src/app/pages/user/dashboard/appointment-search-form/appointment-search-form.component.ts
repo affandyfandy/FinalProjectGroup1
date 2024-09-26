@@ -28,8 +28,16 @@ import { bootstrapEye, bootstrapEyeSlash } from '@ng-icons/bootstrap-icons';
 export class AppointmentSearchFormComponent {
   doctorName: string = '';
   appointmentDate: string = '';
+  today: string;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const todayDate = new Date();
+    const dd = String(todayDate.getDate()).padStart(2, '0');
+    const mm = String(todayDate.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = todayDate.getFullYear();
+
+    this.today = `${yyyy}-${mm}-${dd}`;
+  }
 
   onSearch() {
     let queryParams: any = {};

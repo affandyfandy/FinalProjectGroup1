@@ -93,8 +93,11 @@ export class AppointmentCreateComponent implements OnInit {
   groupedSchedules: { [key: string]: DoctorScheduleList[] } = {};
   filteredSchedules: { [key: string]: DoctorScheduleList[] } = {};
   doctorName: string = '';
+  specializations: string[] = [];
+  selectedSpecializations: { [key: string]: boolean } = {};
   isLoading: boolean = true;
   noData: boolean = false;
+  isDropdownOpen: boolean = false; 
 
   constructor(
     private doctorScheduleService: DoctorSchedulesService,
@@ -105,29 +108,26 @@ export class AppointmentCreateComponent implements OnInit {
     this.loadSchedules();
   }
 
-  onSearch() {
-    if (this.doctorName) {
-      this.filterSchedules(); // Call filter function on search
-    } else {
-      this.filteredSchedules = { ...this.groupedSchedules }; // Reset filtered schedules if input is empty
-    }
-  }
-
   loadSchedules() {
     this.doctorScheduleService.getSchedulesDoctor().subscribe({
       next: (response) => {
         this.doctorSchedules = response;
         this.groupSchedulesByDoctor();
         this.filteredSchedules = { ...this.groupedSchedules };
-        this.noData = Object.keys(this.filteredSchedules).length === 0; // Check if there are no schedules
-        this.isLoading = false; // Set loading to false after fetching
-        console.log('Grouped schedules:', this.groupedSchedules);
+        this.extractSpecializations();
+        this.noData = Object.keys(this.filteredSchedules).length === 0;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading doctor schedules:', error);
         this.isLoading = false;
       },
     });
+  }
+
+  // Toggle the dropdown open/close state
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   groupSchedulesByDoctor() {
@@ -137,37 +137,49 @@ export class AppointmentCreateComponent implements OnInit {
         acc[doctorId] = [];
       }
       acc[doctorId].push(schedule);
-      acc[doctorId] = this.sortSchedulesByDay(acc[doctorId]);
       return acc;
     }, {} as { [key: string]: DoctorScheduleList[] });
   }
 
+  // Extract unique specializations from the doctor list
+  extractSpecializations() {
+    const specializationsSet = new Set<string>();
+    this.doctorSchedules.forEach((schedule) => {
+      specializationsSet.add(schedule.doctor.specialization);
+    });
+    this.specializations = Array.from(specializationsSet);
+  }
+
+  // Filter schedules based on the selected specializations and the doctor name
   filterSchedules() {
-    const searchTerm = this.doctorName.toLowerCase(); // Convert to lowercase for case insensitive search
+    const searchTerm = this.doctorName.toLowerCase();
     this.filteredSchedules = Object.keys(this.groupedSchedules)
       .filter((doctorId) => {
-        const doctorName =
-          this.groupedSchedules[doctorId][0].doctor.name.toLowerCase();
-        return doctorName.includes(searchTerm); // Check if the doctor's name includes the search term
+        const doctor = this.groupedSchedules[doctorId][0].doctor;
+        const matchesName = doctor.name.toLowerCase().includes(searchTerm);
+        const matchesSpecialization =
+          this.selectedSpecializations[doctor.specialization] ||
+          this.noSpecializationFilter();
+        return matchesName && matchesSpecialization;
       })
       .reduce((acc, doctorId) => {
-        acc[doctorId] = this.groupedSchedules[doctorId]; // Keep only the filtered doctors
+        acc[doctorId] = this.groupedSchedules[doctorId];
         return acc;
       }, {} as { [key: string]: DoctorScheduleList[] });
     this.noData = Object.keys(this.filteredSchedules).length === 0;
   }
 
-  // Helper function to return object keys (doctor IDs)
-  objectKeys(obj: any): string[] {
-    return Object.keys(obj);
+  // Handle changes in the specialization filter
+  onFilterSpecializationChange() {
+    this.filterSchedules();
   }
 
-  // Sort schedules by day
-  dayOrder: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  // Helper function to check if no specializations are selected (show all if no filter)
+  noSpecializationFilter(): boolean {
+    return !Object.values(this.selectedSpecializations).includes(true);
+  }
 
-  sortSchedulesByDay(schedules: any[]): any[] {
-    return schedules.sort((a, b) => {
-      return this.dayOrder.indexOf(a.day) - this.dayOrder.indexOf(b.day);
-    });
+  onSearch() {
+    this.filterSchedules();
   }
 }

@@ -66,6 +66,7 @@ export class AppointmentFormComponent implements OnInit {
   patient: PatientShowDTO | null = null;
   token: string = '';
   userId: string = '';
+  today: string;
   patientId: string = '';
 
   @ViewChild(ToastContainerDirective, { static: true })
@@ -83,6 +84,13 @@ export class AppointmentFormComponent implements OnInit {
     private appointmentService: AppointmentService,
     private toastrService: ToastrService
   ) {
+    const todayDate = new Date();
+    const dd = String(todayDate.getDate()).padStart(2, '0');
+    const mm = String(todayDate.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = todayDate.getFullYear();
+
+    this.today = `${yyyy}-${mm}-${dd}`;
+
     this.appointmentForm = this.fb.group({
       date: ['', Validators.required],
       hour: ['', Validators.required],
